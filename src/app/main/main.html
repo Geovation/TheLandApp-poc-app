@@ -1,12 +1,10 @@
-<div ng-controller="MainController as main" layout-fill>
-  <md-toolbar layout="row">
-    <div class="md-toolbar-tools">
-      <h2>Land App</h2>
-    </div>
-  </md-toolbar>
-  <md-content layout="column">
-    <md-content>
-      Lorem ipsum
-    </md-content>
-  </md-content>
-</div>
+
+<section layout="column">
+  <section layout="row" flex style="height: 100%">
+      <md-content flex style="height: 100%">
+          <header></header>
+          <land-app-map></land-app-map>
+      </md-content>
+      <layers-sidenav></layers-sidenav>
+  </section>
+</section>

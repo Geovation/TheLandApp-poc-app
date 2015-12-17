@@ -1,0 +1,22 @@
+<md-toolbar>
+  <div class="md-toolbar-tools">
+    <!--<md-button class="md-primary" aria-label="Toggle Menu" ng-click="toggleMenu()"><i class="fa fa-lg fa-bars"></i></md-button>-->
+    <h2>
+      <span>The Land App</span>
+    </h2>
+    <span flex></span>
+
+    <ul class='top-menu'>
+      <!--<li><md-switch ng-click=""></md-switch></li>-->
+      <li>
+        <md-button class="md-primary narrow">
+          <i class="fa fa-lg fa-share-square-o"></i>
+          <md-tooltip>Share this map</md-tooltip>
+        </md-button>
+        <md-button class="md-primary narrow" ng-click="headerCtrl.toggleLayersPanel()">
+          <md-icon md-svg-src="img/icons/layers_128.svg"></md-icon>
+        </md-button>
+      </li>
+    </ul>
+  </div>
+</md-toolbar>
