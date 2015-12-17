@@ -3,9 +3,6 @@
   'use strict';
 
   angular
-    .module('landApp')
-    .constant('malarkey', malarkey)
-    .constant('toastr', toastr)
-    .constant('moment', moment);
+    .module('landApp');
 
 })();
