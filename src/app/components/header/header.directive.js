@@ -21,7 +21,7 @@
       var vm = this;
 
       vm.toggleLayersPanel = function() {
-        $log('toggleLayersPanel');
+        $log.debug('toggleLayersPanel');
         $rootScope.$emit('open-layers-panel');
       };
     }
