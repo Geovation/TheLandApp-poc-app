@@ -2,6 +2,6 @@
   'use strict';
 
   angular
-    .module('landApp', ['ngResource', 'ngRoute', 'ngMaterial']);
+    .module('LandApp', ['ngResource', 'ngRoute', 'ngMaterial']);
 
 })();
