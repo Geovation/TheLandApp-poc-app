@@ -3,6 +3,6 @@
   'use strict';
 
   angular
-    .module('landApp');
+    .module('LandApp');
 
 })();

@@ -42,6 +42,7 @@ module.exports = function(config) {
       moduleName: 'landApp'
     },
 
+
     browsers : ['PhantomJS'],
 
     plugins : [

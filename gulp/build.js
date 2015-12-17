@@ -19,7 +19,7 @@ gulp.task('partials', function () {
       quotes: true
     }))
     .pipe($.angularTemplatecache('templateCacheHtml.js', {
-      module: 'landApp',
+      module: 'LandApp',
       root: 'app'
     }))
     .pipe(gulp.dest(conf.paths.tmp + '/partials/'));
@@ -33,9 +33,11 @@ gulp.task('html', ['inject', 'partials'], function () {
     addRootSlash: false
   };
 
+
   var htmlFilter = $.filter('*.html');
   var jsFilter = $.filter('**/*.js');
   var cssFilter = $.filter('**/*.css');
+
   var assets;
 
   return gulp.src(path.join(conf.paths.tmp, '/serve/*.html'))
