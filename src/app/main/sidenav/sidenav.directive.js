@@ -20,12 +20,19 @@
     function SidenavController($rootScope, $mdSidenav, mapService) {
       var vm = this;
 
+      vm.myFarmLayers = mapService.farmLayers;
+
       $rootScope.$on('open-layers-panel', function() {
-          $mdSidenav('layers-sidenav').toggle();
+        $mdSidenav('layers-sidenav').toggle();
       });
 
+      vm.toggleFarmLayer = function(layer) {
+        $rootScope.$emit('toggle-farm-layer', layer);
+      };
 
-
+      vm.toggleEnvironmentalLayer = function(layer) {
+        $rootScope.$emit('toggle-environmental-layer', layer);
+      };
     }
   }
 
