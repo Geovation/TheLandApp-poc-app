@@ -14,59 +14,50 @@
       controllerAs: 'vm'
     };
 
+    var vm,
+        view,
+        map;
+
     return directive;
 
     /** @ngInject */
-    function MapController($rootScope, $log) {
-      var vm = this;
+    function MapController($rootScope, $log, mapService) {
+      vm = this;
+      vm.mapService = mapService;
 
       createMap();
 
-      vm.zoomIn = function() {
-
-      };
-
-      vm.zoomOut = function() {
-
-      };
-
+      mapService.addBaseMaps(map);
     }
 
-
     function createMap() {
-      var self = this;
+      var timsFarm = ol.proj.fromLonLat([-0.658493, 51.191286]);
+      var jamesFarm = ol.proj.fromLonLat([-1.315305, 51.324901]);
 
-      var timsFarm = ol.proj.fromLonLat(<ol.Coordinate>[-0.658493, 51.191286]);
-      var jamesFarm = ol.proj.fromLonLat(<ol.Coordinate>[-1.315305, 51.324901]);
-
-      this.view = new ol.View({
+      view = new ol.View({
           center: jamesFarm,
           maxZoom: 20,
           minZoom: 7,
           zoom: 13
       });
 
-      this.scope.zoomIn = function() {
-          self.view.setZoom(self.view.getZoom() + 1);
+      vm.zoomIn = function() {
+          view.setZoom(view.getZoom() + 1);
       };
 
-      this.scope.zoomOut = function() {
-          self.view.setZoom(self.view.getZoom() - 1);
+      vm.zoomOut = function() {
+          view.setZoom(view.getZoom() - 1);
       };
 
-      this.scope.map = new ol.Map(<olx.MapOptions>{
+      map = new ol.Map({
           target: 'map',
           layers: [], // initialise without any layers because land-app-map-controller will set basemap
           loadTilesWhileAnimating: true,
-          view: self.view,
+          view: view,
           controls: []
       });
 
-      var self = this;
-
       //this.scope.map.addInteraction(clickHandler);
     }
-
   }
-
 })();
