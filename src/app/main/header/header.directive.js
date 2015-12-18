@@ -11,7 +11,8 @@
       restrict: 'E',
       templateUrl: 'app/main/header/header.html',
       controller: HeaderController,
-      controllerAs: 'vm'
+      controllerAs: 'vm',
+      bindToController: true
     };
 
     return directive;

@@ -18,6 +18,10 @@
 
     /** @ngInject */
     function SidenavController($rootScope, $mdSidenav) {
+      $rootScope.$on('open-layers-panel', function() {
+          $mdSidenav('layers-sidenav').toggle();
+      });
+
     }
   }
 
