@@ -3,20 +3,30 @@
     <h1 class="md-toolbar-tools">Layers</h1>
   </md-toolbar>
   <md-content layout-padding>
-    <md-subheader class="md-primary closer-to-children">My Farm</md-subheader>
+    <!-- <md-subheader class="md-primary closer-to-children">My Farm</md-subheader> -->
 
-    <md-checkbox class="md-raised md-primary"
+    <!-- <md-checkbox class="md-raised md-primary"
       ng-repeat="layer in vmSidenav.myFarmLayers track by $index"
       ng-disabled="layer.disabled"
       ng-model="farmLayers[$index]"
-      ng-change="vmSidenav.toggleFarmLayer(layer)">{{layer.name}}</md-checkbox>
+      ng-change="vmSidenav.toggleFarmLayer(layer)">{{layer.name}}</md-checkbox> -->
 
-    <!-- <md-subheader class="md-primary closer-to-children">Environmental</md-subheader> -->
-    <!-- <md-checkbox class="md-raised md-primary" ng-repeat="layer in layersSidenavCtrl.environmentalLayers" ng-disabled="layer.disabled" ng-model="environmentalLayers[$index]" ng-change="layersSidenavCtrl.toggleEnvironmentalLayer(layer)">{{layer.name}}</md-checkbox> -->
+    <md-subheader class="md-primary closer-to-children">Environmental</md-subheader>
+    <md-checkbox class="md-raised md-primary"
+        ng-repeat="layer in vmSidenav.environmentalLayers"
+        ng-disabled="layer.disabled"
+        ng-model="layer.checked"
+        ng-change="vmSidenav.toggleEnvironmentalLayer(layer)">{{layer.name}}
+    </md-checkbox>
 
     <md-subheader class="md-primary closer-to-children">Basemaps</md-subheader>
-    <!-- <md-radio-group ng-model="layersSidenavCtrl.map.basemap" ng-if="layersSidenavCtrl.basemaps">
-      <md-radio-button ng-repeat="bm in layersSidenavCtrl.basemaps" ng-disabled="bm.disabled" class="md-primary" ng-value="bm">{{bm.name}}</md-radio-button>
-    </md-radio-group> -->
+    <md-radio-group ng-model="vmSidenav.basemap" ng-change="vmSidenav.toggleBaseMapLayer()">
+      <md-radio-button
+        ng-repeat="bm in vmSidenav.baseMapLayers"
+        ng-disabled="bm.disabled"
+        class="md-primary"
+        ng-value="bm">{{bm.name}}
+      </md-radio-button>
+    </md-radio-group>
   </md-content>
 </md-sidenav>
