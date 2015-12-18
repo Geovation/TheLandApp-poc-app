@@ -4,8 +4,7 @@
   </md-toolbar>
   <md-content layout-padding>
     <md-subheader class="md-primary closer-to-children">My Farm</md-subheader>
-    <!-- <md-checkbox class="md-raised md-primary" ng-repeat="layer in vm.myFarmLayers track by $index" ng-disabled="layer.disabled" ng-model="farmLayers[$index]" ng-change="layersSidenavCtrl.toggleFarmLayer(layer)">{{layer.name}}</md-checkbox> -->
-    <md-checkbox class="md-raised md-primary" ></md-checkbox> 
+    <md-checkbox class="md-raised md-primary" ng-repeat="layer in vmSidenav.myFarmLayers track by $index" ng-disabled="layer.disabled" ng-model="farmLayers[$index]" ng-change="layersSidenavCtrl.toggleFarmLayer(layer)">{{layer.name}}</md-checkbox>
 
     <!-- <md-subheader class="md-primary closer-to-children">Environmental</md-subheader> -->
     <!-- <md-checkbox class="md-raised md-primary" ng-repeat="layer in layersSidenavCtrl.environmentalLayers" ng-disabled="layer.disabled" ng-model="environmentalLayers[$index]" ng-change="layersSidenavCtrl.toggleEnvironmentalLayer(layer)">{{layer.name}}</md-checkbox> -->

@@ -11,16 +11,20 @@
       restrict: 'E',
       templateUrl: 'app/main/sidenav/sidenav.html',
       controller: SidenavController,
-      controllerAs: 'vm'
+      controllerAs: 'vmSidenav'
     };
 
     return directive;
 
     /** @ngInject */
-    function SidenavController($rootScope, $mdSidenav) {
+    function SidenavController($rootScope, $mdSidenav, mapService) {
+      var vm = this;
+
       $rootScope.$on('open-layers-panel', function() {
           $mdSidenav('layers-sidenav').toggle();
       });
+
+
 
     }
   }

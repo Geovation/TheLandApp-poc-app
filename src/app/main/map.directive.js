@@ -16,23 +16,22 @@
       bindToController: true
     };
 
-    var vm,
-        view,
+    var view,
         map;
 
     return directive;
 
     /** @ngInject */
     function MapController($rootScope, $log, mapService) {
-      vm = this;
+      var vm = this;
       vm.mapService = mapService;
 
-      createMap();
+      createMap(vm);
 
       mapService.addBaseMaps(map);
     }
 
-    function createMap() {
+    function createMap(vm) {
       var timsFarm = ol.proj.fromLonLat([-0.658493, 51.191286]);
       var jamesFarm = ol.proj.fromLonLat([-1.315305, 51.324901]);
 
