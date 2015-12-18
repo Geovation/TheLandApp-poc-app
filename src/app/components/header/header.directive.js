@@ -3,7 +3,7 @@
 
   angular
     .module('LandApp')
-    .directive('header', header);
+    .directive('laHeader', header);
 
   /** @ngInject */
   function header() {
