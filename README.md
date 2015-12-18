@@ -1,3 +1,4 @@
+John Papa code style: https://github.com/johnpapa/angular-styleguide
 from https://github.com/Swiip/generator-gulp-angular/blob/master/docs/usage.md
 
 ## Use Gulp tasks
