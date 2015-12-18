@@ -1,6 +1,8 @@
 (function() {
   'use strict';
 
+ // TODO delete layers dependencies.
+
   angular
     .module('LandApp')
     .service('mapService', [mapService]);

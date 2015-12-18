@@ -17,10 +17,12 @@
     return directive;
 
     /** @ngInject */
-    function SidenavController($rootScope, $mdSidenav, mapService) {
+    function SidenavController($rootScope, $mdSidenav, layersService) {
       var vm = this;
 
-      vm.myFarmLayers = mapService.farmLayers;
+      vm.basemap = '';
+      vm.environmentalLayers = layersService.environmentalLayers;
+      vm.baseMapLayers = layersService.baseMapLayers;
 
       $rootScope.$on('open-layers-panel', function() {
         $mdSidenav('layers-sidenav').toggle();
@@ -33,6 +35,11 @@
       vm.toggleEnvironmentalLayer = function(layer) {
         $rootScope.$emit('toggle-environmental-layer', layer);
       };
+
+      vm.toggleBaseMapLayer = function() {
+        $rootScope.$emit('toggle-basemap-layer', vm.basemap);
+      };
+
     }
   }
 
