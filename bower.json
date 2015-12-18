@@ -10,23 +10,18 @@
     "animate.css": "~3.3.0",
     "angular": "~1.4.0",
     "components-font-awesome": "~4.5.0",
-    "openlayers": "https://github.com/openlayers/ol3/releases/download/v3.12.1/v3.12.1-dist.zip"
+    "openlayers": "https://github.com/openlayers/ol3/releases/download/v3.12.1/v3.12.1-dist.zip",
+    "proj4": "~2.3.12"
   },
   "devDependencies": {
     "angular-mocks": "~1.4.0"
   },
-  "resolutions": {
-    "jquery": "~2.1.4",
-    "angular": "~1.4.0"
-  },
-
   "overrides": {
-    "openlayers" : {
+    "openlayers": {
       "main": [
-      	"ol.js",
-      	"ol.css"
+        "ol.js",
+        "ol.css"
       ]
     }
   }
-
 }
