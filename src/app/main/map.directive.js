@@ -8,10 +8,12 @@
   /** @ngInject */
   function laMap() {
     var directive = {
+      priority: 2,
       restrict: 'E',
       templateUrl: 'app/main/map.directive.html',
       controller: MapController,
-      controllerAs: 'vm'
+      controllerAs: 'vm',
+      bindToController: true
     };
 
     var vm,

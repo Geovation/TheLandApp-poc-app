@@ -8,10 +8,11 @@
   /** @ngInject */
   function header() {
     var directive = {
+      priority: 1,
       restrict: 'E',
       templateUrl: 'app/main/header/header.html',
       controller: HeaderController,
-      controllerAs: 'vm',
+      controllerAs: 'vmMap',
       bindToController: true
     };
 
@@ -19,9 +20,9 @@
 
     /** @ngInject */
     function HeaderController($rootScope, $log) {
-      var vm = this;
+      var vmMap = this;
 
-      vm.toggleLayersPanel = function() {
+      vmMap.toggleLayersPanel = function() {
         $log.debug('toggleLayersPanel');
         $rootScope.$emit('open-layers-panel');
       };
