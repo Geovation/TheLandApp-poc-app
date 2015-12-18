@@ -9,7 +9,7 @@
   function sidenav() {
     var directive = {
       restrict: 'E',
-      templateUrl: 'app/components/sidenav/sidenav.html',
+      templateUrl: 'app/main/sidenav/sidenav.html',
       controller: SidenavController,
       controllerAs: 'vm'
     };
@@ -18,6 +18,10 @@
 
     /** @ngInject */
     function SidenavController($rootScope, $mdSidenav) {
+      $rootScope.$on('open-layers-panel', function() {
+          $mdSidenav('layers-sidenav').toggle();
+      });
+
     }
   }
 
