@@ -9,7 +9,7 @@
   function header() {
     var directive = {
       restrict: 'E',
-      templateUrl: 'app/components/header/header.html',
+      templateUrl: 'app/main/header/header.html',
       controller: HeaderController,
       controllerAs: 'vm'
     };
