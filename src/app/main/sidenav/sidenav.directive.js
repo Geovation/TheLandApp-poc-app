@@ -23,6 +23,7 @@
       vm.basemap = '';
       vm.environmentalLayers = layersService.environmentalLayers;
       vm.baseMapLayers = layersService.baseMapLayers;
+      vm.farmLayers = layersService.farmLayers;
 
       $rootScope.$on('open-layers-panel', function() {
         $mdSidenav('layers-sidenav').toggle();
