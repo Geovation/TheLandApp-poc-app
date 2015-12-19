@@ -3,13 +3,13 @@
     <h1 class="md-toolbar-tools">Layers</h1>
   </md-toolbar>
   <md-content layout-padding>
-    <!-- <md-subheader class="md-primary closer-to-children">My Farm</md-subheader> -->
-
-    <!-- <md-checkbox class="md-raised md-primary"
-      ng-repeat="layer in vmSidenav.myFarmLayers track by $index"
+    <md-subheader class="md-primary closer-to-children">My Farm</md-subheader>
+    <md-checkbox class="md-raised md-primary"
+      ng-repeat="layer in vmSidenav.farmLayers track by $index"
       ng-disabled="layer.disabled"
-      ng-model="farmLayers[$index]"
-      ng-change="vmSidenav.toggleFarmLayer(layer)">{{layer.name}}</md-checkbox> -->
+      ng-model="layer.checked"
+      ng-change="vmSidenav.toggleFarmLayer(layer)">{{layer.name}}
+    </md-checkbox>
 
     <md-subheader class="md-primary closer-to-children">Environmental</md-subheader>
     <md-checkbox class="md-raised md-primary"
