@@ -57,6 +57,9 @@
       name: 'Aerial',
       type: 'aerial',
       url: "https://api.tiles.mapbox.com/v4/truetoffee.a6d1c57e/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoidHJ1ZXRvZmZlZSIsImEiOiJPU2NGeVpNIn0.ZJjeKACNei3rl6k9KLzJlA"
+    }, {
+      name: 'Ordnance Survey',
+      disabled: true
     }];
   }
 

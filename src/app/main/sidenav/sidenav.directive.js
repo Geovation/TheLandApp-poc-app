@@ -20,7 +20,7 @@
     function SidenavController($rootScope, $mdSidenav, layersService) {
       var vm = this;
 
-      vm.basemap = '';
+      vm.basemap = 'Open Street Map';
       vm.environmentalLayers = layersService.environmentalLayers;
       vm.baseMapLayers = layersService.baseMapLayers;
       vm.farmLayers = layersService.farmLayers;
