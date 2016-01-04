@@ -10,7 +10,7 @@
     var directive = {
       priority: 2,
       restrict: 'E',
-      templateUrl: 'app/main/map.directive.html',
+      templateUrl: 'app/main/map/map.directive.html',
       controller: MapController,
       controllerAs: 'vm',
       bindToController: true
