@@ -20,7 +20,6 @@
     function SidenavController($rootScope, $mdSidenav, layersService) {
       var vm = this;
 
-      vm.basemap = '';
       vm.environmentalLayers = layersService.environmentalLayers;
       vm.baseMapLayers = layersService.baseMapLayers;
       vm.farmLayers = layersService.farmLayers;
@@ -30,17 +29,20 @@
       });
 
       vm.toggleFarmLayer = function(layer) {
-        $rootScope.$emit('toggle-farm-layer', layer);
+        $rootScope.$broadcast('toggle-farm-layer', layer);
       };
 
       vm.toggleEnvironmentalLayer = function(layer) {
-        $rootScope.$emit('toggle-environmental-layer', layer);
+        $rootScope.$broadcast('toggle-environmental-layer', layer);
       };
 
       vm.toggleBaseMapLayer = function() {
-        $rootScope.$emit('toggle-basemap-layer', vm.basemap);
+        $rootScope.$broadcast('toggle-basemap-layer', vm.basemap);
       };
 
+      // set default
+      vm.basemap = vm.baseMapLayers[0];
+      vm.toggleBaseMapLayer();
     }
   }
 

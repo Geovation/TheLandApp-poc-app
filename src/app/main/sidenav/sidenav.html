@@ -25,7 +25,8 @@
         ng-repeat="bm in vmSidenav.baseMapLayers"
         ng-disabled="bm.disabled"
         class="md-primary"
-        ng-value="bm">{{bm.name}}
+        ng-value="bm"
+        ng-model="vmSidenav.basemap">{{bm.name}}
       </md-radio-button>
     </md-radio-group>
   </md-content>

@@ -1,8 +1,10 @@
-// /* global malarkey:false, toastr:false, moment:false */
+/* global ol:false, proj4:false*/
 (function() {
   'use strict';
 
   angular
-    .module('LandApp');
+    .module('LandApp')
+    .constant('ol', ol)
+    .constant('proj4', proj4);
 
 })();

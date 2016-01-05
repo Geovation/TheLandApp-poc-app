@@ -1,0 +1,65 @@
+/**
+ *  Do not remove this comments bellow. It's the markers used by wiredep to inject
+ *  less dependencies when defined in the bower.json of your dependencies
+ */
+// bower:less
+// endbower
+
+.map {
+	width: 100%;
+	height: 100%;
+}
+
+.map-zoom-tools {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	background: none;
+
+	.btn {
+		@size: 30px;
+
+		display: block;
+		margin: 2px;
+		background: rgba(255, 255, 255, 0.9);
+		min-width: @size;
+		min-height: @size;
+		line-height: @size;
+	}
+}
+
+.map-search {
+	position: absolute;
+	top: 9px;
+	left: 300px;
+	z-index: 2;
+	background: none;
+}
+
+md-menu-item {
+  > md-checkbox {
+    margin-left: 15px;
+  }
+}
+
+.map-drawing-tools {
+  position: absolute;
+  top: 70px;
+
+  + .map-drawing-tools {
+    left: 50%;
+  }
+
+  .md-button.md-primary {
+    &.active {
+      background-color: orange;
+    }
+  }
+}
+
+/**
+ *  Do not remove this comments bellow. It's the markers used by gulp-inject to inject
+ *  all your less files automatically
+ */
+// injector
+// endinjector
