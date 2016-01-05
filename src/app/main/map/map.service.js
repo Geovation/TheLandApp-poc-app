@@ -3,10 +3,10 @@
 
   angular
     .module('LandApp')
-    .service('mapService', ['ol', '$log', 'proj4', mapService]);
+    .service('mapService', ['ol', '$log', 'proj4','$mdToast', mapService]);
 
   /** @ngInject */
-  function mapService(ol, $log, proj4) {
+  function mapService(ol, $log, proj4, $mdToast) {
     // define EPSG:27700
     proj4.defs("EPSG:27700", "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +towgs84=446.448,-125.157,542.06,0.15,0.247,0.842,-20.489 +units=m +no_defs");
 
@@ -14,24 +14,151 @@
     // var timsFarm = ol.proj.fromLonLat([-0.658493, 51.191286]);
     var jamesFarm = ol.proj.fromLonLat([-1.315305, 51.324901]);
 
-    // name: ol's layer
-    var osLayers = {};
+    var osLayers = {};  // name: ol's layer
     var currentBaseMap = {};
     var view = {};
     var map = {};
+    var drawingTools = [{
+          name: 'Water',
+          type: 'LineString',
+          icon: 'fa-pencil',
+          colour: "0, 178, 238",
+          strokeWidth: 3
+      }, {
+          name: 'Electricity',
+          type: 'LineString',
+          icon: 'fa-bolt',
+          colour: "238, 238, 0",
+          strokeWidth: 3
+      }, {
+          name: 'Hedge',
+          type: 'LineString',
+          icon: 'fa-photo',
+          colour: "46, 139, 87",
+          strokeWidth: 3
+      }, {
+          name: 'Tree',
+          type: 'Point',
+          icon: 'fa-tree',
+          colour: "46, 139, 87",
+          strokeWidth: 3
+      }, {
+          name: 'Buildings',
+          type: 'Polygon',
+          icon: 'fa-industry',
+          colour: "144, 78, 39",
+          strokeWidth: 3
+    }];
+
+    var drawingLayers = {};
 
     var service = {
       createMap: createMap,
       setBaseMap: setBaseMap,
       toggleLayerFromCheckProperty: toggleLayerFromCheckProperty,
       zoomIn: zoomIn,
-      zoomOut: zoomOut
+      zoomOut: zoomOut,
+      toggleDrawingTool: toggleDrawingTool,
+      drawingTools: drawingTools
     };
 
     return service;
 
-
     ///////////////
+
+
+    function newVectorLayer(name, colour, strokeWidth) {
+      return new ol.layer.Vector({
+        source: new ol.source.Vector({}),
+        style: new ol.style.Style({
+          fill: new ol.style.Fill({
+            color: "rgba(" + colour +  ", 0.15)"
+          }),
+          stroke: new ol.style.Stroke({
+            color: "rgba(" + colour +  ", 0.9)",
+            width: strokeWidth
+          }),
+          image: new ol.style.Circle({
+            radius: 7,
+            fill: new ol.style.Fill({
+              color: "rgba(" + colour +  ", 0.9)"
+            })
+          })
+        })
+      });
+    };
+
+    function unfocusLayer(layer) {
+      map.getLayers().getArray()
+        .filter(l => l !== layer)
+        .forEach(l => {
+            l.setOpacity(l['oldOpacity'] || 1);
+            delete l['oldOpacity'];
+        });
+    };
+
+    function toggleDrawingTool(tool) {
+      if (tool.draw) {
+        deactivateDrawingTool(tool);
+      } else {
+        activateDrawingTool(tool);
+      }
+    }
+
+    function deactivateDrawingTool(tool) {
+        $log.log('deactivate', tool);
+        tool.active = false;
+        map.removeInteraction(tool.draw);
+        delete tool.draw;
+        unfocusLayer(drawingLayers[tool.name]);
+    };
+
+    function activateDrawingTool(tool) {
+        drawingTools.forEach(function(dt){
+          deactivateDrawingTool(dt);
+        });
+
+      //  $log.log('activate', tool, this.$scope);
+        tool.active = true;
+
+        tool.draw = new ol.interaction.Draw({
+            //features: this.$scope.drawingLayers[tool.name].getSource().getFeatures(),
+            source: drawingLayers[tool.name].getSource(),
+            type: tool.type,
+            style: new ol.style.Style({
+                fill: new ol.style.Fill({
+                    color: "rgba(" + tool.colour +  ", 0.15)"
+                }),
+                stroke: new ol.style.Stroke({
+                    color: "rgba(" + tool.colour +  ", 0.9)",
+                    width: tool.strokeWidth
+                }),
+                image: new ol.style.Circle({
+                    radius: 7,
+                    fill: new ol.style.Fill({
+                        color: "rgba(" + tool.colour +  ", 0.9)"
+                    })
+                })
+            })
+        });
+        map.addInteraction(tool.draw);
+        focusLayer(drawingLayers[tool.name]);
+        $mdToast.show({
+            template: '<md-toast>Start drawing some ' + tool.name + '!</md-toast>',
+            hideDelay: 5000,
+            position: "top right"
+        });
+    };
+
+    function focusLayer(layer) {
+      map.getLayers().getArray()
+        .filter(l => l !== layer)
+        .forEach(l => {
+            l['oldOpacity'] = l.getOpacity();
+            l.setOpacity(0.5);
+        });
+    };
+
     function zoomIn() {
       view.setZoom(view.getZoom() + 1);
     }
@@ -55,6 +182,12 @@
         view: view,
         controls: []
       });
+
+      drawingLayers = drawingTools.reduce(function(obj, curr, i, arr) {
+        obj[curr.name] = newVectorLayer(curr.name, curr.colour, curr.strokeWidth);
+        map.addLayer(obj[curr.name]);
+        return obj;
+      }, {});
     }
 
     function addLayer(layer) {

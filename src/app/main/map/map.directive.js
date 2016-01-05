@@ -42,6 +42,8 @@
       var vm = this;
       vm.zoomIn = mapService.zoomIn;
       vm.zoomOut = mapService.zoomOut;
+      vm.toggleDrawingTool = mapService.toggleDrawingTool;
+      vm.drawingTools = mapService.drawingTools;
     }
   }
 })();
