@@ -76,7 +76,7 @@
     }, {
       name: 'RPA Boundaries',
       type: 'vector',
-      url: "/data/geojson/watership_down_rpa.geojson",
+      url: "/assets/geojson/watership_down_rpa.geojson",
       projection: "EPSG:27700",
       fillColor: "rgba(255, 165, 0, 0.5)",
       strokeColor: "rgba(255, 165, 0, 1)",
