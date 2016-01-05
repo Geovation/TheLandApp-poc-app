@@ -85,7 +85,7 @@
               source: new ol.source.Vector({
                 url: layer.url,
                 format: new ol.format.GeoJSON({
-                  defaultDataProjection: layer.projection
+                  defaultDataProjection: "EPSG:27700"
                 })
               }),
               style: new ol.style.Style({
@@ -93,7 +93,7 @@
                   color: layer.fillColor,
                 }),
                 stroke: new ol.style.Stroke({
-                  color: layer.strokeColer,
+                  color: layer.strokeColor,
                   width: layer.strokeWidth
                 })
               })
@@ -110,7 +110,7 @@
       currentBaseMap = baseMap;
       addLayer(currentBaseMap);
     }
-    
+
   } // mapService
 
 

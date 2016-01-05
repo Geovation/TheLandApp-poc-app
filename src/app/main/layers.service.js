@@ -19,34 +19,30 @@
   /////////////
 
   function createEnvironmentalLayers() {
-      return [{
+    return [{
         name: 'Ancient Woodland',
         type: 'vector',
-        url: "/data/geojson/Ancient_Woodland_England_clipped.geojson",
-        format: "geojson",
-        projection: "EPSG:27700",
+        url: "/assets/geojson/Ancient_Woodland_England_clipped.geojson",
         fillColor: "rgba(176, 23, 21, 0.5)",
         strokeColor: "rgba(176, 23, 21, 1)",
         strokeWidth: 2
       }, {
+        disabled: true,
         name: 'AONB',
         type: 'vector',
         url: "/data/geojson/AONB_clipped.geojson",
-        format: "geojson",
-        projection: "EPSG:27700",
         fillColor: "rgba(176, 23, 21, 0.5)",
         strokeColor: "rgba(176, 23, 21, 1)",
         strokeWidth: 2
       }, {
+        disabled: true,
         name: 'SSSI',
         type: 'vector',
         url: "/data/geojson/Sites_of_special_scientific_interest_england_clipped.geojson",
-        format: "geojson",
-        projection: "EPSG:27700",
         fillColor: "rgba(176, 23, 21, 0.5)",
         strokeColor: "rgba(176, 23, 21, 1)",
         strokeWidth: 2
-      }];
+    }];
   }
 
   function createBaseMapLayers() {
@@ -69,7 +65,6 @@
       type: 'vector',
       // url: "/data/geojson/land_registry_boundaries.geojson",
       url: "/assets/geojson/watership_down_pif.geojson",
-      projection: "EPSG:27700",
       fillColor: "rgba(176, 23, 21, 0.5)",
       strokeColor: "rgba(176, 23, 21, 1)",
       strokeWidth: 2
@@ -77,15 +72,14 @@
       name: 'RPA Boundaries',
       type: 'vector',
       url: "/assets/geojson/watership_down_rpa.geojson",
-      projection: "EPSG:27700",
       fillColor: "rgba(255, 165, 0, 0.5)",
       strokeColor: "rgba(255, 165, 0, 1)",
       strokeWidth: 2
     }, {
+      disabled: true,
       name: 'LR Vectors',
       type: 'vector',
       url: "TODO",
-      projection: "EPSG:27700",
       fillColor: "rgba(255, 165, 0, 0.5)",
       strokeColor: "rgba(255, 165, 0, 1)",
       strokeWidth: 2
