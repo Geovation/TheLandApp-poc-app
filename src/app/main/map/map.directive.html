@@ -1,48 +1,49 @@
 <div id="map" class="map"></div>
 
-<!-- <md-content class="map-zoom-tools">
+<md-content class="map-zoom-tools">
 	<md-button class="btn btn-primary" ng-click="vm.zoomIn()">+</md-button>
 	<md-button class="btn btn-primary" ng-click="vm.zoomOut()">-</md-button>
 </md-content>
 
-<div layout="column" layout-align="center center" class="map-drawing-tools"> -->
-	<!-- <md-button aria-label="menu" class="md-fab md-mini" ng-repeat="tool in mapCtrl.drawingTools"
-			   ng-click="mapCtrl.toggleDrawingTool(tool)"
+
+<div layout="column" layout-align="center center" class="map-drawing-tools">
+	<md-button aria-label="menu" class="md-fab md-mini" ng-repeat="tool in vm.drawingTools"
+			   ng-click="vm.toggleDrawingTool(tool)"
 			   ng-class="{'md-primary': !tool.active, 'md-hue-1': tool.active}">
 		<md-tooltip md-direction="right">{{tool.name}}</md-tooltip>
 		<i class="fa fa-lg" ng-class="tool.icon"></i>
-	</md-button> -->
+	</md-button>
 
 
 
 
-	<!--<md-button class="md-fab md-mini md-primary">1</md-button>-->
-	<!--<md-button class="md-fab md-mini md-primary .md-hue-1">2</md-button>-->
+	<!-- <md-button class="md-fab md-mini md-primary">1</md-button> -->
+	<!-- <md-button class="md-fab md-mini md-primary .md-hue-1">2</md-button> -->
 	<!--<md-button class="md-fab md-mini md-primary .md-hue-2">3</md-button>-->
 	<!--<md-button class="md-fab md-mini md-primary .md-hue-3">4</md-button>-->
-	<!--<md-button class="md-fab md-mini md-accent">5</md-button>-->
+	<!-- <md-button class="md-fab md-mini md-accent">5</md-button> -->
 	<!--<md-button class="md-fab md-mini md-accent .md-hue-1">6</md-button>-->
 	<!--<md-button class="md-fab md-mini md-accent .md-hue-2">7</md-button>-->
 	<!--<md-button class="md-fab md-mini md-accent .md-hue-3">8</md-button>-->
-	<!--<md-button class="md-fab md-mini md-warn">9</md-button>-->
+	<!-- <md-button class="md-fab md-mini md-warn">9</md-button> -->
 	<!--<md-button class="md-fab md-mini md-warn .md-hue-1">10</md-button>-->
 	<!--<md-button class="md-fab md-mini md-warn .md-hue-2">11</md-button>-->
 	<!--<md-button class="md-fab md-mini md-warn .md-hue-3">12</md-button>-->
-	<!--<md-button class="md-fab md-mini md-background">13</md-button>-->
+	<!-- <md-button class="md-fab md-mini md-background">13</md-button> -->
 	<!--<md-button class="md-fab md-mini md-background .md-hue-1">14</md-button>-->
 	<!--<md-button class="md-fab md-mini md-background .md-hue-2">15</md-button>-->
-	<!--<md-button class="md-fab md-mini md-background .md-hue-3">16</md-button>-->
+	<!--<md-button class="md-fab md-mini md-background .md-hue-3">16</md-button> -->
 
-<!--
+
 </div>
 
-<div layout="column" layout-align="center center" class="map-drawing-tools"> -->
-	<!-- <md-button aria-label="menu" class="md-fab md-mini md-warn"
-			   ng-click="mapCtrl.deactivateAllDrawingTools()"
-			   ng-show="mapCtrl.isAnyDrawingToolActive()">
+<div layout="column" layout-align="center center" class="map-drawing-tools">
+	<md-button aria-label="menu" class="md-fab md-mini md-warn"
+			   ng-click="vm.deactivateAllDrawingTools()"
+			   ng-show="vm.isAnyDrawingToolActive()">
 		<md-tooltip md-direction="up">Finish Drawing</md-tooltip>
 		<i class="fa fa-lg fa-times"></i>
-	</md-button> -->
-<!-- </div>
+	</md-button>
+</div>
 
-<section class="map-search" osel-search="performMapSearch"></section> -->
+<!-- <section class="map-search" osel-search="performMapSearch"></section> -->
