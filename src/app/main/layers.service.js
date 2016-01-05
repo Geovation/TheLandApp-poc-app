@@ -27,10 +27,9 @@
         strokeColor: "rgba(176, 23, 21, 1)",
         strokeWidth: 2
       }, {
-        disabled: true,
         name: 'AONB',
         type: 'vector',
-        url: "/data/geojson/AONB_clipped.geojson",
+        url: "/assets/geojson/AONB_clipped.geojson",
         fillColor: "rgba(176, 23, 21, 0.5)",
         strokeColor: "rgba(176, 23, 21, 1)",
         strokeWidth: 2
