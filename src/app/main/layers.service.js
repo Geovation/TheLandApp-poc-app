@@ -16,8 +16,6 @@
     return service;
   }
 
-  /////////////
-
   function createEnvironmentalLayers() {
     return [{
         name: 'Ancient Woodland',
