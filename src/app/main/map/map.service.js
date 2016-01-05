@@ -14,14 +14,16 @@
     var jamesFarm = ol.proj.fromLonLat([-1.315305, 51.324901]);
 
     // name: ol's layer
-    var layers = {};
+    var osLayers = {};
     var currentBaseMap = {};
     var view = {};
     var map = {};
 
     var service = {
       createMap: createMap,
-      setBaseMap: setBaseMap
+      setBaseMap: setBaseMap,
+      addLayer: addLayer,
+      removeLayer: removeLayer
       // addBaseMaps: addBaseMaps,
       // environmentalLayers: environmentalLayers,
       // baseMapLayers: baseMapLayers,
@@ -50,29 +52,39 @@
       });
     }
 
-    function setBaseMap(baseMap) {
-      if (!layers[baseMap.name]) {
-        switch (baseMap.type) {
+    function addLayer(layer) {
+      buildAndCacheLayer(layer);
+      map.addLayer(osLayers[layer.name]);
+    }
+
+    function removeLayer(layer) {
+      buildAndCacheLayer(layer);
+      map.removeLayer(osLayers[layer.name]);
+    }
+
+    function buildAndCacheLayer(layer) {
+      if (!osLayers[layer.name]) {
+        switch (layer.type) {
           case 'xyz':
-            layers[baseMap.name] = new ol.layer.Tile({
+            osLayers[layer.name] = new ol.layer.Tile({
                 source: new ol.source.XYZ({
-                  url: baseMap.url
+                  url: layer.url
                 })
               });
             break;
           case 'osm':
-            layers[baseMap.name] = new ol.layer.Tile({
+            osLayers[layer.name] = new ol.layer.Tile({
                 source: new ol.source.OSM()
               });
             break;
         }
       }
+    }
 
-      // switch layer
-      // map.setBaseLayer(layers[baseMap.name]);
-      map.removeLayer(currentBaseMap);
-      currentBaseMap = layers[baseMap.name];
-      map.addLayer(currentBaseMap);
+    function setBaseMap(baseMap) {
+      removeLayer(currentBaseMap);
+      currentBaseMap = baseMap;
+      addLayer(currentBaseMap);
     }
   } // mapService
 
