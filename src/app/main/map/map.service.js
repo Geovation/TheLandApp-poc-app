@@ -94,7 +94,7 @@
                 }),
                 stroke: new ol.style.Stroke({
                   color: layer.strokeColor,
-                  width: layer.strokeWidth
+                  width: 2
                 })
               })
             });

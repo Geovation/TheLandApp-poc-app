@@ -25,22 +25,18 @@
         url: "/assets/geojson/Ancient_Woodland_England_clipped.geojson",
         fillColor: "rgba(176, 23, 21, 0.5)",
         strokeColor: "rgba(176, 23, 21, 1)",
-        strokeWidth: 2
       }, {
         name: 'AONB',
         type: 'vector',
         url: "/assets/geojson/AONB_clipped.geojson",
         fillColor: "rgba(176, 23, 21, 0.5)",
         strokeColor: "rgba(176, 23, 21, 1)",
-        strokeWidth: 2
       }, {
-        disabled: true,
         name: 'SSSI',
         type: 'vector',
-        url: "/data/geojson/Sites_of_special_scientific_interest_england_clipped.geojson",
+        url: "/assets/geojson/Sites_of_special_scientific_interest_england_clipped.geojson",
         fillColor: "rgba(176, 23, 21, 0.5)",
         strokeColor: "rgba(176, 23, 21, 1)",
-        strokeWidth: 2
     }];
   }
 
@@ -66,14 +62,12 @@
       url: "/assets/geojson/watership_down_pif.geojson",
       fillColor: "rgba(176, 23, 21, 0.5)",
       strokeColor: "rgba(176, 23, 21, 1)",
-      strokeWidth: 2
     }, {
       name: 'RPA Boundaries',
       type: 'vector',
       url: "/assets/geojson/watership_down_rpa.geojson",
       fillColor: "rgba(255, 165, 0, 0.5)",
       strokeColor: "rgba(255, 165, 0, 1)",
-      strokeWidth: 2
     }, {
       disabled: true,
       name: 'LR Vectors',
@@ -81,7 +75,6 @@
       url: "TODO",
       fillColor: "rgba(255, 165, 0, 0.5)",
       strokeColor: "rgba(255, 165, 0, 1)",
-      strokeWidth: 2
     }];
   }
 
