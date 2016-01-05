@@ -1,14 +1,15 @@
 (function() {
   'use strict';
 
- // TODO delete layers dependencies.
-
   angular
     .module('LandApp')
-    .service('mapService', ['ol', mapService]);
+    .service('mapService', ['ol', '$log', 'proj4', mapService]);
 
   /** @ngInject */
-  function mapService(ol) {
+  function mapService(ol, $log, proj4) {
+    // define EPSG:27700
+    proj4.defs("EPSG:27700", "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +towgs84=446.448,-125.157,542.06,0.15,0.247,0.842,-20.489 +units=m +no_defs");
+
     // TODO: remove this hard code
     // var timsFarm = ol.proj.fromLonLat([-0.658493, 51.191286]);
     var jamesFarm = ol.proj.fromLonLat([-1.315305, 51.324901]);
@@ -22,13 +23,7 @@
     var service = {
       createMap: createMap,
       setBaseMap: setBaseMap,
-      addLayer: addLayer,
-      removeLayer: removeLayer
-      // addBaseMaps: addBaseMaps,
-      // environmentalLayers: environmentalLayers,
-      // baseMapLayers: baseMapLayers,
-      // farmLayers: farmLayers,
-      // map: map
+      toggleLayerFromCheckProperty: toggleLayerFromCheckProperty
     };
 
     return service;
@@ -62,6 +57,14 @@
       map.removeLayer(osLayers[layer.name]);
     }
 
+    function toggleLayerFromCheckProperty(layer) {
+      if (layer.checked) {
+        addLayer(layer);
+      } else {
+        removeLayer(layer);
+      }
+    }
+
     function buildAndCacheLayer(layer) {
       if (!osLayers[layer.name]) {
         switch (layer.type) {
@@ -77,15 +80,37 @@
                 source: new ol.source.OSM()
               });
             break;
+          case 'vector':
+            osLayers[layer.name] = new ol.layer.Vector({
+              source: new ol.source.Vector({
+                url: layer.url,
+                format: new ol.format.GeoJSON({
+                  defaultDataProjection: layer.projection
+                })
+              }),
+              style: new ol.style.Style({
+                fill: new ol.style.Fill({
+                  color: layer.fillColor,
+                }),
+                stroke: new ol.style.Stroke({
+                  color: layer.strokeColer,
+                  width: layer.strokeWidth
+                })
+              })
+            });
+            break;
+          default:
+            $log.log("layer type '" + layer.type + "' not defined");
         }
       }
-    }
+    } //buildAndCacheLayer
 
     function setBaseMap(baseMap) {
       removeLayer(currentBaseMap);
       currentBaseMap = baseMap;
       addLayer(currentBaseMap);
     }
+    
   } // mapService
 
 

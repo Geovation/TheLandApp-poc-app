@@ -22,8 +22,18 @@
     function linkFunc(scope) {
       mapService.createMap();
       scope.$on('toggle-basemap-layer', function(e, baseMap) {
-        $log.debug(baseMap);
+        $log.debug("base map: " + baseMap);
         mapService.setBaseMap(baseMap);
+      });
+
+      scope.$on('toggle-farm-layer', function(e, layer) {
+        $log.debug("farm layer:" + layer);
+        mapService.toggleLayerFromCheckProperty(layer);
+      });
+
+      scope.$on('toggle-environmental-layer', function(e, layer) {
+        $log.debug("environmental layer:" + layer);
+        mapService.toggleLayerFromCheckProperty(layer);
       });
     }
 
