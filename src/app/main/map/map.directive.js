@@ -36,6 +36,10 @@
         $log.debug("environmental layer:" + layer);
         mapService.toggleLayerFromCheckProperty(layer);
       });
+
+      scope.$on("address-selected", function(e, address) {
+        debugger;
+      });
     }
 
     function Controller() {
