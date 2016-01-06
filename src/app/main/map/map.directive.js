@@ -6,7 +6,7 @@
     .directive('laMap', laMap);
 
   /** @ngInject */
-  function laMap($log, mapService) {
+  function laMap($log, mapService, ol) {
     var directive = {
       priority: 2,
       restrict: 'E',
@@ -38,8 +38,14 @@
       });
 
       scope.$on("address-selected", function(e, address) {
-        debugger;
+        if (address) {
+          var coord1 = ol.proj.fromLonLat([Number(address.boundingbox[2]), Number(address.boundingbox[0])]);
+          var coord2 = ol.proj.fromLonLat([Number(address.boundingbox[3]), Number(address.boundingbox[1])]);
+          var extent = ol.extent.boundingExtent([coord1, coord2]);
+          mapService.fitExtent(extent);
+        }
       });
+
     }
 
     function Controller() {

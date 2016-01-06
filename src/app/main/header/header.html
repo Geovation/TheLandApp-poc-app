@@ -11,12 +11,13 @@
         md-search-text="vmHeader.searchText"
         md-selected-item-change="vmHeader.selectedItemChange(item)"
         md-items="item in vmHeader.querySearch(vmHeader.searchText)"
-        md-item-text="item.display"
+        md-item-text="item.display_name"
         md-min-length="3"
         md-delay="500"
         placeholder="Search">
+
       <md-item-template>
-        <span md-highlight-text="vmHeader.searchText" md-highlight-flags="^i">{{item.display_name}}</span>
+        <span md-highlight-text="vmHeader.searchText" md-highlight-flags="gi">{{item.display_name}}</span>
       </md-item-template>
       <md-not-found>
         No addresses matching "{{vmHeader.searchText}}" were found.
