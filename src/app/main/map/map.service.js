@@ -59,13 +59,25 @@
       zoomIn: zoomIn,
       zoomOut: zoomOut,
       toggleDrawingTool: toggleDrawingTool,
-      drawingTools: drawingTools
+      drawingTools: drawingTools,
+      deactivateAllDrawingTools: deactivateAllDrawingTools,
+      isAnyDrawingToolActive: isAnyDrawingToolActive
     };
 
     return service;
 
     ///////////////
+    function isAnyDrawingToolActive() {
+      return drawingTools
+        .filter(function(dt) { return dt.hasOwnProperty('draw');} )
+        .length > 0;
+    }
 
+    function deactivateAllDrawingTools() {
+      drawingTools
+        .filter(function(dt) { return dt.hasOwnProperty('draw');} )
+        .forEach(deactivateDrawingTool);
+    }
 
     function newVectorLayer(name, colour, strokeWidth) {
       return new ol.layer.Vector({
@@ -86,16 +98,25 @@
           })
         })
       });
-    };
+    }
 
     function unfocusLayer(layer) {
       map.getLayers().getArray()
-        .filter(l => l !== layer)
-        .forEach(l => {
-            l.setOpacity(l['oldOpacity'] || 1);
-            delete l['oldOpacity'];
+        .filter(function(l) { return l !== layer; })
+        .forEach(function(l) {
+            l.setOpacity(l.oldOpacity || 1);
+            delete l.oldOpacity;
         });
-    };
+    }
+
+    function focusLayer(layer) {
+      map.getLayers().getArray()
+        .filter(function(l) { return l !== layer; })
+        .forEach(function(l) {
+            l.oldOpacity = l.getOpacity();
+            l.setOpacity(0.5);
+        });
+    }
 
     function toggleDrawingTool(tool) {
       if (tool.draw) {
@@ -111,14 +132,14 @@
         map.removeInteraction(tool.draw);
         delete tool.draw;
         unfocusLayer(drawingLayers[tool.name]);
-    };
+    }
 
     function activateDrawingTool(tool) {
         drawingTools.forEach(function(dt){
           deactivateDrawingTool(dt);
         });
 
-      //  $log.log('activate', tool, this.$scope);
+        $log.log('activate', tool);
         tool.active = true;
 
         tool.draw = new ol.interaction.Draw({
@@ -148,16 +169,7 @@
             hideDelay: 5000,
             position: "top right"
         });
-    };
-
-    function focusLayer(layer) {
-      map.getLayers().getArray()
-        .filter(l => l !== layer)
-        .forEach(l => {
-            l['oldOpacity'] = l.getOpacity();
-            l.setOpacity(0.5);
-        });
-    };
+    }
 
     function zoomIn() {
       view.setZoom(view.getZoom() + 1);
@@ -183,7 +195,7 @@
         controls: []
       });
 
-      drawingLayers = drawingTools.reduce(function(obj, curr, i, arr) {
+      drawingLayers = drawingTools.reduce(function(obj, curr) {
         obj[curr.name] = newVectorLayer(curr.name, curr.colour, curr.strokeWidth);
         map.addLayer(obj[curr.name]);
         return obj;
@@ -211,17 +223,25 @@
     function buildAndCacheLayer(layer) {
       if (!osLayers[layer.name]) {
         switch (layer.type) {
-          case 'xyz':
+          case 'base.mapbox':
             osLayers[layer.name] = new ol.layer.Tile({
-                source: new ol.source.XYZ({
-                  url: layer.url
-                })
-              });
+              zIndex: -1,
+              source: new ol.source.XYZ({
+                url: layer.url
+              })
+            });
             break;
-          case 'osm':
+          case 'base.osm':
             osLayers[layer.name] = new ol.layer.Tile({
-                source: new ol.source.OSM()
-              });
+              zIndex: -1,
+              source: new ol.source.OSM()
+            });
+            break;
+          case 'base.mapquest':
+            osLayers[layer.name] = new ol.layer.Tile({
+              zIndex: -1,
+              source: new ol.source.MapQuest({layer: 'osm'})
+            });
             break;
           case 'vector':
             osLayers[layer.name] = new ol.layer.Vector({

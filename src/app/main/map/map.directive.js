@@ -44,6 +44,8 @@
       vm.zoomOut = mapService.zoomOut;
       vm.toggleDrawingTool = mapService.toggleDrawingTool;
       vm.drawingTools = mapService.drawingTools;
+      vm.deactivateAllDrawingTools = mapService.deactivateAllDrawingTools;
+      vm.isAnyDrawingToolActive = mapService.isAnyDrawingToolActive;
     }
   }
 })();
