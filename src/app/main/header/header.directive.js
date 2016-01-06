@@ -29,20 +29,22 @@
       /////////
       function toggleLayersPanel () {
         $log.debug('toggleLayersPanel');
-        $rootScope.$emit('open-layers-panel');
-      };
+        $rootScope.$broadcast('open-layers-panel');
+      }
 
       function searchTextChange(text) {
         $log.debug("search text changed" + text);
       }
 
-      function selectedItemChange(item) {
-        $log.debug("address-selected " + JSON.stringify(item));
-        $rootScope.$emit('address-selected', [item]);
+      function selectedItemChange(address) {
+        $log.debug("address-selected " + JSON.stringify(address));
+        $rootScope.$broadcast('address-selected', address);
       }
 
       // returns a primise as it is async.
       function querySearch(query) {
+        $log.debug("Query search:" + query);
+
         var url = "http://nominatim.openstreetmap.org/search";
         var defer = $q.defer();
 
@@ -56,11 +58,8 @@
             }
           );
 
-        $log.debug(query);
-
         return defer.promise;
       }
-
 
     }
   }

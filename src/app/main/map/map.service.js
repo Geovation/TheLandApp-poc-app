@@ -55,6 +55,7 @@
     var service = {
       createMap: createMap,
       setBaseMap: setBaseMap,
+      fitExtent: fitExtent,
       toggleLayerFromCheckProperty: toggleLayerFromCheckProperty,
       zoomIn: zoomIn,
       zoomOut: zoomOut,
@@ -67,6 +68,10 @@
     return service;
 
     ///////////////
+    function fitExtent(extent) {
+      view.fit(extent, map.getSize());
+    }
+
     function isAnyDrawingToolActive() {
       return drawingTools
         .filter(function(dt) { return dt.hasOwnProperty('draw');} )
