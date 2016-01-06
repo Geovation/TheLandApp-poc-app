@@ -68,14 +68,12 @@
 
     ///////////////
     function isAnyDrawingToolActive() {
-      debugger;
       return drawingTools
         .filter(function(dt) { return dt.hasOwnProperty('draw');} )
         .length > 0;
     }
 
     function deactivateAllDrawingTools() {
-      debugger;
       drawingTools
         .filter(function(dt) { return dt.hasOwnProperty('draw');} )
         .forEach(deactivateDrawingTool);
@@ -141,7 +139,7 @@
           deactivateDrawingTool(dt);
         });
 
-      //  $log.log('activate', tool, this.$scope);
+        $log.log('activate', tool);
         tool.active = true;
 
         tool.draw = new ol.interaction.Draw({
@@ -225,17 +223,25 @@
     function buildAndCacheLayer(layer) {
       if (!osLayers[layer.name]) {
         switch (layer.type) {
-          case 'xyz':
+          case 'base.mapbox':
             osLayers[layer.name] = new ol.layer.Tile({
-                source: new ol.source.XYZ({
-                  url: layer.url
-                })
-              });
+              zIndex: -1,
+              source: new ol.source.XYZ({
+                url: layer.url
+              })
+            });
             break;
-          case 'osm':
+          case 'base.osm':
             osLayers[layer.name] = new ol.layer.Tile({
-                source: new ol.source.OSM()
-              });
+              zIndex: -1,
+              source: new ol.source.OSM()
+            });
+            break;
+          case 'base.mapquest':
+            osLayers[layer.name] = new ol.layer.Tile({
+              zIndex: -1,
+              source: new ol.source.MapQuest({layer: 'osm'})
+            });
             break;
           case 'vector':
             osLayers[layer.name] = new ol.layer.Vector({

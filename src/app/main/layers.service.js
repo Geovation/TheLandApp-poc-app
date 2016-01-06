@@ -40,16 +40,20 @@
 
   function createBaseMapLayers() {
     return [{
-      name: 'Open Street Map',
-      type: 'osm'
-    }, {
-      name: 'Aerial',
-      type: 'xyz',
-      url: "https://api.tiles.mapbox.com/v4/truetoffee.a6d1c57e/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoidHJ1ZXRvZmZlZSIsImEiOiJPU2NGeVpNIn0.ZJjeKACNei3rl6k9KLzJlA"
-    }, {
-      name: 'Ordnance Survey',
-      disabled: true
-    }];
+        name: 'Open Street Map',
+        type: 'base.osm'
+      }, {
+        name: 'Map Quest',
+        type: 'base.mapquest'
+      }, {
+        name: 'Aerial',
+        type: 'base.mapbox',
+        url: "https://api.tiles.mapbox.com/v4/truetoffee.a6d1c57e/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoidHJ1ZXRvZmZlZSIsImEiOiJPU2NGeVpNIn0.ZJjeKACNei3rl6k9KLzJlA"
+      }, {
+        name: 'Ordnance Survey',
+        disabled: true
+      }
+  ];
   }
 
   function createFarmLayers() {
