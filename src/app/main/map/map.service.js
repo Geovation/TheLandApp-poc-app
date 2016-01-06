@@ -59,13 +59,27 @@
       zoomIn: zoomIn,
       zoomOut: zoomOut,
       toggleDrawingTool: toggleDrawingTool,
-      drawingTools: drawingTools
+      drawingTools: drawingTools,
+      deactivateAllDrawingTools: deactivateAllDrawingTools,
+      isAnyDrawingToolActive: isAnyDrawingToolActive
     };
 
     return service;
 
     ///////////////
+    function isAnyDrawingToolActive() {
+      debugger;
+      return drawingTools
+        .filter(function(dt) { return dt.hasOwnProperty('draw');} )
+        .length > 0;
+    }
 
+    function deactivateAllDrawingTools() {
+      debugger;
+      drawingTools
+        .filter(function(dt) { return dt.hasOwnProperty('draw');} )
+        .forEach(deactivateDrawingTool);
+    }
 
     function newVectorLayer(name, colour, strokeWidth) {
       return new ol.layer.Vector({
@@ -86,16 +100,25 @@
           })
         })
       });
-    };
+    }
 
     function unfocusLayer(layer) {
       map.getLayers().getArray()
-        .filter(l => l !== layer)
-        .forEach(l => {
-            l.setOpacity(l['oldOpacity'] || 1);
-            delete l['oldOpacity'];
+        .filter(function(l) { return l !== layer; })
+        .forEach(function(l) {
+            l.setOpacity(l.oldOpacity || 1);
+            delete l.oldOpacity;
         });
-    };
+    }
+
+    function focusLayer(layer) {
+      map.getLayers().getArray()
+        .filter(function(l) { return l !== layer; })
+        .forEach(function(l) {
+            l.oldOpacity = l.getOpacity();
+            l.setOpacity(0.5);
+        });
+    }
 
     function toggleDrawingTool(tool) {
       if (tool.draw) {
@@ -111,7 +134,7 @@
         map.removeInteraction(tool.draw);
         delete tool.draw;
         unfocusLayer(drawingLayers[tool.name]);
-    };
+    }
 
     function activateDrawingTool(tool) {
         drawingTools.forEach(function(dt){
@@ -148,16 +171,7 @@
             hideDelay: 5000,
             position: "top right"
         });
-    };
-
-    function focusLayer(layer) {
-      map.getLayers().getArray()
-        .filter(l => l !== layer)
-        .forEach(l => {
-            l['oldOpacity'] = l.getOpacity();
-            l.setOpacity(0.5);
-        });
-    };
+    }
 
     function zoomIn() {
       view.setZoom(view.getZoom() + 1);
@@ -183,7 +197,7 @@
         controls: []
       });
 
-      drawingLayers = drawingTools.reduce(function(obj, curr, i, arr) {
+      drawingLayers = drawingTools.reduce(function(obj, curr) {
         obj[curr.name] = newVectorLayer(curr.name, curr.colour, curr.strokeWidth);
         map.addLayer(obj[curr.name]);
         return obj;
