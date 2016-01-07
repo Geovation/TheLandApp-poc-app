@@ -1,5 +1,5 @@
 {
-  "firebase": "LandApp",
+  "firebase": "the-land-app-indigo",
   "public": "dist",
   "ignore": [
     "firebase.json",

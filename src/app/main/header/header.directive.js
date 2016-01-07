@@ -45,10 +45,10 @@
       function querySearch(query) {
         $log.debug("Query search:" + query);
 
-        var url = "http://nominatim.openstreetmap.org/search";
+        var url = "https://nominatim.openstreetmap.org/search";
         var defer = $q.defer();
 
-        $http.get(url, {params:{format:"json", q:query}})
+        $http.get(url, {params:{format:"json", q:query, countrycodes:"gb"}})
           .then(
             function successCallback(response){
               defer.resolve(response.data);
