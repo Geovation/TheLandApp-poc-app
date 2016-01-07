@@ -1,0 +1,15 @@
+{
+  "qa": {
+    "ENV": {
+      "name": "qa",
+      "firebase" : "the-land-app-indigo"
+    }
+  },
+  
+  "dev": {
+    "ENV": {
+      "name": "dev",
+      "firebase" : "the-land-app-indigo"
+    }
+  }
+}

@@ -25,12 +25,9 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <ng-include src="'loading.html'" ng-if="!indexVm.loaded"></ng-include>
+    <ng-include src="'login.html'" ng-if="!indexVm.authData"></ng-include>
 
-    <ng-include src="'login.html'" ng-if="indexVm.loaded && !indexVm.authData"></ng-include>
-
-    <section layout="row" flex style="height: 100%" ng-view ng-if="indexVm.loaded && indexVm.authData">
-    </section>
+    <section layout="row" flex style="height: 100%" ng-view ng-if="indexVm.authData"/>
 
     <!-- build:js(src) scripts/vendor.js -->
     <!-- bower:js -->

@@ -6,8 +6,8 @@
     .run(runBlock);
 
   /** @ngInject */
-  function runBlock($log) {
-
+  function runBlock($rootScope, $log, ENV) {
+    $rootScope.ENV = ENV;
     $log.debug('runBlock end');
   }
 

@@ -2,7 +2,7 @@
   <div class="md-toolbar-tools">
     <!--<md-button class="md-primary" aria-label="Toggle Menu" ng-click="toggleMenu()"><i class="fa fa-lg fa-bars"></i></md-button>-->
     <h2>
-      <span>The Land App</span>
+      <span title="{{ENV | json}}">The Land App</span>
     </h2>
 
     <md-autocomplete
@@ -37,6 +37,11 @@
 
         <md-button class="md-primary narrow" ng-click="vmHeader.toggleLayersPanel()">
           <md-icon md-svg-src="assets/images/icons/layers_128.svg"></md-icon>
+        </md-button>
+
+        <md-button class="md-primary narrow" ng-click="indexVm.logout()">
+          <i class="fa fa-lg fa-sign-out"></i>
+          <md-tooltip>Log out {{indexVm.authData.password.email}}</md-tooltip>
         </md-button>
       </li>
     </ul>
