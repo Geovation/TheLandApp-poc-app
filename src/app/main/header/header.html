@@ -38,6 +38,11 @@
         <md-button class="md-primary narrow" ng-click="vmHeader.toggleLayersPanel()">
           <md-icon md-svg-src="assets/images/icons/layers_128.svg"></md-icon>
         </md-button>
+
+        <md-button class="md-primary narrow" ng-click="indexVm.logout()">
+          <i class="fa fa-lg fa-sign-out"></i>
+          <md-tooltip>Log out {{indexVm.authData.password.email}}</md-tooltip>
+        </md-button>
       </li>
     </ul>
   </div>

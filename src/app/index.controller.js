@@ -9,22 +9,17 @@
   function IndexController($log, $firebaseAuth, $mdDialog, Firebase) {
     var vm = this;
 
-    vm.loaded = true;
-    //vm.user = true;
-    //vm.test = "CIAO";
-    vm.login = login;
-    vm.signup = signup;
-    vm.logout = logout;
-    vm.authData = false;
-
-    /////////
+    //TODO: externalize it
     var firebaseRef = new Firebase("https://the-land-app-indigo.firebaseio.com");
     var auth = $firebaseAuth(firebaseRef);
     var modalMessage;
 
-    // for persistent
-    //  vm.authData = auth.$getAuth();
+    vm.login = login;
+    vm.signup = signup;
+    vm.logout = logout;
+    vm.authData = auth.$getAuth();
 
+    /////////
     function showError(error) {
       $mdDialog.hide(modalMessage);
       modalMessage = $mdDialog.alert({
@@ -70,6 +65,7 @@
 
     function logout() {
       auth.$unauth();
+      vm.authData = null;
     }
   }
 })();
