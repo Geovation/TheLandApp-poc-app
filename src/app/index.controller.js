@@ -6,11 +6,10 @@
     .controller('IndexController', IndexController);
 
   /** @ngInject */
-  function IndexController($log, $firebaseAuth, $mdDialog, Firebase) {
+  function IndexController($log, $firebaseAuth, $mdDialog, Firebase, ENV) {
     var vm = this;
 
-    //TODO: externalize it
-    var firebaseRef = new Firebase("https://the-land-app-indigo.firebaseio.com");
+    var firebaseRef = new Firebase("https://" + ENV.firebase + ".firebaseio.com");
     var auth = $firebaseAuth(firebaseRef);
     var modalMessage;
 

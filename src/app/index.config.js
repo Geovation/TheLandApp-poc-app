@@ -18,3 +18,14 @@
   }
 
 })();
+
+// (function () {
+//  return angular.module('config', [])
+// .constant('ENV', {"name":"qa","firebase":"the-land-app-indigo"});
+//
+// })();
+// (function () {
+//  return angular.module('config')
+// .constant('ENV', {"name":"qa","firebase":"the-land-app-indigo"});
+//
+// })();

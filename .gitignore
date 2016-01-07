@@ -6,3 +6,4 @@ bower_components/
 dist/
 coverage/
 .DS_Store
+src/app/environments.js
