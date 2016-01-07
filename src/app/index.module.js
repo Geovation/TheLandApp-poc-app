@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('LandApp', ['ngResource', 'ngRoute', 'ngMaterial'])
+    .module('LandApp', ['ngResource', 'ngRoute', 'ngMaterial', 'firebase'])
     .config(['$mdThemingProvider', function ($mdThemingProvider) {
       var primary = '#28904E'; // not the real primary!!
 
