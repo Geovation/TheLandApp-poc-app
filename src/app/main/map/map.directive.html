@@ -6,7 +6,7 @@
 </md-content>
 
 
-<div layout="column" layout-align="center center" class="map-drawing-tools">
+<div layout="column" layout-align="center center" class="map-drawing-tools" ng-show="vm.getEnableDrawing()">
 	<md-button aria-label="menu" class="md-fab md-mini" ng-repeat="tool in vm.drawingTools"
 			   ng-click="vm.toggleDrawingTool(tool)"
 			   ng-class="{'md-primary': !tool.active, 'md-hue-1': tool.active}">

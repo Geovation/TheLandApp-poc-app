@@ -56,6 +56,7 @@
       vm.drawingTools = mapService.drawingTools;
       vm.deactivateAllDrawingTools = mapService.deactivateAllDrawingTools;
       vm.isAnyDrawingToolActive = mapService.isAnyDrawingToolActive;
+      vm.getEnableDrawing = mapService.getEnableDrawing;
     }
   }
 })();
