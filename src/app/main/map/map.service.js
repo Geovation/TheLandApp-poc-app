@@ -44,6 +44,8 @@
     function loadUserLayers(authData) {
       if (authData) {
 
+        // createMap();
+
         firebaseService.getUserLayersRef().on("value", function(userLayers) {
           $log.debug(userLayers);
 
@@ -51,19 +53,22 @@
 
           var layers = userLayers.val();
           var format = new ol.format.GeoJSON();
+          var extent = ol.extent.createEmpty();
 
           drawingLayers = drawingTools.reduce(function(obj, curr) {
             obj[curr.name] = newVectorLayer(curr.name, curr.colour, curr.strokeWidth);
             map.addLayer(obj[curr.name]);
 
-            if (layers[curr.name].features) {
+            if (layers && layers[curr.name] && layers[curr.name].features) {
               var features = format.readFeatures(layers[curr.name]);
               obj[curr.name].getSource().addFeatures(features);
+              ol.extent.extend(extent, obj[curr.name].getSource().getExtent());
             }
 
             return obj;
           }, {});
 
+          fitExtent(extent);
           $timeout(function() {enableDrawing = true;});
         });
       } else {
@@ -72,7 +77,19 @@
     }
 
     function fitExtent(extent) {
-      view.fit(extent, map.getSize());
+      // Britisg extend
+      // Latitude: 60.8433° to 49.9553°
+      // Longitude: -8.17167° to 1.74944°
+
+      // Easting: 64989
+      // Northing: 1233616
+      //
+      // Easting: 669031
+      // Northing: 12862
+
+      if (!ol.extent.isEmpty(extent)) {
+        view.fit(extent, map.getSize());
+      }
     }
 
     function isAnyDrawingToolActive() {
@@ -156,7 +173,7 @@
         drawingTools.forEach(function(dt){
           deactivateDrawingTool(dt);
         });
-        
+
         tool.active = true;
 
         tool.draw = new ol.interaction.Draw({
