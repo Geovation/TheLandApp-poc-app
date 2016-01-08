@@ -6,17 +6,15 @@
     .controller('IndexController', IndexController);
 
   /** @ngInject */
-  function IndexController($log, $firebaseAuth, $mdDialog, Firebase, ENV) {
+  function IndexController($log, $mdDialog, firebaseService) {
     var vm = this;
 
-    var firebaseRef = new Firebase("https://" + ENV.firebase + ".firebaseio.com");
-    var auth = $firebaseAuth(firebaseRef);
     var modalMessage;
 
     vm.login = login;
     vm.signup = signup;
     vm.logout = logout;
-    vm.authData = auth.$getAuth();
+    vm.authData = firebaseService.auth.$getAuth();
 
     /////////
     function showError(error) {
@@ -38,7 +36,7 @@
     function signup() {
       showMessage("Signing up");
 
-      auth.$createUser({email:vm.email, password:vm.password})
+      firebaseService.auth.$createUser({email:vm.email, password:vm.password})
       .then(function(userData) {
         $log.debug("User " + userData.uid + " created successfully!");
         login();
@@ -51,7 +49,7 @@
     function login() {
       showMessage("Loging in");
 
-      auth.$authWithPassword({email: vm.email, password: vm.password})
+      firebaseService.auth.$authWithPassword({email: vm.email, password: vm.password})
       .then(function(authData) {
         $log.debug("Logged in as:", authData.uid);
         vm.authData = authData;
@@ -63,7 +61,7 @@
     }
 
     function logout() {
-      auth.$unauth();
+      firebaseService.auth.$unauth();
       vm.authData = null;
     }
   }

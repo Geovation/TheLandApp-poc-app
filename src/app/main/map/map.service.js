@@ -3,10 +3,10 @@
 
   angular
     .module('LandApp')
-    .service('mapService', ['ol', '$log', 'proj4','$mdToast', mapService]);
+    .service('mapService', mapService);
 
   /** @ngInject */
-  function mapService(ol, $log, proj4, $mdToast) {
+  function mapService(ol, $log, proj4, $mdToast, firebaseService) {
     // define EPSG:27700
     proj4.defs("EPSG:27700", "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +towgs84=446.448,-125.157,542.06,0.15,0.247,0.842,-20.489 +units=m +no_defs");
 
@@ -132,7 +132,13 @@
     }
 
     function deactivateDrawingTool(tool) {
-        $log.log('deactivate', tool);
+        $log.debug('deactivate', tool);
+
+        var allFeatures = drawingLayers[tool.name].getSource().getFeatures();
+        var format = new ol.format.GeoJSON();
+        var jsonData = JSON.parse(format.writeFeatures(allFeatures));
+
+        firebaseService.getUserLayersRef().child(tool.name).set(jsonData);
         tool.active = false;
         map.removeInteraction(tool.draw);
         delete tool.draw;
@@ -140,11 +146,7 @@
     }
 
     function activateDrawingTool(tool) {
-        drawingTools.forEach(function(dt){
-          deactivateDrawingTool(dt);
-        });
-
-        $log.log('activate', tool);
+        $log.debug('activate', tool);
         tool.active = true;
 
         tool.draw = new ol.interaction.Draw({
@@ -268,7 +270,7 @@
             });
             break;
           default:
-            $log.log("layer type '" + layer.type + "' not defined");
+            $log.debug("layer type '" + layer.type + "' not defined");
         }
       }
     } //buildAndCacheLayer
@@ -280,15 +282,5 @@
     }
 
   } // mapService
-
-
-  ///////////////
-  // function addBaseMaps(map) {
-  //   angular.forEach(baseMapLayers, function(layerDefinition) {
-  //     if (layerDefinition.layer) {
-  //       map.addLayer(layerDefinition.layer);
-  //     }
-  //   });
-  // }
 
 })();
