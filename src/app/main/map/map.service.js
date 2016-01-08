@@ -137,11 +137,13 @@
     function deactivateDrawingTool(tool) {
         $log.debug('deactivate', tool);
 
-        var allFeatures = drawingLayers[tool.name].getSource().getFeatures();
-        var format = new ol.format.GeoJSON();
-        var jsonData = JSON.parse(format.writeFeatures(allFeatures));
+        if (tool.active) {
+          var allFeatures = drawingLayers[tool.name].getSource().getFeatures();
+          var format = new ol.format.GeoJSON();
+          var jsonData = JSON.parse(format.writeFeatures(allFeatures));
+          firebaseService.getUserLayersRef().child(tool.name).set(jsonData);
+        }
 
-        firebaseService.getUserLayersRef().child(tool.name).set(jsonData);
         tool.active = false;
         map.removeInteraction(tool.draw);
         delete tool.draw;
@@ -150,6 +152,11 @@
 
     function activateDrawingTool(tool) {
         $log.debug('activate', tool);
+
+        drawingTools.forEach(function(dt){
+          deactivateDrawingTool(dt);
+        });
+        
         tool.active = true;
 
         tool.draw = new ol.interaction.Draw({
