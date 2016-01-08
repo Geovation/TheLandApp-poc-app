@@ -7,6 +7,7 @@ var run = require('gulp-run');
 
 var environment = argv.env || 'dev';
 
-gulp.task('deploy', ['default'], function () {
+gulp.task('deploy',function () {
+  console.log("IMPORTANT !! Remember to Build first with 'gulp'!!!");
   run('firebase deploy --firebase ' + environments[environment].ENV.firebase).exec();  // prints "Hello World\n".
 });
