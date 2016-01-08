@@ -1,5 +1,5 @@
 {
-  "firebase": "configure me in environmens.json !!!",
+  "firebase": "configure me in environmens.json and run gulp deploy!!!",
   "public": "dist",
   "ignore": [
     "firebase.json",

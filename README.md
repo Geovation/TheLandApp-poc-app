@@ -15,4 +15,5 @@ The default environment used is dev. To change environment just add --env=env_na
 ```gulp serve --env=qa```
 
 ## Deploy
-* `gulp deploy`
+* `gulp && gulp deploy` build and deploy
+* `gulp deploy` deploy
