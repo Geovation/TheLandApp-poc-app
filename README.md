@@ -13,3 +13,6 @@ from https://github.com/Swiip/generator-gulp-angular/blob/master/docs/usage.md
 
 The default environment used is dev. To change environment just add --env=env_name. Example
 ```gulp serve --env=qa```
+
+## Deploy
+* `gulp deploy`

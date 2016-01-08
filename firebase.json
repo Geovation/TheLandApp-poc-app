@@ -1,9 +1,10 @@
 {
-  "firebase": "the-land-app-indigo",
+  "firebase": "configure me in environmens.json !!!",
   "public": "dist",
   "ignore": [
     "firebase.json",
     "**/.*",
     "**/node_modules/**"
-  ]
+  ],
+  "rules": "security-rules.json"
 }
