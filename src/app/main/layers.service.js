@@ -10,7 +10,8 @@
     var service = {
       environmentalLayers: createEnvironmentalLayers(),
       baseMapLayers: createBaseMapLayers(),
-      farmLayers: createFarmLayers()
+      farmLayers: createFarmLayers(),
+      drawingTools: createDrawingTools()
     };
 
     return service;
@@ -53,7 +54,7 @@
         name: 'Ordnance Survey',
         disabled: true
       }
-  ];
+    ];
   }
 
   function createFarmLayers() {
@@ -77,6 +78,45 @@
       url: "TODO",
       fillColor: "rgba(255, 165, 0, 0.5)",
       strokeColor: "rgba(255, 165, 0, 1)",
+    }];
+  }
+
+  function createDrawingTools() {
+    return [{
+          name: 'Water',
+          type: 'LineString',
+          icon: 'fa-pencil',
+          colour: "0, 178, 238",
+          strokeWidth: 3,
+          checked: true
+      }, {
+          name: 'Electricity',
+          type: 'LineString',
+          icon: 'fa-bolt',
+          colour: "238, 238, 0",
+          strokeWidth: 3,
+          checked: true
+      }, {
+          name: 'Hedge',
+          type: 'LineString',
+          icon: 'fa-photo',
+          colour: "46, 139, 87",
+          strokeWidth: 3,
+          checked: true
+      }, {
+          name: 'Tree',
+          type: 'Point',
+          icon: 'fa-tree',
+          colour: "46, 139, 87",
+          strokeWidth: 3,
+          checked: true
+      }, {
+          name: 'Buildings',
+          type: 'Polygon',
+          icon: 'fa-industry',
+          colour: "144, 78, 39",
+          strokeWidth: 3,
+          checked: true
     }];
   }
 
