@@ -8,7 +8,15 @@
       ng-repeat="layer in vmSidenav.farmLayers track by $index"
       ng-disabled="layer.disabled"
       ng-model="layer.checked"
-      ng-change="vmSidenav.toggleFarmLayer(layer)">{{layer.name}}
+      ng-change="$emit('toggle-farm-layer', layer)">{{layer.name}}
+    </md-checkbox>
+
+    <md-subheader class="md-primary closer-to-children">My Layers</md-subheader>
+    <md-checkbox class="md-raised md-primary"
+      ng-repeat="tool in vmSidenav.drawingTools track by $index"
+      ng-disabled="tool.disabled"
+      ng-model="tool.checked"
+      ng-change="$emit('toggle-drawingTool-layer', tool)">{{tool.name}}
     </md-checkbox>
 
     <md-subheader class="md-primary closer-to-children">Environmental</md-subheader>
@@ -16,11 +24,11 @@
         ng-repeat="layer in vmSidenav.environmentalLayers"
         ng-disabled="layer.disabled"
         ng-model="layer.checked"
-        ng-change="vmSidenav.toggleEnvironmentalLayer(layer)">{{layer.name}}
+        ng-change="$emit('toggle-environmental-layer', layer)">{{layer.name}}
     </md-checkbox>
 
     <md-subheader class="md-primary closer-to-children">Basemaps</md-subheader>
-    <md-radio-group ng-model="vmSidenav.basemap" ng-change="vmSidenav.toggleBaseMapLayer()">
+    <md-radio-group ng-model="vmSidenav.basemap" ng-change="$emit('toggle-basemap-layer', vmSidenav.basemap)">
       <md-radio-button
         ng-repeat="bm in vmSidenav.baseMapLayers"
         ng-disabled="bm.disabled"

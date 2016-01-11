@@ -6,7 +6,7 @@
     .service('mapService', mapService);
 
   /** @ngInject */
-  function mapService(ol, $log, proj4, $mdToast, $timeout, firebaseService) {
+  function mapService(ol, $log, proj4, $mdToast, $timeout, firebaseService, layersService) {
     // define EPSG:27700
     proj4.defs("EPSG:27700", "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +towgs84=446.448,-125.157,542.06,0.15,0.247,0.842,-20.489 +units=m +no_defs");
 
@@ -18,7 +18,7 @@
     var currentBaseMap = {};
     var view = {};
     var map = {};
-    var drawingTools = buildDrawingTools();
+    var drawingTools = layersService.drawingTools;
     var enableDrawing = false;
     var drawingLayers = {};
 
@@ -31,7 +31,8 @@
       toggleLayerFromCheckProperty: toggleLayerFromCheckProperty,
       zoomIn: zoomIn,
       zoomOut: zoomOut,
-      toggleDrawingTool: toggleDrawingTool,
+      editToggleDrawingTool: editToggleDrawingTool,
+      setVisibleDrawingToolLayer: setVisibleDrawingToolLayer,
       drawingTools: drawingTools,
       deactivateAllDrawingTools: deactivateAllDrawingTools,
       isAnyDrawingToolActive: isAnyDrawingToolActive,
@@ -43,10 +44,7 @@
     ///////////////
     function loadUserLayers(authData) {
       if (authData) {
-
-        // createMap();
-
-        firebaseService.getUserLayersRef().on("value", function(userLayers) {
+        firebaseService.getUserLayersRef().once("value", function(userLayers) {
           $log.debug(userLayers);
 
           drawingLayers = [];
@@ -143,7 +141,7 @@
         });
     }
 
-    function toggleDrawingTool(tool) {
+    function editToggleDrawingTool(tool) {
       if (tool.draw) {
         deactivateDrawingTool(tool);
       } else {
@@ -159,12 +157,14 @@
           var format = new ol.format.GeoJSON();
           var jsonData = JSON.parse(format.writeFeatures(allFeatures));
           firebaseService.getUserLayersRef().child(tool.name).set(jsonData);
+
+          tool.active = false;
+          map.removeInteraction(tool.draw);
+          delete tool.draw;
+          unfocusLayer(drawingLayers[tool.name]);
         }
 
-        tool.active = false;
-        map.removeInteraction(tool.draw);
-        delete tool.draw;
-        unfocusLayer(drawingLayers[tool.name]);
+        setVisibleDrawingToolLayer(tool);
     }
 
     function activateDrawingTool(tool) {
@@ -203,6 +203,8 @@
             hideDelay: 5000,
             position: "top right"
         });
+
+        drawingLayers[tool.name].setVisible(true);
     }
 
     function zoomIn() {
@@ -302,40 +304,14 @@
       addLayer(currentBaseMap);
     }
 
+    /** Hide/Unhide drawing tool layer based on tool being checked.
+    */
+    function setVisibleDrawingToolLayer(tool) {
+      var layer = drawingLayers[tool.name];
+      layer.setVisible(tool.checked);
+    }
+
   } // mapService
 
-  function buildDrawingTools() {
-    return [{
-          name: 'Water',
-          type: 'LineString',
-          icon: 'fa-pencil',
-          colour: "0, 178, 238",
-          strokeWidth: 3
-      }, {
-          name: 'Electricity',
-          type: 'LineString',
-          icon: 'fa-bolt',
-          colour: "238, 238, 0",
-          strokeWidth: 3
-      }, {
-          name: 'Hedge',
-          type: 'LineString',
-          icon: 'fa-photo',
-          colour: "46, 139, 87",
-          strokeWidth: 3
-      }, {
-          name: 'Tree',
-          type: 'Point',
-          icon: 'fa-tree',
-          colour: "46, 139, 87",
-          strokeWidth: 3
-      }, {
-          name: 'Buildings',
-          type: 'Polygon',
-          icon: 'fa-industry',
-          colour: "144, 78, 39",
-          strokeWidth: 3
-    }];
-  }
 
 })();

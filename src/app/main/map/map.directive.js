@@ -22,6 +22,11 @@
     /** @ngInject */
     function linkFunc(scope) {
       mapService.createMap();
+
+      scope.$on('toggle-drawingTool-layer', function(e, tool) {
+        mapService.setVisibleDrawingToolLayer(tool);
+      });
+
       scope.$on('toggle-basemap-layer', function(e, baseMap) {
         $log.debug("base map: " + baseMap);
         mapService.setBaseMap(baseMap);
@@ -52,7 +57,7 @@
       var vm = this;
       vm.zoomIn = mapService.zoomIn;
       vm.zoomOut = mapService.zoomOut;
-      vm.toggleDrawingTool = mapService.toggleDrawingTool;
+      vm.editToggleDrawingTool = mapService.editToggleDrawingTool;
       vm.drawingTools = mapService.drawingTools;
       vm.deactivateAllDrawingTools = mapService.deactivateAllDrawingTools;
       vm.isAnyDrawingToolActive = mapService.isAnyDrawingToolActive;

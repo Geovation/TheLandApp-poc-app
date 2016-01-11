@@ -23,26 +23,14 @@
       vm.environmentalLayers = layersService.environmentalLayers;
       vm.baseMapLayers = layersService.baseMapLayers;
       vm.farmLayers = layersService.farmLayers;
+      vm.basemap = vm.baseMapLayers[0];
+      vm.drawingTools = layersService.drawingTools;
+
+      $rootScope.$broadcast('toggle-basemap-layer', vm.basemap);
 
       $rootScope.$on('open-layers-panel', function() {
         $mdSidenav('layers-sidenav').toggle();
       });
-
-      vm.toggleFarmLayer = function(layer) {
-        $rootScope.$broadcast('toggle-farm-layer', layer);
-      };
-
-      vm.toggleEnvironmentalLayer = function(layer) {
-        $rootScope.$broadcast('toggle-environmental-layer', layer);
-      };
-
-      vm.toggleBaseMapLayer = function() {
-        $rootScope.$broadcast('toggle-basemap-layer', vm.basemap);
-      };
-
-      // set default
-      vm.basemap = vm.baseMapLayers[0];
-      vm.toggleBaseMapLayer();
     }
   }
 
