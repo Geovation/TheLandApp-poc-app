@@ -36,7 +36,8 @@
       drawingTools: drawingTools,
       deactivateAllDrawingTools: deactivateAllDrawingTools,
       isAnyDrawingToolActive: isAnyDrawingToolActive,
-      getEnableDrawing: function() {return enableDrawing;}
+      getEnableDrawing: function() {return enableDrawing;},
+      addDeleteInteraction: addDeleteInteraction
     };
 
     return service;
@@ -229,6 +230,38 @@
         loadTilesWhileAnimating: true,
         view: view,
         controls: []
+      });
+    }
+
+    function addDeleteInteraction() {
+      var interaction = new ol.interaction.Select(),
+          selectedFeatures = [];
+
+      map.addInteraction(interaction);
+
+      interaction.on("select", function(e) {
+        selectedFeatures = e.selected;
+      });
+
+      angular.element(window).bind("keydown", function(e) {
+        var keyCode = e.which || e.keyCode;
+
+        if (selectedFeatures.length && keyCode === 8) { // backspace key
+          angular.forEach(selectedFeatures, function(feature) {
+            angular.forEach(drawingLayers, function(layer) {
+              if (layer.getSource().getFeatures().indexOf(feature) > -1) {
+                layer.getSource().removeFeature(feature);
+                return;
+              }
+            });
+          });
+        }
+      });
+
+      $mdToast.show({
+        template: "<md-toast>Select a shape and press backspace to delete it at any time</md-toast>",
+        hideDelay: 5000,
+        position: "top right"
       });
     }
 
