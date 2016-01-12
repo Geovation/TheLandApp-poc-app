@@ -273,6 +273,14 @@
               source: new ol.source.MapQuest({layer: 'osm'})
             });
             break;
+          case 'wms':
+            osLayers[layer.name] = new ol.layer.Tile({
+              source: new ol.source.TileWMS({
+                url: layer.url,
+                params: {'LAYERS': layer.layers, 'TILED': true}
+              })
+            });
+            break;
           case 'vector':
             osLayers[layer.name] = new ol.layer.Vector({
               source: new ol.source.Vector({
