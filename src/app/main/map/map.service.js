@@ -154,7 +154,7 @@
         $log.debug('deactivate', tool);
 
         if (tool.active) {
-          saveState(tool.name);
+          saveDrawingLayers(tool.name);
 
           tool.active = false;
           map.removeInteraction(tool.draw);
@@ -165,11 +165,16 @@
         setVisibleDrawingToolLayer(tool);
     }
 
-    function saveState(toolName) {
+    /**
+     * Saves the current drawing layers to the database.
+     *
+     * @param {string|undefined} singleLayerName If defined, will only save this named layer.
+     */
+    function saveDrawingLayers(singleLayerName) {
       var format = new ol.format.GeoJSON();
 
-      angular.forEach(drawingLayers, function(layer, name) {
-        if (angular.isDefined(toolName) && name !== toolName) {
+      angular.forEach(drawingLayers, function(layer, layerName) {
+        if (angular.isDefined(toolName) && (layerName !== singleLayerName)) {
           return;
         }
 
@@ -244,6 +249,10 @@
       });
     }
 
+    /**
+     * Enables the user to remove features by selecting them using a click
+     * and deleting using the backspace button.
+     */
     function addDeleteInteraction() {
       var interaction = new ol.interaction.Select(),
           selectedFeatures = [];
@@ -260,19 +269,18 @@
         if (selectedFeatures.length && keyCode === 8) { // backspace key
           var wasSomethingRemoved = false;
 
+          // find parent layers and remove the selected features from them
           angular.forEach(selectedFeatures, function(feature) {
             angular.forEach(drawingLayers, function(layer) {
               if (layer.getSource().getFeatures().indexOf(feature) > -1) {
                 layer.getSource().removeFeature(feature);
                 wasSomethingRemoved = true;
-
-                return;
               }
             });
           });
 
           if (wasSomethingRemoved) {
-            saveState();
+            saveDrawingLayers();
           }
         }
       });
