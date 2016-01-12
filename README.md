@@ -12,8 +12,7 @@ from https://github.com/Swiip/generator-gulp-angular/blob/master/docs/usage.md
 * `gulp protractor:dist` to launch your e2e tests with Protractor on the dist files
 
 The default environment used is dev. To change environment just add --env=env_name. Example
-```gulp serve --env=qa```
+`gulp serve --env=qa`
 
 ## Deploy
-* `gulp && gulp deploy` build and deploy
-* `gulp deploy` deploy
+* `gulp deploy` build and deploy
