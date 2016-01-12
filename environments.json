@@ -2,14 +2,16 @@
   "qa": {
     "ENV": {
       "name": "qa",
-      "firebase" : "the-land-app-indigo"
+      "firebase" : "the-land-app-indigo",
+      "gaKey": "UA-72303224-1"
     }
   },
-  
+
   "dev": {
     "ENV": {
       "name": "dev",
-      "firebase" : "the-land-app-indigo"
+      "firebase" : "the-land-app-indigo",
+      "gaKey": "UA-72303224-1"
     }
   }
 }
