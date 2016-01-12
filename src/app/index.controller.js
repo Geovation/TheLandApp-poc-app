@@ -47,7 +47,7 @@
     }
 
     function login() {
-      showMessage("Loging in");
+      showMessage("Logging in");
 
       firebaseService.auth.$authWithPassword({email: vm.email, password: vm.password})
       .then(function(authData) {

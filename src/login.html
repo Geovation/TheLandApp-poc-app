@@ -1,6 +1,7 @@
-<section layout="row"  layout-align="center center" style="height: 100%">
-  <section layout="column">
-    <div>You need to Login or register first</div>
+<section layout="row"  layout-align="center center" style="height: 100vh;">
+  <md-content layout="column" layout-align="center center" layout-padding class="login">
+    <img src="assets/images/land-app-logo.png" height="100" width="100" />
+    <h3>The Land App</h3>
     <form name="loginForm">
       <md-input-container>
         <label>Email</label>
@@ -15,5 +16,5 @@
         <md-button class="md-raised md-warn" ng-click="indexVm.signup()" ng-disabled="loginForm.$invalid">Signup</md-button>
       </h1>
     </form>
-  </section>
+  </md-content>
 </section>
