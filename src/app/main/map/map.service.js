@@ -154,10 +154,7 @@
         $log.debug('deactivate', tool);
 
         if (tool.active) {
-          var allFeatures = drawingLayers[tool.name].getSource().getFeatures();
-          var format = new ol.format.GeoJSON();
-          var jsonData = JSON.parse(format.writeFeatures(allFeatures));
-          firebaseService.getUserLayersRef().child(tool.name).set(jsonData);
+          saveState(tool.name);
 
           tool.active = false;
           map.removeInteraction(tool.draw);
@@ -166,6 +163,20 @@
         }
 
         setVisibleDrawingToolLayer(tool);
+    }
+
+    function saveState(toolName) {
+      var format = new ol.format.GeoJSON();
+
+      angular.forEach(drawingLayers, function(layer, name) {
+        if (angular.isDefined(toolName) && name !== toolName) {
+          return;
+        }
+
+        var payload = format.writeFeaturesObject(layer.getSource().getFeatures());
+
+        firebaseService.getUserLayersRef().child(name).set(payload);
+      });
     }
 
     function activateDrawingTool(tool) {
@@ -247,14 +258,22 @@
         var keyCode = e.which || e.keyCode;
 
         if (selectedFeatures.length && keyCode === 8) { // backspace key
+          var wasSomethingRemoved = false;
+
           angular.forEach(selectedFeatures, function(feature) {
             angular.forEach(drawingLayers, function(layer) {
               if (layer.getSource().getFeatures().indexOf(feature) > -1) {
                 layer.getSource().removeFeature(feature);
+                wasSomethingRemoved = true;
+
                 return;
               }
             });
           });
+
+          if (wasSomethingRemoved) {
+            saveState();
+          }
         }
       });
 
