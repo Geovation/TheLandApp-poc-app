@@ -36,7 +36,8 @@
       drawingTools: drawingTools,
       deactivateAllDrawingTools: deactivateAllDrawingTools,
       isAnyDrawingToolActive: isAnyDrawingToolActive,
-      getEnableDrawing: function() {return enableDrawing;}
+      getEnableDrawing: function() {return enableDrawing;},
+      addDeleteInteraction: addDeleteInteraction
     };
 
     var layerIndexes = {
@@ -158,10 +159,7 @@
         $log.debug('deactivate', tool);
 
         if (tool.active) {
-          var allFeatures = drawingLayers[tool.name].getSource().getFeatures();
-          var format = new ol.format.GeoJSON();
-          var jsonData = JSON.parse(format.writeFeatures(allFeatures));
-          firebaseService.getUserLayersRef().child(tool.name).set(jsonData);
+          saveDrawingLayers(tool.name);
 
           tool.active = false;
           map.removeInteraction(tool.draw);
@@ -170,6 +168,25 @@
         }
 
         setVisibleDrawingToolLayer(tool);
+    }
+
+    /**
+     * Saves the current drawing layers to the database.
+     *
+     * @param {string|undefined} singleLayerName If defined, will only save this named layer.
+     */
+    function saveDrawingLayers(singleLayerName) {
+      var format = new ol.format.GeoJSON();
+
+      angular.forEach(drawingLayers, function(layer, layerName) {
+        if (angular.isDefined(toolName) && (layerName !== singleLayerName)) {
+          return;
+        }
+
+        var payload = format.writeFeaturesObject(layer.getSource().getFeatures());
+
+        firebaseService.getUserLayersRef().child(name).set(payload);
+      });
     }
 
     function activateDrawingTool(tool) {
@@ -234,6 +251,49 @@
         loadTilesWhileAnimating: true,
         view: view,
         controls: []
+      });
+    }
+
+    /**
+     * Enables the user to remove features by selecting them using a click
+     * and deleting using the backspace button.
+     */
+    function addDeleteInteraction() {
+      var interaction = new ol.interaction.Select(),
+          selectedFeatures = [];
+
+      map.addInteraction(interaction);
+
+      interaction.on("select", function(e) {
+        selectedFeatures = e.selected;
+      });
+
+      angular.element(window).bind("keydown", function(e) {
+        var keyCode = e.which || e.keyCode;
+
+        if (selectedFeatures.length && keyCode === 8) { // backspace key
+          var wasSomethingRemoved = false;
+
+          // find parent layers and remove the selected features from them
+          angular.forEach(selectedFeatures, function(feature) {
+            angular.forEach(drawingLayers, function(layer) {
+              if (layer.getSource().getFeatures().indexOf(feature) > -1) {
+                layer.getSource().removeFeature(feature);
+                wasSomethingRemoved = true;
+              }
+            });
+          });
+
+          if (wasSomethingRemoved) {
+            saveDrawingLayers();
+          }
+        }
+      });
+
+      $mdToast.show({
+        template: "<md-toast>Select a shape and press backspace to delete it at any time</md-toast>",
+        hideDelay: 5000,
+        position: "top right"
       });
     }
 
