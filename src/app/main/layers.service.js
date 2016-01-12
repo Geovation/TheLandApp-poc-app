@@ -34,30 +34,22 @@
           name: 'AONB',
           type: 'wms',
           url: "https://www.geostore.com/OGC/OGCInterface?UID=UDATAGOV2011&PASSWORD=datagov2011&INTERFACE=ENVIRONMENT&LC=2000000000000040000000000000000000000000000000000001040000000000000000",
-          layers: 'eainspire2011-wms-areas_of_onb_inspire',
-          fillColor: "rgba(176, 23, 21, 0.5)",
-          strokeColor: "rgba(176, 23, 21, 1)",
+          layers: 'eainspire2011-wms-areas_of_onb_inspire'
         }, {
           name: 'Ancient Woodland',
           type: 'wms',
           url: "https://www.geostore.com/OGC/OGCInterface?UID=UDATAGOV2011&PASSWORD=datagov2011&INTERFACE=ENVIRONMENT&LC=2000000000000040000000000000000000000000000000000001040000000000000000",
-          layers: 'eainspire2011-wms-ancient_woodlandv_inspire',
-          fillColor: "rgba(176, 23, 21, 0.5)",
-          strokeColor: "rgba(176, 23, 21, 1)",
+          layers: 'eainspire2011-wms-ancient_woodlandv_inspire'
         }, {
           name: 'SAC',
           type: 'wms',
           url: "https://www.geostore.com/OGC/OGCInterface?UID=UDATAGOV2011&PASSWORD=datagov2011&INTERFACE=ENVIRONMENT&LC=2000000000000000000",
-          layers: 'eainspire2011-wms-special_area_of_conservation_inspire',
-          fillColor: "rgba(176, 23, 21, 0.5)",
-          strokeColor: "rgba(176, 23, 21, 1)",
+          layers: 'eainspire2011-wms-special_area_of_conservation_inspire'
         }, {
           name: 'SSSI',
           type: 'wms',
           url: "https://www.geostore.com/OGC/OGCInterface?UID=UDATAGOV2011&PASSWORD=datagov2011&INTERFACE=ENVIRONMENT&LC=2000000000000040000000000000000000000000000000000001040000000000000000",
-          layers: 'eainspire2011-wms-sites_of_ssi_inspire',
-          fillColor: "rgba(176, 23, 21, 0.5)",
-          strokeColor: "rgba(176, 23, 21, 1)",
+          layers: 'eainspire2011-wms-sites_of_ssi_inspire'
         }, {
           name: 'SSSI JSON',
           type: 'vector',

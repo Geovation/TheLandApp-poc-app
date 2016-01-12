@@ -39,6 +39,11 @@
       getEnableDrawing: function() {return enableDrawing;}
     };
 
+    var layerIndexes = {
+      baseMap : -2,
+      external : -1
+    };
+
     return service;
 
     ///////////////
@@ -255,7 +260,7 @@
         switch (layer.type) {
           case 'base.mapbox':
             osLayers[layer.name] = new ol.layer.Tile({
-              zIndex: -1,
+              zIndex: layerIndexes.baseMap,
               source: new ol.source.XYZ({
                 url: layer.url
               })
@@ -263,18 +268,19 @@
             break;
           case 'base.osm':
             osLayers[layer.name] = new ol.layer.Tile({
-              zIndex: -1,
+              zIndex: layerIndexes.baseMap,
               source: new ol.source.OSM()
             });
             break;
           case 'base.mapquest':
             osLayers[layer.name] = new ol.layer.Tile({
-              zIndex: -1,
+              zIndex: layerIndexes.baseMap,
               source: new ol.source.MapQuest({layer: 'osm'})
             });
             break;
           case 'wms':
             osLayers[layer.name] = new ol.layer.Tile({
+              zIndex: layerIndexes.external,
               source: new ol.source.TileWMS({
                 url: layer.url,
                 params: {'LAYERS': layer.layers, 'TILED': true}
@@ -283,6 +289,7 @@
             break;
           case 'vector':
             osLayers[layer.name] = new ol.layer.Vector({
+              zIndex: layerIndexes.external,
               source: new ol.source.Vector({
                 url: layer.url,
                 format: new ol.format.GeoJSON({
