@@ -3,7 +3,9 @@
     "ENV": {
       "name": "qa",
       "firebase" : "the-land-app-indigo",
-      "gaKey": "UA-72303224-1"
+      "gaKey": "UA-72303224-1",
+      "mapboxToken": "pk.eyJ1IjoidGltaG9wa2luODciLCJhIjoiY2lqYmRvbmR1MDBienR3a24zbWI1NmJ5dCJ9.a93pKjxkLeNxyW1Wtk77sg",
+      "mapboxMapId": "mapbox.satellite"
     }
   },
 
@@ -11,7 +13,9 @@
     "ENV": {
       "name": "dev",
       "firebase" : "the-land-app-indigo",
-      "gaKey": "UA-72303224-1"
+      "gaKey": "UA-72303224-1",
+      "mapboxToken": "pk.eyJ1IjoidGltaG9wa2luODciLCJhIjoiY2lqYmRvbmR1MDBienR3a24zbWI1NmJ5dCJ9.a93pKjxkLeNxyW1Wtk77sg",
+      "mapboxMapId": "mapbox.satellite"
     }
   }
 }
