@@ -60,27 +60,29 @@
     }
 
     function createFarmLayers() {
-      return [{
-        name: 'Land Registry',
-        type: 'vector',
-        // url: "/data/geojson/land_registry_boundaries.geojson",
-        url: "/assets/geojson/watership_down_pif.geojson",
-        fillColor: "rgba(176, 23, 21, 0.5)",
-        strokeColor: "rgba(176, 23, 21, 1)",
-      }, {
-        name: 'RPA Boundaries',
-        type: 'vector',
-        url: "/assets/geojson/watership_down_rpa.geojson",
-        fillColor: "rgba(255, 165, 0, 0.5)",
-        strokeColor: "rgba(255, 165, 0, 1)",
-      }, {
-        disabled: true,
-        name: 'LR Vectors',
-        type: 'vector',
-        url: "TODO",
-        fillColor: "rgba(255, 165, 0, 0.5)",
-        strokeColor: "rgba(255, 165, 0, 1)",
-      }];
+      return [
+        {
+          name: 'RLR Parcel',
+          type: 'vector',
+          url: "/assets/geojson/watership_down_rpa.geojson",
+          fillColor: "rgba(255, 165, 0, 0.5)",
+          strokeColor: "rgba(255, 165, 0, 1)",
+        }, {
+          name: 'RLR PIF',
+          type: 'vector',
+          // url: "/data/geojson/land_registry_boundaries.geojson",
+          url: "/assets/geojson/watership_down_pif.geojson",
+          fillColor: "rgba(176, 23, 21, 0.5)",
+          strokeColor: "rgba(176, 23, 21, 1)",
+        }, {
+          disabled: true,
+          name: 'LR Vectors',
+          type: 'vector',
+          url: "TODO",
+          fillColor: "rgba(255, 165, 0, 0.5)",
+          strokeColor: "rgba(255, 165, 0, 1)",
+        }
+      ];
     }
 
     function createDrawingTools() {
