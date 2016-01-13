@@ -6,7 +6,7 @@
     .service('mapService', mapService);
 
   /** @ngInject */
-  function mapService(ol, $log, proj4, $mdToast, $timeout, firebaseService, layersService) {
+  function mapService(ol, $log, proj4, $mdToast, $timeout, $window, firebaseService, layersService) {
     // define EPSG:27700
     proj4.defs("EPSG:27700", "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +towgs84=446.448,-125.157,542.06,0.15,0.247,0.842,-20.489 +units=m +no_defs");
 
@@ -279,7 +279,7 @@
 
       // wait for the backspace keydown event to fire
       // to remove features from the map
-      angular.element(window).bind("keydown", function(e) {
+      angular.element($window).bind("keydown", function(e) {
         var keyCode = e.which || e.keyCode;
 
         if (selectedFeatures.length && keyCode === 8) { // backspace key

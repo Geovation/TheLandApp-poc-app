@@ -6,7 +6,7 @@
     .controller('IndexController', IndexController);
 
   /** @ngInject */
-  function IndexController($log, $mdDialog, firebaseService) {
+  function IndexController($log, $document, $mdDialog, firebaseService) {
     var vm = this;
 
     var modalConfig;
@@ -33,8 +33,8 @@
       // $mdDialog.show(modalConfig);
 
       $mdDialog.show({
-        parent: angular.element(document.body),
-        template: 
+        parent: angular.element($document.body),
+        template:
           '<md-dialog>' +
           '  <md-dialog-content>' +
           '    <md-content layout-padding layout="column">' +
