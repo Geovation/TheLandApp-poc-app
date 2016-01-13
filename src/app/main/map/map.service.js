@@ -297,6 +297,7 @@
 
           if (wasSomethingRemoved) {
             saveDrawingLayers();
+            selectInteraction.getFeatures().clear();
             e.preventDefault();
           }
         }
