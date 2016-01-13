@@ -22,7 +22,12 @@
       $log.debug("GA userId : " + uid);
       ga('set', 'userId', uid);
       if (uid) {
-        ga('send', 'event', 'user', 'login',  '', '' + authData.password.email);
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'User',
+          eventAction: 'login',
+          eventLabel: authData.password.email
+        });
       }
     }
   }
