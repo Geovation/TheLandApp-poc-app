@@ -2,32 +2,32 @@
   <md-toolbar class="md-theme-light">
     <h1 class="md-toolbar-tools">Layers</h1>
   </md-toolbar>
-  <md-content layout-padding>
-    <md-subheader class="md-primary closer-to-children">My Farm</md-subheader>
-    <md-checkbox class="md-raised md-primary"
+  <md-content layout-padding layout="column">
+    <md-subheader class="md-primary md-subheader--closer-to-children">My Farm</md-subheader>
+    <md-checkbox class="md-raised md-primary md-checkbox--list"
       ng-repeat="layer in vmSidenav.farmLayers track by $index"
       ng-disabled="layer.disabled"
       ng-model="layer.checked"
       ng-change="$emit('toggle-farm-layer', layer)">{{layer.name}}
     </md-checkbox>
 
-    <md-subheader class="md-primary closer-to-children">My Layers</md-subheader>
-    <md-checkbox class="md-raised md-primary"
+    <md-subheader class="md-primary md-subheader--closer-to-children">My Layers</md-subheader>
+    <md-checkbox class="md-raised md-primary md-checkbox--list"
       ng-repeat="tool in vmSidenav.drawingTools track by $index"
       ng-disabled="tool.disabled"
       ng-model="tool.checked"
       ng-change="$emit('toggle-drawingTool-layer', tool)">{{tool.name}}
     </md-checkbox>
 
-    <md-subheader class="md-primary closer-to-children">Environmental</md-subheader>
-    <md-checkbox class="md-raised md-primary"
+    <md-subheader class="md-primary md-subheader--closer-to-children">Environmental</md-subheader>
+    <md-checkbox class="md-raised md-primary md-checkbox--list"
         ng-repeat="layer in vmSidenav.environmentalLayers"
         ng-disabled="layer.disabled"
         ng-model="layer.checked"
         ng-change="$emit('toggle-environmental-layer', layer)">{{layer.name}}
     </md-checkbox>
 
-    <md-subheader class="md-primary closer-to-children">Basemaps</md-subheader>
+    <md-subheader class="md-primary md-subheader--closer-to-children">Basemaps</md-subheader>
     <md-radio-group ng-model="vmSidenav.basemap" ng-change="$emit('toggle-basemap-layer', vmSidenav.basemap)">
       <md-radio-button
         ng-repeat="bm in vmSidenav.baseMapLayers"
