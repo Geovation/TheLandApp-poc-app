@@ -22,7 +22,7 @@
     /** @ngInject */
     function linkFunc(scope) {
       mapService.createMap();
-      mapService.addDeleteInteraction();
+      mapService.addControlInteractions();
 
       scope.$on('toggle-drawingTool-layer', function(e, tool) {
         mapService.setVisibleDrawingToolLayer(tool);

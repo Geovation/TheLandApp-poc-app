@@ -37,7 +37,7 @@
       deactivateAllDrawingTools: deactivateAllDrawingTools,
       isAnyDrawingToolActive: isAnyDrawingToolActive,
       getEnableDrawing: function() {return enableDrawing;},
-      addDeleteInteraction: addDeleteInteraction
+      addControlInteractions: addControlInteractions
     };
 
     var layerIndexes = {
@@ -255,19 +255,26 @@
     }
 
     /**
-     * Enables the user to remove features by selecting them using a click
-     * and deleting using the backspace button.
+     * Enables the following drawing layer interactions:
+     *  - removing features (by clicking and pressing backspace)
+     *  - modifying features (adding/moving attributes)
      */
-    function addDeleteInteraction() {
-      var interaction = new ol.interaction.Select(),
+    function addControlInteractions() {
+      var selectInteraction = new ol.interaction.Select(),
+          modifyInteraction = new ol.interaction.Modify({
+            features: selectInteraction.getFeatures()
+          }),
           selectedFeatures = [];
 
-      map.addInteraction(interaction);
-
-      interaction.on("select", function(e) {
+      selectInteraction.on("select", function(e) {
         selectedFeatures = e.selected;
       });
 
+      map.addInteraction(modifyInteraction);
+      map.addInteraction(selectInteraction);
+
+      // wait for the backspace keydown event to fire
+      // to remove features from the map
       angular.element(window).bind("keydown", function(e) {
         var keyCode = e.which || e.keyCode;
 
@@ -286,6 +293,7 @@
 
           if (wasSomethingRemoved) {
             saveDrawingLayers();
+            e.preventDefault();
           }
         }
       });
