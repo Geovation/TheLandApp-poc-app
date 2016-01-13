@@ -260,7 +260,11 @@
      *  - modifying features (adding/moving attributes)
      */
     function addControlInteractions() {
-      var selectInteraction = new ol.interaction.Select(),
+      var selectInteraction = new ol.interaction.Select({
+            condition: function(event) {
+              return ol.events.condition.singleClick(event) && !isAnyDrawingToolActive();
+            }
+          }),
           modifyInteraction = new ol.interaction.Modify({
             features: selectInteraction.getFeatures()
           }),
