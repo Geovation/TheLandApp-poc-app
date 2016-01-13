@@ -16,13 +16,14 @@
     // toastr.options.preventDuplicates = true;
     // toastr.options.progressBar = true;
 
-    var primary = '#28904E'; // not the real primary!!
+    var primary = '#439E64'; // not the real primary!!
+
 
     $mdThemingProvider.definePalette('landAppGreen', {
       '50': primary,
-      '100': primary,
+      '100': '76d197',
       '200': primary,
-      '300': "#5BC381",
+      '300': "5BC381",
       '400': primary,
       '500': primary,
       '600': primary,

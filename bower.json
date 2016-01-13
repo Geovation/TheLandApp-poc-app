@@ -4,10 +4,10 @@
   "dependencies": {
     "angular-resource": "~1.4.0",
     "angular-route": "~1.4.0",
-    "angular-material": "~0.9.7",
+    "angular-material": "~1.x",
     "moment": "~2.10.3",
     "animate.css": "~3.3.0",
-    "angular": "~1.4.0",
+    "angular": "~1.4.8",
     "components-font-awesome": "~4.5.0",
     "openlayers": "https://github.com/openlayers/ol3/releases/download/v3.12.1/v3.12.1-dist.zip",
     "proj4": "~2.3.12",
