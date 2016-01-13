@@ -179,13 +179,13 @@
       var format = new ol.format.GeoJSON();
 
       angular.forEach(drawingLayers, function(layer, layerName) {
-        if (angular.isDefined(toolName) && (layerName !== singleLayerName)) {
+        if (angular.isDefined(singleLayerName) && (layerName !== singleLayerName)) {
           return;
         }
 
         var payload = format.writeFeaturesObject(layer.getSource().getFeatures());
 
-        firebaseService.getUserLayersRef().child(name).set(payload);
+        firebaseService.getUserLayersRef().child(layerName).set(payload);
       });
     }
 
@@ -288,12 +288,6 @@
             saveDrawingLayers();
           }
         }
-      });
-
-      $mdToast.show({
-        template: "<md-toast>Select a shape and press backspace to delete it at any time</md-toast>",
-        hideDelay: 5000,
-        position: "top right"
       });
     }
 

@@ -18,14 +18,15 @@
     return directive;
 
     /** @ngInject */
-    function HeaderController($rootScope, $log, $q, $http) {
+    function HeaderController($rootScope, $log, $q, $http, $mdDialog) {
       var vm = this;
-      vm.selectedItem = {};
+      vm.selectedItem = null;
       vm.searchText = "";
       vm.toggleLayersPanel = toggleLayersPanel;
       vm.searchTextChange = searchTextChange;
       vm.selectedItemChange = selectedItemChange;
       vm.querySearch = querySearch;
+      vm.shareThisMap = shareThisMap;
       /////////
       function toggleLayersPanel () {
         $log.debug('toggleLayersPanel');
@@ -59,6 +60,15 @@
           );
 
         return defer.promise;
+      }
+
+      // open a dialog with a shareable link
+      function shareThisMap() {
+        var dialogConfig = $mdDialog
+          .alert()
+          .title('Share Map: coming soon!')
+          .ok('Ok, awesome');
+        $mdDialog.show(dialogConfig);
       }
 
     }

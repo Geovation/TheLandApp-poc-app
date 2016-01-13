@@ -1,19 +1,30 @@
-<section layout="row"  layout-align="center center" style="height: 100%">
-  <section layout="column">
-    <div>You need to Login or register first</div>
-    <form name="loginForm">
-      <md-input-container>
-        <label>Email</label>
-        <input type="email" ng-model="indexVm.email" name="email" required ng-minlength="1" md-maxlength="50">
-      </md-input-container>
-      <md-input-container>
-        <label>Password</label>
-        <input type="password" ng-model="indexVm.password" name="password" required ng-minlength="1" md-maxlength="10">
-      </md-input-container>
-      <h1>
-        <md-button class="md-raised md-primary" ng-click="indexVm.login()" ng-disabled="loginForm.$invalid">Login</md-button>
-        <md-button class="md-raised md-warn" ng-click="indexVm.signup()" ng-disabled="loginForm.$invalid">Signup</md-button>
+<section layout="row" layout-align="center center" style="height: 100vh;">
+    <md-content layout="column" layout-align="center" layout-padding class="login md-whiteframe-5dp" flex="33">
+        <div layout="column" layout-align="center center">
+            <img src="assets/images/land-app-logo-transparent.png" class="logo logo--big" />
+            <p class="logo--big__text">The Land App</p>
+            <span>Please sign in</span>
+        </div>
+        <form name="loginForm" flex layout="column">
+            <md-input-container flex class="md-input-container--closer">
+                <label>Email</label>
+                <input type="email" ng-model="indexVm.email" name="email" required ng-minlength="1" md-maxlength="50">
+            </md-input-container>
+            <md-input-container flex class="md-input-container--closer">
+                <label>Password</label>
+                <input type="password" ng-model="indexVm.password" name="password" required ng-minlength="1" md-maxlength="10">
+            </md-input-container>
+            <h1 layout="column" layout-align="center">
+        <div flex layout="row" layout-align="center">
+          <md-tooltip md-direction="top">Enter your email and password first</md-tooltip>
+          <md-button flex class="md-raised md-primary" ng-click="indexVm.login()" ng-disabled="loginForm.$invalid">Sign In</md-button>
+        </div>
+        <div flex layout="row" layout-align="center">
+          <md-tooltip md-direction="top">Enter your email and password first</md-tooltip>
+          <md-button class="md-primary" ng-click="indexVm.signup()" ng-disabled="loginForm.$invalid">or register</md-button>
+        </div>
+        
       </h1>
-    </form>
-  </section>
+        </form>
+    </md-content>
 </section>
