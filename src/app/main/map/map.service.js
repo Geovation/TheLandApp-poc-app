@@ -263,7 +263,7 @@
       var selectInteraction = new ol.interaction.Select(),
           modifyInteraction = new ol.interaction.Modify({
             features: selectInteraction.getFeatures()
-          });
+          }),
           selectedFeatures = [];
 
       selectInteraction.on("select", function(e) {
@@ -293,6 +293,7 @@
 
           if (wasSomethingRemoved) {
             saveDrawingLayers();
+            e.preventDefault();
           }
         }
       });
