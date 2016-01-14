@@ -6,7 +6,7 @@
     .service('mapService', mapService);
 
   /** @ngInject */
-  function mapService(ol, proj4, $log, $http, $mdToast, $timeout, $window, firebaseService, layersService) {
+  function mapService(ol, proj4, $log, $http, $mdToast, $timeout, $window, customLayersService, firebaseService, layersService) {
     // define EPSG:27700
     proj4.defs("EPSG:27700", "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +towgs84=446.448,-125.157,542.06,0.15,0.247,0.842,-20.489 +units=m +no_defs");
 
@@ -375,45 +375,10 @@
             });
             break;
           case 'vectorspace':
-            osLayers[layer.name] = new ol.layer.Vector({
-              zIndex: layerIndexes.external,
-              maxResolution: 5,
-              source: new ol.source.Vector({
-                format: new ol.format.GeoJSON(),
-                strategy: ol.loadingstrategy.bbox,
-                loader: function (extent, resolution, projection) {
-                  // wgs84
-                  extent = ol.proj.transformExtent(extent, "EPSG:3857", "EPSG:4326");
-
-                  $http.get(layer.url, {
-                      headers : {
-                          "Accept": "application/json;srid=4326"
-                      },
-                      params : {
-                        "bbox" : extent.join() + ",4326"
-                      }
-                    })
-                    .then(function successCallback(response) {
-                      if (response.data) {
-                        var features = (new ol.format.GeoJSON())
-                          .readFeatures(response.data, {
-                              dataProjection: "EPSG:4326",
-                              featureProjection: projection
-                            });
-                        var src = osLayers[layer.name].getSource();
-                        src.addFeatures(features);
-                        $log.debug('new featurecount:', src.getFeatures().length);
-                      }
-                    }, function errorCallback(response) {
-                      $log.debug(response);
-                    });
-                }
-                //useSpatialIndex: true
-              })
-            });
+            osLayers[layer.name] = customLayersService.buildVectorSpace(layerIndexes, layer);
             break;
           default:
-            $log.debug("layer type '" + layer.type + "' not defined");
+            $log.debug("layer type '" + JSON.stringify(layer.type) + "' not defined");
         }
       }
     } //buildAndCacheLayer
