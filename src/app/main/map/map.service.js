@@ -274,6 +274,10 @@
         selectedFeatures = e.selected;
       });
 
+      modifyInteraction.on("modifyend", function(e) {
+        saveDrawingLayers();
+      });
+
       map.addInteraction(modifyInteraction);
       map.addInteraction(selectInteraction);
 
