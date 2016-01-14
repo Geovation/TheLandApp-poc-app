@@ -20,7 +20,7 @@
     var map = {};
     var drawingTools = layersService.drawingTools;
     var enableDrawing = false;
-    var drawingLayers = {};
+    var drawingLayers = [];
 
     firebaseService.firebaseRef.onAuth(loadUserLayers);
 
@@ -263,6 +263,13 @@
       var selectInteraction = new ol.interaction.Select({
             condition: function(event) {
               return ol.events.condition.singleClick(event) && !isAnyDrawingToolActive();
+            },
+            filter: function(feature, layer) {
+              var drawLayer = false;
+              angular.forEach(drawingLayers, function(l) {
+                drawLayer = drawLayer || (l===layer);
+              });
+              return drawLayer;
             }
           }),
           modifyInteraction = new ol.interaction.Modify({
@@ -274,7 +281,7 @@
         selectedFeatures = e.selected;
       });
 
-      modifyInteraction.on("modifyend", function(e) {
+      modifyInteraction.on("modifyend", function() {
         saveDrawingLayers();
       });
 
