@@ -2,10 +2,11 @@
   "qa": {
     "ENV": {
       "name": "qa",
-      "firebase" : "the-land-app-indigo",
-      "gaKey": "UA-72303224-1",
-      "mapboxToken": "pk.eyJ1IjoidGltaG9wa2luODciLCJhIjoiY2lqYmRvbmR1MDBienR3a24zbWI1NmJ5dCJ9.a93pKjxkLeNxyW1Wtk77sg",
-      "mapboxMapId": "mapbox.satellite"
+      "firebase" : "SET ME",
+      "gaKey": "SET ME",
+      "mapboxToken": "SET ME",
+      "mapboxMapId": "SET ME",
+      "vectorspaceKey": "SET ME"
     }
   },
 
@@ -15,7 +16,8 @@
       "firebase" : "the-land-app-indigo",
       "gaKey": "UA-72303224-1",
       "mapboxToken": "pk.eyJ1IjoidGltaG9wa2luODciLCJhIjoiY2lqYmRvbmR1MDBienR3a24zbWI1NmJ5dCJ9.a93pKjxkLeNxyW1Wtk77sg",
-      "mapboxMapId": "mapbox.satellite"
+      "mapboxMapId": "mapbox.satellite",
+      "vectorspaceKey": "22749233807361"
     }
   }
 }

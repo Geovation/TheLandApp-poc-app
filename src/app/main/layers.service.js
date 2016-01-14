@@ -75,12 +75,9 @@
           fillColor: "rgba(176, 23, 21, 0.5)",
           strokeColor: "rgba(176, 23, 21, 1)",
         }, {
-          disabled: true,
           name: 'LR Vectors',
-          type: 'vector',
-          url: "TODO",
-          fillColor: "rgba(255, 165, 0, 0.5)",
-          strokeColor: "rgba(255, 165, 0, 1)",
+          type: 'vectorspace',
+          url: "https://api.vectorspace.io/spaces/27085816987650/layers/27790585888771/features?key=" + ENV.vectorspaceKey
         }
       ];
     }
