@@ -20,9 +20,9 @@
     var map = {};
     var drawingTools = layersService.drawingTools;
     var enableDrawing = false;
-    var drawingLayers = {};
+    var drawingLayers = [];
 
-    firebaseService.firebaseRef.onAuth(loadUserLayers);
+    firebaseService.firebaseRef.onAuth(loadUserLayersAndEnableEditing);
 
     var service = {
       createMap: createMap,
@@ -36,8 +36,7 @@
       drawingTools: drawingTools,
       deactivateAllDrawingTools: deactivateAllDrawingTools,
       isAnyDrawingToolActive: isAnyDrawingToolActive,
-      getEnableDrawing: function() {return enableDrawing;},
-      addControlInteractions: addControlInteractions
+      getEnableDrawing: function() {return enableDrawing;}
     };
 
     var layerIndexes = {
@@ -48,7 +47,7 @@
     return service;
 
     ///////////////
-    function loadUserLayers(authData) {
+    function loadUserLayersAndEnableEditing(authData) {
       if (authData) {
         firebaseService.getUserLayersRef().once("value", function(userLayers) {
           $log.debug(userLayers);
@@ -59,8 +58,11 @@
           var format = new ol.format.GeoJSON();
           var extent = ol.extent.createEmpty();
 
+          // populate drawingLayers with Open Layers vector layers.
+          var vectorLayers = [];
           drawingLayers = drawingTools.reduce(function(obj, curr) {
             obj[curr.name] = newVectorLayer(curr.name, curr.colour, curr.strokeWidth);
+            vectorLayers.push(obj[curr.name]);
             map.addLayer(obj[curr.name]);
 
             if (layers && layers[curr.name] && layers[curr.name].features) {
@@ -71,6 +73,8 @@
 
             return obj;
           }, {});
+
+          addControlInteractions(vectorLayers);
 
           fitExtent(extent);
           $timeout(function() {enableDrawing = true;});
@@ -259,11 +263,12 @@
      *  - removing features (by clicking and pressing backspace)
      *  - modifying features (adding/moving attributes)
      */
-    function addControlInteractions() {
+    function addControlInteractions(vectorLayers) {
       var selectInteraction = new ol.interaction.Select({
             condition: function(event) {
               return ol.events.condition.singleClick(event) && !isAnyDrawingToolActive();
-            }
+            },
+            layers: vectorLayers
           }),
           modifyInteraction = new ol.interaction.Modify({
             features: selectInteraction.getFeatures()
@@ -274,7 +279,7 @@
         selectedFeatures = e.selected;
       });
 
-      modifyInteraction.on("modifyend", function(e) {
+      modifyInteraction.on("modifyend", function() {
         saveDrawingLayers();
       });
 
