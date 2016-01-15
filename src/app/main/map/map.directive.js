@@ -22,14 +22,13 @@
     /** @ngInject */
     function linkFunc(scope) {
       mapService.createMap();
-      mapService.addControlInteractions();
 
       scope.$on('toggle-drawingTool-layer', function(e, tool) {
         mapService.setVisibleDrawingToolLayer(tool);
       });
 
       scope.$on('toggle-basemap-layer', function(e, baseMap) {
-        $log.debug("base map: " + baseMap);
+        $log.debug("base map: " + JSON.stringify(baseMap));
         mapService.setBaseMap(baseMap);
       });
 
