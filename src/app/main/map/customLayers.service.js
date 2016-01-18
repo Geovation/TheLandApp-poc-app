@@ -3,7 +3,7 @@
 
   angular
     .module('LandApp')
-    .service('customLayersService', customLayersService);
+    .factory('customLayersService', customLayersService);
 
   /** @ngInject */
   function customLayersService(ol, $http, $log) {

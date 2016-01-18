@@ -3,7 +3,7 @@
 
   angular
     .module('LandApp')
-    .service('layersService', layersService);
+    .factory('layersService', layersService);
 
   /** @ngInject */
   function layersService(ENV) {

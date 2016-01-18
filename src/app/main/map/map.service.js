@@ -3,7 +3,7 @@
 
   angular
     .module('LandApp')
-    .service('mapService', mapService);
+    .factory('mapService', mapService);
 
   /** @ngInject */
   function mapService(ol, proj4, $log, $http, $mdToast, $timeout, $window, customLayersService, firebaseService, layersService) {
