@@ -270,6 +270,7 @@
         condition: function(event) {
           return ol.events.condition.singleClick(event) && !isAnyDrawingToolActive();
         },
+        toggleCondition: ol.events.condition.never,
         layers: vectorLayers
       });
 
