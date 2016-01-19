@@ -270,6 +270,7 @@
         condition: function(event) {
           return ol.events.condition.singleClick(event) && !isAnyDrawingToolActive();
         },
+        toggleCondition: ol.events.condition.never,
         layers: vectorLayers
       });
 
@@ -279,11 +280,6 @@
 
       mapInteractions.featureSelect.on("select", function(e) {
         $rootScope.$broadcast("toggle-feature-panel", e);
-
-        if (e.selected.length) {
-          clearSelectedFeatures();
-          mapInteractions.featureSelect.getFeatures().push(e.selected[0]);
-        }
       });
 
       mapInteractions.featureModify.on("modifyend", function() {
