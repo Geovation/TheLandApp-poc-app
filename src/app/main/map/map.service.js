@@ -279,6 +279,11 @@
 
       mapInteractions.featureSelect.on("select", function(e) {
         $rootScope.$broadcast("toggle-feature-panel", e);
+
+        if (e.selected.length) {
+          clearSelectedFeatures();
+          mapInteractions.featureSelect.getFeatures().push(e.selected[0]);
+        }
       });
 
       mapInteractions.featureModify.on("modifyend", function() {
