@@ -1,41 +1,36 @@
 <md-sidenav class="md-sidenav-right md-whiteframe-z2 feature-panel" md-component-id="feature-panel">
   <md-toolbar class="md-theme-light">
-    <h1 class="md-toolbar-tools" editable-text="vmPanel.feature.title">{{ vmPanel.feature.title || "Untitled feature" }}</h1>
+    <h1 class="md-toolbar-tools" editable-text="vmPanel.featureData.title">{{ vmPanel.featureData.title || "Untitled feature" }}</h1>
   </md-toolbar>
   <md-content layout-padding layout="column">
-    <!-- <md-subheader class="md-primary md-subheader--closer-to-children">My Farm</md-subheader> -->
-    <!-- <md-checkbox class="md-raised md-primary md-checkbox--list"
-      ng-repeat="layer in vmSidenav.farmLayers track by $index"
-      ng-disabled="layer.disabled"
-      ng-model="layer.checked"
-      ng-change="$emit('toggle-farm-layer', layer)">{{layer.name}}
-    </md-checkbox>
+    <form name="attributeForm">
+      <md-subheader class="md-primary md-subheader--closer-to-children">
+        <h2 class="md-title feature-title">Attributes</h2>
 
-    <md-subheader class="md-primary md-subheader--closer-to-children">My Layers</md-subheader>
-    <md-checkbox class="md-raised md-primary md-checkbox--list"
-      ng-repeat="tool in vmSidenav.drawingTools track by $index"
-      ng-disabled="tool.disabled"
-      ng-model="tool.checked"
-      ng-change="$emit('toggle-drawingTool-layer', tool)">{{tool.name}}
-    </md-checkbox>
+        <md-button class="md-icon-button add-feature-attribute" aria-label="Add attribute" ng-click="vmPanel.addAttribute()">
+          <i class="fa fa-plus-circle fa-2x map-drawing-tool__icon"></i>
+        </md-button>
+      </md-subheader>
 
-    <md-subheader class="md-primary md-subheader--closer-to-children">Environmental</md-subheader>
-    <md-checkbox class="md-raised md-primary md-checkbox--list"
-        ng-repeat="layer in vmSidenav.environmentalLayers"
-        ng-disabled="layer.disabled"
-        ng-model="layer.checked"
-        ng-change="$emit('toggle-environmental-layer', layer)">{{layer.name}}
-    </md-checkbox>
+      <section layout="row" ng-repeat="attribute in vmPanel.featureData.attributes">
+        <md-input-container>
+          <label>Attribute name</label>
+          <input type="text" name="attributeName[]" ng-model="attribute.name" required>
 
-    <md-subheader class="md-primary md-subheader--closer-to-children">Basemaps</md-subheader>
-    <md-radio-group ng-model="vmSidenav.basemap" ng-change="$emit('toggle-basemap-layer', vmSidenav.basemap)">
-      <md-radio-button
-        ng-repeat="bm in vmSidenav.baseMapLayers"
-        ng-disabled="bm.disabled"
-        class="md-primary"
-        ng-value="bm"
-        ng-model="vmSidenav.basemap">{{bm.name}}
-      </md-radio-button>
-    </md-radio-group> -->
+          <div ng-messages="attributeForm.attributeName.$error" md-auto-hide="true">
+            <div ng-message="required">This field is required.</div>
+          </div>
+        </md-input-container>
+
+        <md-input-container>
+          <label>Attribute value</label>
+          <textarea type="text" name="attributeValue[]" ng-model="attribute.value" required></textarea>
+
+          <div ng-messages="attributeForm.attributeValue.$error" md-auto-hide="true">
+            <div ng-message="required">This field is required.</div>
+          </div>
+        </md-input-container>
+      </section>
+    </form>
   </md-content>
 </md-sidenav>

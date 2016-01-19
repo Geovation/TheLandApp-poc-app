@@ -272,7 +272,7 @@
 
       selectInteraction.on("select", function(e) {
         selectedFeatures = e.selected;
-        $rootScope.$broadcast("toggle-feature-panel", e.selected);
+        $rootScope.$broadcast("toggle-feature-panel", e);
       });
 
       modifyInteraction.on("modifyend", function(e) {

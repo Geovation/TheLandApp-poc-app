@@ -20,18 +20,29 @@
     function FeaturePanelController($rootScope, $mdSidenav) {
       var vm = this;
 
-      vm.feature = {
-        title: ""
+      vm.featureData = {};
+
+      vm.addAttribute = function() {
+        if (!angular.isArray(vm.featureData.attributes)) {
+          vm.featureData.attributes = [];
+        }
+
+        vm.featureData.attributes.push({name: "", value: ""});
       };
 
-      $rootScope.$on("toggle-feature-panel", function(event, featureList) {
-        var selectedFeature = featureList[0],
+      var prevSelectedFeature;
+
+      $rootScope.$on("toggle-feature-panel", function(ngEvent, selectEvent) {
+        var selectedFeature = selectEvent.selected[0],
             panel = $mdSidenav("feature-panel");
 
-        if (!selectedFeature) {
-          panel.close();
-        } else {
+        if (selectedFeature) {
           panel.open();
+          prevSelectedFeature = selectedFeature;
+          vm.featureData = selectedFeature.get("featureData") || {};
+        } else {
+          prevSelectedFeature.set("featureData", vm.featureData);
+          panel.close();
         }
       });
     }
