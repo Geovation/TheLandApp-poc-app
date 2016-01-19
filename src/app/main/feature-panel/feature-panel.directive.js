@@ -42,7 +42,7 @@
           vm.featureData = selectedFeature.get("featureData") || {};
         } else {
           if (prevSelectedFeature) {
-            prevSelectedFeature.set("featureData", vm.featureData);
+            prevSelectedFeature.set("featureData", angular.copy(vm.featureData));
           }
 
           panel.close();
