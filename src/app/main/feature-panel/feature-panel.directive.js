@@ -41,7 +41,10 @@
           prevSelectedFeature = selectedFeature;
           vm.featureData = selectedFeature.get("featureData") || {};
         } else {
-          prevSelectedFeature.set("featureData", vm.featureData);
+          if (prevSelectedFeature) {
+            prevSelectedFeature.set("featureData", vm.featureData);
+          }
+
           panel.close();
         }
       });
