@@ -37,7 +37,8 @@
       drawingTools: drawingTools,
       deactivateAllDrawingTools: deactivateAllDrawingTools,
       isAnyDrawingToolActive: isAnyDrawingToolActive,
-      getEnableDrawing: function() {return enableDrawing;}
+      getEnableDrawing: function() {return enableDrawing;},
+      removeFeature: removeFeature
     };
 
     var layerIndexes = {
@@ -265,8 +266,6 @@
      *  - modifying features (adding/moving attributes)
      */
     function addControlInteractions(vectorLayers) {
-      var selectedFeatures = [];
-
       mapInteractions.featureSelect = new ol.interaction.Select({
         condition: function(event) {
           return ol.events.condition.singleClick(event) && !isAnyDrawingToolActive();
@@ -279,7 +278,6 @@
       });
 
       mapInteractions.featureSelect.on("select", function(e) {
-        selectedFeatures = e.selected;
         $rootScope.$broadcast("toggle-feature-panel", e);
       });
 
@@ -289,30 +287,14 @@
 
       map.addInteraction(mapInteractions.featureModify);
       map.addInteraction(mapInteractions.featureSelect);
+    }
 
-      // wait for the backspace keydown event to fire
-      // to remove features from the map
-      angular.element($window).bind("keydown", function(e) {
-        var keyCode = e.which || e.keyCode;
-
-        if (selectedFeatures.length && keyCode === 8) { // backspace key
-          var wasSomethingRemoved = false;
-
-          // find parent layers and remove the selected features from them
-          angular.forEach(selectedFeatures, function(feature) {
-            angular.forEach(drawingLayers, function(layer) {
-              if (layer.getSource().getFeatures().indexOf(feature) > -1) {
-                layer.getSource().removeFeature(feature);
-                wasSomethingRemoved = true;
-              }
-            });
-          });
-
-          if (wasSomethingRemoved) {
-            saveDrawingLayers();
-            clearSelectedFeatures();
-            e.preventDefault();
-          }
+    function removeFeature(feature) {
+      angular.forEach(drawingLayers, function(layer) {
+        if (layer.getSource().getFeatures().indexOf(feature) > -1) {
+          layer.getSource().removeFeature(feature);
+          saveDrawingLayers();
+          clearSelectedFeatures();
         }
       });
     }
