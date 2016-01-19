@@ -21,6 +21,7 @@
     var drawingTools = layersService.drawingTools;
     var enableDrawing = false;
     var drawingLayers = [];
+    var mapInteractions = {};
 
     firebaseService.firebaseRef.onAuth(loadUserLayersAndEnableEditing);
 
@@ -264,28 +265,30 @@
      *  - modifying features (adding/moving attributes)
      */
     function addControlInteractions(vectorLayers) {
-      var selectInteraction = new ol.interaction.Select({
-            condition: function(event) {
-              return ol.events.condition.singleClick(event) && !isAnyDrawingToolActive();
-            },
-            layers: vectorLayers
-          }),
-          modifyInteraction = new ol.interaction.Modify({
-            features: selectInteraction.getFeatures()
-          }),
-          selectedFeatures = [];
+      var selectedFeatures = [];
 
-      selectInteraction.on("select", function(e) {
+      mapInteractions.featureSelect = new ol.interaction.Select({
+        condition: function(event) {
+          return ol.events.condition.singleClick(event) && !isAnyDrawingToolActive();
+        },
+        layers: vectorLayers
+      });
+
+      mapInteractions.featureModify = new ol.interaction.Modify({
+        features: mapInteractions.featureSelect.getFeatures()
+      });
+
+      mapInteractions.featureSelect.on("select", function(e) {
         selectedFeatures = e.selected;
         $rootScope.$broadcast("toggle-feature-panel", e);
       });
 
-      modifyInteraction.on("modifyend", function() {
+      mapInteractions.featureModify.on("modifyend", function() {
         saveDrawingLayers();
       });
 
-      map.addInteraction(modifyInteraction);
-      map.addInteraction(selectInteraction);
+      map.addInteraction(mapInteractions.featureModify);
+      map.addInteraction(mapInteractions.featureSelect);
 
       // wait for the backspace keydown event to fire
       // to remove features from the map
@@ -307,11 +310,15 @@
 
           if (wasSomethingRemoved) {
             saveDrawingLayers();
-            selectInteraction.getFeatures().clear();
+            clearSelectedFeatures();
             e.preventDefault();
           }
         }
       });
+    }
+
+    function clearSelectedFeatures() {
+      mapInteractions.featureSelect.getFeatures().clear();
     }
 
     function addLayer(layer) {
@@ -404,6 +411,7 @@
     function setVisibleDrawingToolLayer(tool) {
       var layer = drawingLayers[tool.name];
       layer.setVisible(tool.checked);
+      clearSelectedFeatures();
     }
 
   } // mapService
