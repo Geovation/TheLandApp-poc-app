@@ -6,7 +6,7 @@
     .directive('laFeaturePanel', featurePanel);
 
   /** @ngInject */
-  function featurePanel() {
+  function featurePanel(mapService) {
     var directive = {
       restrict: 'E',
       templateUrl: 'app/main/feature-panel/feature-panel.html',
@@ -17,8 +17,10 @@
     return directive;
 
     /** @ngInject */
-    function FeaturePanelController($rootScope, $mdSidenav) {
+    function FeaturePanelController($rootScope, $mdSidenav, $mdDialog) {
       var vm = this;
+      var activeFeature;
+      var panel;
 
       vm.featureData = {};
 
@@ -30,19 +32,32 @@
         vm.featureData.attributes.push({name: "", value: ""});
       };
 
-      var prevSelectedFeature;
+      vm.removeFeature = function() {
+        var confirm = $mdDialog.confirm()
+          .title("Are you sure you want to remove this layer?")
+          .content("This action cannot be undone and will remove all associated layer data.")
+          .ariaLabel("Remove layer")
+          .ok("Remove layer")
+          .cancel("Cancel");
+
+        $mdDialog.show(confirm).then(function() {
+          mapService.removeFeature(activeFeature);
+          panel.close();
+        });
+      };
 
       $rootScope.$on("toggle-feature-panel", function(ngEvent, selectEvent) {
-        var selectedFeature = selectEvent.selected[0],
-            panel = $mdSidenav("feature-panel");
+        panel = $mdSidenav("feature-panel");
 
-        if (selectedFeature) {
+        if (selectEvent.selected.length) {
+          activeFeature = selectEvent.selected[0];
+          vm.featureData = activeFeature.get("featureData") || {};
+
           panel.open();
-          prevSelectedFeature = selectedFeature;
-          vm.featureData = selectedFeature.get("featureData") || {};
         } else {
-          if (prevSelectedFeature) {
-            prevSelectedFeature.set("featureData", angular.copy(vm.featureData));
+          if (angular.isDefined(activeFeature)) {
+            activeFeature.set("featureData", angular.copy(vm.featureData));
+            activeFeature = undefined;
           }
 
           panel.close();
