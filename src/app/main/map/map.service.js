@@ -190,7 +190,7 @@
           return;
         }
 
-        var payload = format.writeFeaturesObject(layer.getSource().getFeatures());
+        var payload = angular.copy(format.writeFeaturesObject(layer.getSource().getFeatures()));
 
         firebaseService.getUserLayersRef().child(layerName).set(payload);
       });

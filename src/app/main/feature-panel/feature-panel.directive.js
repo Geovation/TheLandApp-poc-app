@@ -47,7 +47,7 @@
       };
 
       vm.saveFeatureData = function() {
-        activeFeature.set("featureData", angular.copy(vm.featureData));
+        activeFeature.set("featureData", vm.featureData);
 
         mapService.saveDrawingLayers();
 
