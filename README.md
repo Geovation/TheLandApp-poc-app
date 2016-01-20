@@ -1,7 +1,14 @@
+# The Land App PoC
+
+## Style Guide
 John Papa code style: https://github.com/johnpapa/angular-styleguide
 from https://github.com/Swiip/generator-gulp-angular/blob/master/docs/usage.md
 
-## Use Gulp tasks
+## Install
+  `npm install`
+  `bower install`
+
+## Gulp Tasks
 
 * `gulp` or `gulp build` to build an optimized version of your application in `/dist`
 * `gulp serve` to launch a browser sync server on your source files
@@ -16,4 +23,3 @@ The default environment used is dev. To change environment just add --env=env_na
 
 ## Deploy
 * `gulp deploy` build and deploy
-
