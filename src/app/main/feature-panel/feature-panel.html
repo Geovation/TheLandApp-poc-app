@@ -1,13 +1,13 @@
 <md-sidenav class="md-sidenav-right md-whiteframe-z2 feature-panel" md-component-id="feature-panel">
   <md-toolbar class="md-theme-light">
-    <h1 class="md-toolbar-tools" editable-text="vmPanel.featureData.title">{{ vmPanel.featureData.title || "Untitled layer" }}</h1>
+    <h1 class="md-toolbar-tools"
+      editable-text="vmPanel.featureData.title"
+      onaftersave="vmPanel.saveFeatureData()">
+        {{ vmPanel.featureData.title || "Untitled feature" }}
+    </h1>
   </md-toolbar>
   <md-content layout-padding layout="column">
-    <form name="attributeForm">
-      <section layout="row" layout-align="center center">
-        <md-button class="md-raised md-warn md-hue-2" ng-click="vmPanel.removeFeature()">Remove layer</md-button>
-      </section>
-
+    <form name="attributeForm" ng-submit="vmPanel.saveFeatureData()">
       <section layout="row" layout-align="space-between center">
         <md-subheader class="md-primary md-subheader--closer-to-children">
           <h2 class="md-title feature-title">Attributes</h2>
@@ -36,6 +36,18 @@
             <div ng-message="required">This field is required.</div>
           </div>
         </md-input-container>
+      </section>
+
+      <section layout="row" layout-align="center center">
+        <md-button class="md-raised md-primary md-hue-2" type="submit">Save</md-button>
+      </section>
+
+      <section layout="row" layout-align="center center">
+        <p class="md-caption auto-save" ng-show="vmPanel.lastSaveTime">Saved at {{ vmPanel.lastSaveTime | date:"mediumTime" }}</p>
+      </section>
+
+      <section layout="row" layout-align="center center">
+        <md-button class="md-raised md-warn md-hue-2" ng-click="vmPanel.removeFeature()">Remove feature</md-button>
       </section>
     </form>
   </md-content>

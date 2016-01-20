@@ -38,7 +38,8 @@
       deactivateAllDrawingTools: deactivateAllDrawingTools,
       isAnyDrawingToolActive: isAnyDrawingToolActive,
       getEnableDrawing: function() {return enableDrawing;},
-      removeFeature: removeFeature
+      removeFeature: removeFeature,
+      saveDrawingLayers: saveDrawingLayers
     };
 
     var layerIndexes = {

@@ -6,7 +6,7 @@
     .directive('laFeaturePanel', featurePanel);
 
   /** @ngInject */
-  function featurePanel(mapService) {
+  function featurePanel() {
     var directive = {
       restrict: 'E',
       templateUrl: 'app/main/feature-panel/feature-panel.html',
@@ -17,7 +17,7 @@
     return directive;
 
     /** @ngInject */
-    function FeaturePanelController($rootScope, $mdSidenav, $mdDialog) {
+    function FeaturePanelController($rootScope, $mdSidenav, $mdDialog, mapService) {
       var vm = this;
       var activeFeature;
       var panel;
@@ -46,6 +46,14 @@
         });
       };
 
+      vm.saveFeatureData = function() {
+        activeFeature.set("featureData", angular.copy(vm.featureData));
+
+        mapService.saveDrawingLayers();
+
+        vm.lastSaveTime = Date.now();
+      };
+
       $rootScope.$on("toggle-feature-panel", function(ngEvent, selectEvent) {
         panel = $mdSidenav("feature-panel");
 
@@ -55,11 +63,6 @@
 
           panel.open();
         } else {
-          if (angular.isDefined(activeFeature)) {
-            activeFeature.set("featureData", angular.copy(vm.featureData));
-            activeFeature = undefined;
-          }
-
           panel.close();
         }
       });
