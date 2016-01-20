@@ -6,7 +6,8 @@
     .factory('mapService', mapService);
 
   /** @ngInject */
-  function mapService(ol, proj4, $log, $http, $mdToast, $timeout, $window, customLayersService, firebaseService, layersService, $rootScope) {
+  function mapService(ol, proj4, $log, $http, $mdToast, $rootScope, $timeout, $window,
+      customLayersService, firebaseService, layerInteractionsService, layersService) {
     // define EPSG:27700
     proj4.defs("EPSG:27700", "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +towgs84=446.448,-125.157,542.06,0.15,0.247,0.842,-20.489 +units=m +no_defs");
 
@@ -14,7 +15,6 @@
     // var timsFarm = ol.proj.fromLonLat([-0.658493, 51.191286]);
     var jamesFarm = ol.proj.fromLonLat([-1.315305, 51.324901]);
 
-    var osLayers = {};  // name: ol's layer
     var currentBaseMap = {};
     var view = {};
     var map = {};
@@ -307,12 +307,18 @@
 
     function addLayer(layer) {
       buildAndCacheLayer(layer);
-      map.addLayer(osLayers[layer.name]);
+      map.addLayer(layer.os);
+      if (layer.osMapInteractions) {
+        map.addInteraction(layer.osMapInteractions);
+      }
     }
 
     function removeLayer(layer) {
       buildAndCacheLayer(layer);
-      map.removeLayer(osLayers[layer.name]);
+      map.removeLayer(layer.os);
+      if (layer.osMapInteractions) {
+        map.removeInteraction(layer.osMapInteractions);
+      }
     }
 
     function toggleLayerFromCheckProperty(layer) {
@@ -324,10 +330,10 @@
     }
 
     function buildAndCacheLayer(layer) {
-      if (!osLayers[layer.name]) {
+      if (!layer.os) {
         switch (layer.type) {
           case 'base.mapbox':
-            osLayers[layer.name] = new ol.layer.Tile({
+            layer.os = new ol.layer.Tile({
               zIndex: layerIndexes.baseMap,
               source: new ol.source.XYZ({
                 url: layer.url
@@ -335,19 +341,19 @@
             });
             break;
           case 'base.osm':
-            osLayers[layer.name] = new ol.layer.Tile({
+            layer.os = new ol.layer.Tile({
               zIndex: layerIndexes.baseMap,
               source: new ol.source.OSM()
             });
             break;
           case 'base.mapquest':
-            osLayers[layer.name] = new ol.layer.Tile({
+            layer.os = new ol.layer.Tile({
               zIndex: layerIndexes.baseMap,
               source: new ol.source.MapQuest({layer: 'osm'})
             });
             break;
           case 'wms':
-            osLayers[layer.name] = new ol.layer.Tile({
+            layer.os = new ol.layer.Tile({
               zIndex: layerIndexes.external,
               source: new ol.source.TileWMS({
                 url: layer.url,
@@ -356,7 +362,7 @@
             });
             break;
           case 'vector':
-            osLayers[layer.name] = new ol.layer.Vector({
+            layer.os = new ol.layer.Vector({
               zIndex: layerIndexes.external,
               source: new ol.source.Vector({
                 url: layer.url,
@@ -376,7 +382,8 @@
             });
             break;
           case 'vectorspace':
-            osLayers[layer.name] = customLayersService.buildVectorSpace(layerIndexes, layer);
+            layer.os = customLayersService.buildVectorSpace(layerIndexes, layer);
+            layer.osMapInteractions = layerInteractionsService.buildVectorSpace(layer.os);
             break;
           default:
             $log.debug("layer type '" + JSON.stringify(layer.type) + "' not defined");
