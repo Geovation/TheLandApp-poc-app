@@ -6,7 +6,8 @@
     .factory('mapService', mapService);
 
   /** @ngInject */
-  function mapService(ol, proj4, $log, $http, $mdToast, $timeout, $window, customLayersService, firebaseService, layersService, $rootScope) {
+  function mapService(ol, proj4, $log, $http, $mdToast, $rootScope, $timeout, $window,
+      customLayersService, firebaseService, layerInteractionsService, layersService) {
     // define EPSG:27700
     proj4.defs("EPSG:27700", "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +towgs84=446.448,-125.157,542.06,0.15,0.247,0.842,-20.489 +units=m +no_defs");
 
@@ -307,11 +308,17 @@
     function addLayer(layer) {
       buildAndCacheLayer(layer);
       map.addLayer(osLayers[layer.name]);
+      if (mapInteractions[layer.name]) {
+        map.addInteraction(mapInteractions[layer.name]);
+      }
     }
 
     function removeLayer(layer) {
       buildAndCacheLayer(layer);
       map.removeLayer(osLayers[layer.name]);
+      if (mapInteractions[layer.name]) {
+        map.removeInteraction(mapInteractions[layer.name]);
+      }
     }
 
     function toggleLayerFromCheckProperty(layer) {
@@ -376,6 +383,7 @@
             break;
           case 'vectorspace':
             osLayers[layer.name] = customLayersService.buildVectorSpace(layerIndexes, layer);
+            mapInteractions[layer.name] =layerInteractionsService.buildVectorSpace(osLayers[layer.name]);
             break;
           default:
             $log.debug("layer type '" + JSON.stringify(layer.type) + "' not defined");
