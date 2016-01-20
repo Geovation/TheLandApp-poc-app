@@ -66,6 +66,15 @@
           panel.close();
         }
       });
+
+      $rootScope.$watch(function() {
+        return $mdSidenav("feature-panel").isOpen();
+      }, function(isOpen, wasOpen) {
+        if (!isOpen && wasOpen) {
+          vm.saveFeatureData();
+          vm.lastSaveTime = undefined;
+        }
+      });
     }
   }
 
