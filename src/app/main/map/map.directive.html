@@ -10,7 +10,7 @@
 	<md-button aria-label="menu" class="md-fab md-mini" ng-repeat="tool in vm.drawingTools"
 			   ng-click="vm.editToggleDrawingTool(tool)"
 			   ng-class="{'md-primary': !tool.active, 'md-hue-1': tool.active}">
-		<md-tooltip md-direction="right">{{tool.name}}</md-tooltip>
+		<md-tooltip md-direction="right">{{tool.displayName}}</md-tooltip>
 		<i class="fa fa-lg map-drawing-tool__icon" ng-class="tool.icon"></i>
 	</md-button>
 </div>
