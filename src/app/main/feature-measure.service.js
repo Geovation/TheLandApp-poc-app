@@ -48,7 +48,6 @@
     function calculateArea(polygon, sourceProjection) {
       var geometry = polygon.clone().transform(sourceProjection, "EPSG:4326");
       var coordinates = geometry.getLinearRing(0).getCoordinates();
-      var area = Math.abs(wgs84Sphere.geodesicArea(coordinates));
 
       return Math.abs(wgs84Sphere.geodesicArea(coordinates));
     }
