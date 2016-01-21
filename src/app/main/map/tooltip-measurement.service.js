@@ -6,19 +6,19 @@
     .factory('tooltipMeasurementService', tooltipMeasurementService);
 
   /** @ngInject */
-  function tooltipMeasurementService() {
+  function tooltipMeasurementService(featureMeasureService) {
     var service = {
       addTooltip: addTooltip
     };
-
-    return service;
-
-    //////////////
 
     var measureTooltipNode;
     var measureTooltip;
     var currentFeature;
     var map;
+
+    return service;
+
+    //////////////
 
     function addTooltip(layer, drawInteraction) {
       map = drawInteraction.getMap();
@@ -53,13 +53,11 @@
 
         listener = currentFeature.getGeometry().on("change", function(event) {
           var geometry = event.target;
-          var output;
+          var output = featureMeasureService.getPrettyMeasurement(geometry, map.getView().getProjection());
 
           if (geometry instanceof ol.geom.Polygon) {
-            output = formatArea(geometry);
             tooltipCoord = geometry.getInteriorPoint().getCoordinates();
           } else if (geometry instanceof ol.geom.LineString) {
-            output = formatLength(geometry);
             tooltipCoord = geometry.getLastCoordinate();
           }
 
@@ -78,50 +76,6 @@
         createMeasureTooltip();
         ol.Observable.unByKey(listener);
       });
-    }
-
-    function formatArea(polygon) {
-      var output = angular.element("<span>");
-      var wgs84Sphere = new ol.Sphere(6378137);
-
-      var geometry = polygon.clone().transform(map.getView().getProjection(), "EPSG:4326");
-      var coordinates = geometry.getLinearRing(0).getCoordinates();
-      var area = Math.abs(wgs84Sphere.geodesicArea(coordinates));
-
-      if (area > 10000) {
-        output.text(Math.round(area / 1000000 * 100) / 100 + " km");
-      } else {
-        output.text(Math.round(area * 100) / 100 + " m");
-      }
-
-      output.append(angular.element("<sup>").text("2"));
-
-      return output;
-    }
-
-    function formatLength(line) {
-      var output = angular.element("<span>");
-      var wgs84Sphere = new ol.Sphere(6378137);
-      var length = 0;
-
-      line.getCoordinates().forEach(function(coordinate, index, coordinates) {
-        if (coordinates.length === index + 1) {
-          return;
-        }
-
-        var c1 = ol.proj.transform(coordinate, map.getView().getProjection(), "EPSG:4326");
-        var c2 = ol.proj.transform(coordinates[index + 1], map.getView().getProjection(), "EPSG:4326");
-
-        length += wgs84Sphere.haversineDistance(c1, c2);
-      });
-
-      if (length > 1000) {
-        output.text(Math.round(length / 1000 * 100) / 100 + " km");
-      } else {
-        output.text(Math.round(length * 100) / 100 + " m");
-      }
-
-      return output;
     }
   }
 })();
