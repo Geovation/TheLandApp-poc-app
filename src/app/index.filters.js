@@ -3,6 +3,7 @@ angular
   .filter("formatArea", formatArea)
   .filter("formatLength", formatLength);
 
+/** @ngInject */
 function formatArea($sce) {
   return function(area) {
     if (area > 10000) {
@@ -17,6 +18,7 @@ function formatArea($sce) {
   };
 }
 
+/** @ngInject */
 function formatLength($sce) {
   return function(length) {
     if (length > 1000) {
