@@ -41,7 +41,7 @@
       removeFeature: removeFeature,
       saveDrawingLayers: saveDrawingLayers,
       getProjection: getProjection,
-      getLayerDetailsByFeature: getLayerDetailsByFeature
+      getDrawingLayerDetailsByFeature: getDrawingLayerDetailsByFeature
     };
 
     var layerIndexes = {
@@ -301,7 +301,7 @@
     }
 
     function removeFeature(feature) {
-      var layerDetails = getLayerDetailsByFeature(feature);
+      var layerDetails = getDrawingLayerDetailsByFeature(feature);
 
       if (layerDetails.layer) {
         layerDetails.layer.getSource().removeFeature(feature);
@@ -310,7 +310,7 @@
       }
     }
 
-    function getLayerDetailsByFeature(feature) {
+    function getDrawingLayerDetailsByFeature(feature) {
       var layerDetails = {};
 
       angular.forEach(drawingLayers, function(layer, layerName) {

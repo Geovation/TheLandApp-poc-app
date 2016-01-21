@@ -82,7 +82,7 @@
         var data = {
           area: undefined,
           length: undefined,
-          featureType: mapService.getLayerDetailsByFeature(activeFeature).displayName
+          featureType: mapService.getDrawingLayerDetailsByFeature(activeFeature).displayName
         };
 
         var geometry = activeFeature.getGeometry();
