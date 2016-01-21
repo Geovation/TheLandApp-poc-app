@@ -39,7 +39,9 @@
       isAnyDrawingToolActive: isAnyDrawingToolActive,
       getEnableDrawing: function() {return enableDrawing;},
       removeFeature: removeFeature,
-      saveDrawingLayers: saveDrawingLayers
+      saveDrawingLayers: saveDrawingLayers,
+      getProjection: getProjection,
+      getLayerDetailsByFeature: getLayerDetailsByFeature
     };
 
     var layerIndexes = {
@@ -264,6 +266,10 @@
       });
     }
 
+    function getProjection() {
+      return view.getProjection();
+    }
+
     /**
      * Enables the following drawing layer interactions:
      *  - removing features (by clicking and pressing backspace)
@@ -295,13 +301,32 @@
     }
 
     function removeFeature(feature) {
-      angular.forEach(drawingLayers, function(layer) {
+      var layerDetails = getLayerDetailsByFeature(feature);
+
+      if (layerDetails.layer) {
+        layerDetails.layer.getSource().removeFeature(feature);
+        saveDrawingLayers();
+        clearSelectedFeatures();
+      }
+    }
+
+    function getLayerDetailsByFeature(feature) {
+      var layerDetails = {};
+
+      angular.forEach(drawingLayers, function(layer, layerName) {
         if (layer.getSource().getFeatures().indexOf(feature) > -1) {
-          layer.getSource().removeFeature(feature);
-          saveDrawingLayers();
-          clearSelectedFeatures();
+          layerDetails.layer = layer;
+          layerDetails.name = layerName;
         }
       });
+
+      drawingTools.forEach(function(tool) {
+        if (tool.name === layerDetails.name) {
+          layerDetails.displayName = tool.displayName;
+        }
+      });
+
+      return layerDetails;
     }
 
     function clearSelectedFeatures() {

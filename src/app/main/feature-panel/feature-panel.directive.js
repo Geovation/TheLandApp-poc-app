@@ -17,7 +17,7 @@
     return directive;
 
     /** @ngInject */
-    function FeaturePanelController($rootScope, $mdSidenav, $mdDialog, mapService) {
+    function FeaturePanelController($rootScope, $mdSidenav, $mdDialog, mapService, featureMeasureService) {
       var vm = this;
       var activeFeature;
       var panel;
@@ -59,7 +59,9 @@
 
         if (selectEvent.selected.length) {
           activeFeature = selectEvent.selected[0];
+
           vm.featureData = activeFeature.get("featureData") || {};
+          vm.readOnlyData = compileReadOnlyData();
 
           panel.open();
         } else {
@@ -75,6 +77,24 @@
           vm.lastSaveTime = undefined;
         }
       });
+
+      function compileReadOnlyData() {
+        var data = {
+          area: undefined,
+          length: undefined,
+          featureType: mapService.getLayerDetailsByFeature(activeFeature).displayName
+        };
+
+        var geometry = activeFeature.getGeometry();
+
+        if (geometry instanceof ol.geom.Polygon) {
+          data.area = featureMeasureService.calculateArea(geometry, mapService.getProjection());
+        } else if (geometry instanceof ol.geom.LineString) {
+          data.length = featureMeasureService.calculateLength(geometry, mapService.getProjection());
+        }
+
+        return data;
+      }
     }
   }
 

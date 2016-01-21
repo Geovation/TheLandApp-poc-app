@@ -17,7 +17,7 @@ function formatArea($sce) {
   };
 }
 
-function formatLength() {
+function formatLength($sce) {
   return function(length) {
     if (length > 1000) {
       length = Math.round(length / 1000 * 100) / 100 + " km";
@@ -25,6 +25,6 @@ function formatLength() {
       length = Math.round(length * 100) / 100 + " m";
     }
 
-    return length;
+    return $sce.trustAsHtml(length);
   };
 }
