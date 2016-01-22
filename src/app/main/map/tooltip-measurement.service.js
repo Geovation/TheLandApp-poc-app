@@ -6,7 +6,7 @@
     .factory('tooltipMeasurementService', tooltipMeasurementService);
 
   /** @ngInject */
-  function tooltipMeasurementService(featureMeasureService) {
+  function tooltipMeasurementService(ol, featureMeasureService) {
     var service = {
       addTooltip: addTooltip
     };
@@ -66,7 +66,7 @@
         });
       });
 
-      drawInteraction.on("drawend", function(event) {
+      drawInteraction.on("drawend", function() {
         measureTooltipNode.removeClass("tooltip-measure").addClass("tooltip-static");
         measureTooltip.setOffset([0, -7]);
 
