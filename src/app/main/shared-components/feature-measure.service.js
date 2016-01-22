@@ -6,7 +6,7 @@
     .factory('featureMeasureService', featureMeasureService);
 
   /** @ngInject */
-  function featureMeasureService() {
+  function featureMeasureService($filter) {
     var service = {
       calculateArea: calculateArea,
       calculateLength: calculateLength,
@@ -25,21 +25,11 @@
       if (geometry instanceof ol.geom.Polygon) {
         var area = calculateArea(geometry, sourceProjection);
 
-        if (area > 10000) {
-          output.text(Math.round(area / 1000000 * 100) / 100 + " km");
-        } else {
-          output.text(Math.round(area * 100) / 100 + " m");
-        }
-
-        output.append(angular.element("<sup>").text("2"));
+        output.html($filter('formatArea')(area));
       } else if (geometry instanceof ol.geom.LineString) {
         var length = calculateLength(geometry, sourceProjection);
 
-        if (length > 1000) {
-          output.text(Math.round(length / 1000 * 100) / 100 + " km");
-        } else {
-          output.text(Math.round(length * 100) / 100 + " m");
-        }
+        output.html($filter('formatLength')(length));
       }
 
       return output;

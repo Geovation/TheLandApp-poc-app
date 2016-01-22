@@ -17,7 +17,7 @@
     return directive;
 
     /** @ngInject */
-    function FeaturePanelController($rootScope, $mdSidenav, $mdDialog, mapService) {
+    function FeaturePanelController($rootScope, $mdSidenav, $mdDialog, mapService, featureMeasureService) {
       var vm = this;
       var activeFeature;
       var panel;
@@ -34,10 +34,10 @@
 
       vm.removeFeature = function() {
         var confirm = $mdDialog.confirm()
-          .title("Are you sure you want to remove this layer?")
-          .content("This action cannot be undone and will remove all associated layer data.")
-          .ariaLabel("Remove layer")
-          .ok("Remove layer")
+          .title("Are you sure you want to remove this feature?")
+          .content("This action cannot be undone and will remove all associated feature data.")
+          .ariaLabel("Remove feature")
+          .ok("Remove feature")
           .cancel("Cancel");
 
         $mdDialog.show(confirm).then(function() {
@@ -46,7 +46,11 @@
         });
       };
 
-      vm.saveFeatureData = function() {
+      vm.saveFeatureData = function(featureTitle) {
+        if (angular.isDefined(featureTitle)) {
+          vm.featureData.title = featureTitle;
+        }
+
         activeFeature.set("featureData", vm.featureData);
 
         mapService.saveDrawingLayers();
@@ -59,7 +63,9 @@
 
         if (selectEvent.selected.length) {
           activeFeature = selectEvent.selected[0];
+
           vm.featureData = activeFeature.get("featureData") || {};
+          vm.readOnlyData = compileReadOnlyData();
 
           panel.open();
         } else {
@@ -75,6 +81,24 @@
           vm.lastSaveTime = undefined;
         }
       });
+
+      function compileReadOnlyData() {
+        var data = {
+          area: undefined,
+          length: undefined,
+          featureType: mapService.getDrawingLayerDetailsByFeature(activeFeature).displayName
+        };
+
+        var geometry = activeFeature.getGeometry();
+
+        if (geometry instanceof ol.geom.Polygon) {
+          data.area = featureMeasureService.calculateArea(geometry, mapService.getProjection());
+        } else if (geometry instanceof ol.geom.LineString) {
+          data.length = featureMeasureService.calculateLength(geometry, mapService.getProjection());
+        }
+
+        return data;
+      }
     }
   }
 
