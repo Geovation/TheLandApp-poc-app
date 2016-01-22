@@ -16,11 +16,11 @@
             </md-input-container>
             <h1 layout="column" layout-align="center">
         <div flex layout="row" layout-align="center">
-          <md-tooltip md-direction="top">Enter your email and password first</md-tooltip>
+          <md-tooltip md-direction="top" ng-if="loginForm.$invalid">Enter your email and password first</md-tooltip>
           <md-button flex class="md-raised md-primary" ng-click="indexVm.login()" ng-disabled="loginForm.$invalid">Sign In</md-button>
         </div>
         <div flex layout="row" layout-align="center">
-          <md-tooltip md-direction="top">Enter your email and password first</md-tooltip>
+          <md-tooltip md-direction="top" ng-if="loginForm.$invalid">Enter your email and password first</md-tooltip>
           <md-button class="md-primary" ng-click="indexVm.signup()" ng-disabled="loginForm.$invalid">or register</md-button>
         </div>
         

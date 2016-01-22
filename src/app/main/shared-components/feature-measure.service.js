@@ -6,7 +6,7 @@
     .factory('featureMeasureService', featureMeasureService);
 
   /** @ngInject */
-  function featureMeasureService($filter) {
+  function featureMeasureService(ol, $filter) {
     var service = {
       calculateArea: calculateArea,
       calculateLength: calculateLength,

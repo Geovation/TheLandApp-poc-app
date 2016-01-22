@@ -17,7 +17,7 @@
     return directive;
 
     /** @ngInject */
-    function FeaturePanelController($rootScope, $mdSidenav, $mdDialog, mapService, featureMeasureService) {
+    function FeaturePanelController(ol, $rootScope, $mdSidenav, $mdDialog, mapService, featureMeasureService) {
       var vm = this;
       var activeFeature;
       var panel;

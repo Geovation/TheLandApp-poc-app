@@ -1,4 +1,6 @@
 (function() {
+  'use strict';
+
   angular
     .module("landAppFilters", [])
     .filter("formatArea", formatArea)
