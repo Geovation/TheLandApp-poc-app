@@ -2,12 +2,29 @@
   <md-toolbar class="md-theme-light">
     <h1 class="md-toolbar-tools"
       editable-text="vmPanel.featureData.title"
-      onaftersave="vmPanel.saveFeatureData()">
+      onbeforesave="vmPanel.saveFeatureData($data)">
         {{ vmPanel.featureData.title || "Untitled feature" }}
     </h1>
   </md-toolbar>
   <md-content layout-padding layout="column">
     <form name="attributeForm" ng-submit="vmPanel.saveFeatureData()">
+      <section class="read-only-data" layout-margin>
+        <section layout="row">
+          <div flex="50" class="heading">Feature type</div>
+          <div flex="50">{{ vmPanel.readOnlyData.featureType }}</div>
+        </section>
+
+        <section layout="row" ng-show="vmPanel.readOnlyData.area">
+          <div flex="50" class="heading">Area</div>
+          <div flex="50" ng-bind-html="vmPanel.readOnlyData.area | formatArea"></div>
+        </section>
+
+        <section layout="row" ng-show="vmPanel.readOnlyData.length">
+          <div flex="50" class="heading">Length</div>
+          <div flex="50" ng-bind-html="vmPanel.readOnlyData.length | formatLength"></div>
+        </section>
+      </section>
+
       <section layout="row" layout-align="space-between center">
         <md-subheader class="md-primary md-subheader--closer-to-children">
           <h2 class="md-title feature-title">Attributes</h2>
