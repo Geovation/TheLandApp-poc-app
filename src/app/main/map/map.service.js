@@ -8,6 +8,7 @@
   /** @ngInject */
   function mapService(ol, proj4, $log, $http, $mdToast, $rootScope, $timeout, $window,
       customLayersService, firebaseService, layerInteractionsService, layersService, tooltipMeasurementService) {
+
     // define EPSG:27700
     proj4.defs("EPSG:27700", "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +towgs84=446.448,-125.157,542.06,0.15,0.247,0.842,-20.489 +units=m +no_defs");
 
@@ -41,7 +42,8 @@
       removeFeature: removeFeature,
       saveDrawingLayers: saveDrawingLayers,
       getProjection: getProjection,
-      getDrawingLayerDetailsByFeature: getDrawingLayerDetailsByFeature
+      getDrawingLayerDetailsByFeature: getDrawingLayerDetailsByFeature,
+      addFeaturesToDrawingLayer: addFeaturesToDrawingLayer
     };
 
     var layerIndexes = {
@@ -52,6 +54,11 @@
     return service;
 
     ///////////////
+    function addFeaturesToDrawingLayer(drawingLayerName, features) {
+      drawingLayers[drawingLayerName].getSource().addFeatures(features);
+      saveDrawingLayers(drawingLayerName);
+    }
+
     function loadUserLayersAndEnableEditing(authData) {
       if (authData) {
         firebaseService.getUserLayersRef().once("value", function(userLayers) {
@@ -414,7 +421,7 @@
             break;
           case 'vectorspace':
             layer.ol = customLayersService.buildVectorSpace(layerIndexes, layer);
-            layer.olMapInteractions = layerInteractionsService.buildVectorSpace(map, drawingLayers, layer.ol);
+            layer.olMapInteractions = layerInteractionsService.buildVectorSpace(layer.ol, service);
             break;
           default:
             $log.debug("layer type '" + JSON.stringify(layer.type) + "' not defined");

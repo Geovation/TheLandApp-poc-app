@@ -14,7 +14,7 @@
     return service;
     ////////////////
 
-    function buildVectorSpace(map, drawingLayers, olLayer) {
+    function buildVectorSpace(olLayer, mapService) {
       var hover = new ol.interaction.Select({
        condition: ol.events.condition.pointerMove,
        layers: [olLayer]
@@ -33,10 +33,8 @@
             .textContent('It will be added in the form of hendges and you will be able to edit it.')
             .cancel('Ops, sorry...')
             .ok('Sure, do it');
-          $mdDialog.show(dialogAddFeature).then(function(){
-            drawingLayers.Hedge.getSource().addFeatures(features);
-            // TODO: save
-            debugger;
+          $mdDialog.show(dialogAddFeature).then(function() {
+            mapService.addFeaturesToDrawingLayer("Hedge", features);
             $log.debug("Added feature from LR ");
           });
         }
