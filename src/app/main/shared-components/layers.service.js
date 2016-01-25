@@ -80,47 +80,57 @@
     }
 
     function createDrawingTools() {
-      return [{
-        name: 'Water',
-        displayName: 'Water line',
-        type: 'LineString',
-        icon: 'fa-pencil',
-        colour: "0, 178, 238",
-        strokeWidth: 3,
-        checked: true
-      }, {
-        name: 'Electricity',
-        displayName: 'Power line',
-        type: 'LineString',
-        icon: 'fa-bolt',
-        colour: "238, 238, 0",
-        strokeWidth: 3,
-        checked: true
-      }, {
-        name: 'Hedge',
-        displayName: 'Hedge',
-        type: 'LineString',
-        icon: 'fa-photo',
-        colour: "46, 139, 87",
-        strokeWidth: 3,
-        checked: true
-      }, {
-        name: 'Tree',
-        displayName: 'Tree',
-        type: 'Point',
-        icon: 'fa-tree',
-        colour: "46, 139, 87",
-        strokeWidth: 3,
-        checked: true
-      }, {
-        name: 'Buildings',
-        displayName: 'Building',
-        type: 'Polygon',
-        icon: 'fa-industry',
-        colour: "144, 78, 39",
-        strokeWidth: 3,
-        checked: true
-      }];
+      return [
+          {
+          name: 'Water',
+          displayName: 'Water line',
+          type: 'LineString',
+          icon: 'fa-tint',
+          colour: "0, 178, 238",
+          strokeWidth: 3,
+          checked: true
+        }, {
+          name: 'Electricity',
+          displayName: 'Power line',
+          type: 'LineString',
+          icon: 'fa-bolt',
+          colour: "238, 238, 0",
+          strokeWidth: 3,
+          checked: true
+        }, {
+          name: 'Hedges',
+          displayName: 'Hedge',
+          type: 'LineString',
+          icon: 'fa-ellipsis-v',
+          colour: "0, 50, 0",
+          strokeWidth: 3,
+          checked: true
+        }, {
+          name: 'Trees',
+          displayName: 'Tree',
+          type: 'Point',
+          icon: 'fa-tree',
+          colour: "46, 139, 87",
+          strokeWidth: 3,
+          checked: true
+        }, {
+          name: 'Buildings',
+          displayName: 'Building',
+          type: 'Polygon',
+          icon: 'fa-industry',
+          colour: "144, 78, 39",
+          strokeWidth: 3,
+          checked: true
+        }, {
+          name: 'Boundaries',
+          displayName: 'Boundary',
+          type: 'Polygon',
+          icon: 'fa-square',
+          colour: "46, 139, 87",
+          strokeWidth: 3,
+          checked: true
+        }
+      ];
     }
   }
 

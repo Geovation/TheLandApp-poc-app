@@ -34,7 +34,7 @@
             .cancel('Ops, sorry...')
             .ok('Sure, do it');
           $mdDialog.show(dialogAddFeature).then(function() {
-            mapService.addFeaturesToDrawingLayer("Hedge", features);
+            mapService.addFeaturesToDrawingLayer("Boundaries", features);
             $log.debug("Added feature from LR ");
           });
         }
