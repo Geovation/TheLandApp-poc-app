@@ -1,7 +1,6 @@
 <md-toolbar class="app-header">
     <div class="md-toolbar-tools md-toolbar-tools--no-left-padding">
-        <!--<md-button class="md-primary" aria-label="Toggle Menu" ng-click="toggleMenu()"><i class="fa fa-lg fa-bars"></i></md-button>-->
-        <img src="assets/images/land-app-logo-transparent.png" class="logo" />
+        <img src="assets/images/land-app-logo-transparent.png" class="logo" ng-click="$emit('la-fitExtent')"/>
         <h2>
       <span title="{{ENV | json}}">The&nbsp;Land&nbsp;App</span>
     </h2>
