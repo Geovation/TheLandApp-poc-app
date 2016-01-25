@@ -123,7 +123,7 @@
           checked: true
         }, {
           name: 'Boundaries',
-          displayName: 'Boundarie',
+          displayName: 'Boundary',
           type: 'Polygon',
           icon: 'fa-square',
           colour: "46, 139, 87",
