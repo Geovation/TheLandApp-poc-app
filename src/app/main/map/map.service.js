@@ -8,6 +8,7 @@
   /** @ngInject */
   function mapService(ol, proj4, $log, $http, $mdToast, $rootScope, $timeout, $window,
       customLayersService, firebaseService, layerInteractionsService, layersService, tooltipMeasurementService) {
+
     // define EPSG:27700
     proj4.defs("EPSG:27700", "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +towgs84=446.448,-125.157,542.06,0.15,0.247,0.842,-20.489 +units=m +no_defs");
 
@@ -41,7 +42,8 @@
       removeFeature: removeFeature,
       saveDrawingLayers: saveDrawingLayers,
       getProjection: getProjection,
-      getDrawingLayerDetailsByFeature: getDrawingLayerDetailsByFeature
+      getDrawingLayerDetailsByFeature: getDrawingLayerDetailsByFeature,
+      addFeaturesToDrawingLayer: addFeaturesToDrawingLayer
     };
 
     var layerIndexes = {
@@ -52,6 +54,11 @@
     return service;
 
     ///////////////
+    function addFeaturesToDrawingLayer(drawingLayerName, features) {
+      drawingLayers[drawingLayerName].getSource().addFeatures(features);
+      saveDrawingLayers(drawingLayerName);
+    }
+
     function loadUserLayersAndEnableEditing(authData) {
       if (authData) {
         firebaseService.getUserLayersRef().once("value", function(userLayers) {
@@ -277,11 +284,12 @@
      */
     function addControlInteractions(vectorLayers) {
       mapInteractions.featureSelect = new ol.interaction.Select({
-        condition: function(event) {
-          return ol.events.condition.singleClick(event) && !isAnyDrawingToolActive();
-        },
+        condition: ol.events.condition.singleClick,
         toggleCondition: ol.events.condition.never,
-        layers: vectorLayers
+        layers: vectorLayers,
+        filter: function() {
+          return !isAnyDrawingToolActive();
+        }
       });
 
       mapInteractions.featureModify = new ol.interaction.Modify({
@@ -335,18 +343,20 @@
 
     function addLayer(layer) {
       buildAndCacheLayer(layer);
-      map.addLayer(layer.os);
-      if (layer.osMapInteractions) {
-        map.addInteraction(layer.osMapInteractions);
-      }
+      map.addLayer(layer.ol);
+
+      angular.forEach(layer.olMapInteractions, function(mapInteraction) {
+        map.addInteraction(mapInteraction);
+      });
     }
 
     function removeLayer(layer) {
       buildAndCacheLayer(layer);
-      map.removeLayer(layer.os);
-      if (layer.osMapInteractions) {
-        map.removeInteraction(layer.osMapInteractions);
-      }
+      map.removeLayer(layer.ol);
+
+      angular.forEach(layer.olMapInteractions, function(mapInteraction) {
+        map.removeInteraction(mapInteraction);
+      });
     }
 
     function toggleLayerFromCheckProperty(layer) {
@@ -358,10 +368,10 @@
     }
 
     function buildAndCacheLayer(layer) {
-      if (!layer.os) {
+      if (!layer.ol) {
         switch (layer.type) {
           case 'base.mapbox':
-            layer.os = new ol.layer.Tile({
+            layer.ol = new ol.layer.Tile({
               zIndex: layerIndexes.baseMap,
               source: new ol.source.XYZ({
                 url: layer.url
@@ -369,19 +379,19 @@
             });
             break;
           case 'base.osm':
-            layer.os = new ol.layer.Tile({
+            layer.ol = new ol.layer.Tile({
               zIndex: layerIndexes.baseMap,
               source: new ol.source.OSM()
             });
             break;
           case 'base.mapquest':
-            layer.os = new ol.layer.Tile({
+            layer.ol = new ol.layer.Tile({
               zIndex: layerIndexes.baseMap,
               source: new ol.source.MapQuest({layer: 'osm'})
             });
             break;
           case 'wms':
-            layer.os = new ol.layer.Tile({
+            layer.ol = new ol.layer.Tile({
               zIndex: layerIndexes.external,
               source: new ol.source.TileWMS({
                 url: layer.url,
@@ -390,7 +400,7 @@
             });
             break;
           case 'vector':
-            layer.os = new ol.layer.Vector({
+            layer.ol = new ol.layer.Vector({
               zIndex: layerIndexes.external,
               source: new ol.source.Vector({
                 url: layer.url,
@@ -410,8 +420,8 @@
             });
             break;
           case 'vectorspace':
-            layer.os = customLayersService.buildVectorSpace(layerIndexes, layer);
-            layer.osMapInteractions = layerInteractionsService.buildVectorSpace(layer.os);
+            layer.ol = customLayersService.buildVectorSpace(layerIndexes, layer);
+            layer.olMapInteractions = layerInteractionsService.buildVectorSpace(layer.ol, service);
             break;
           default:
             $log.debug("layer type '" + JSON.stringify(layer.type) + "' not defined");

@@ -16,7 +16,7 @@
     function buildVectorSpace(layerIndexes, layer) {
       var newLayer = new ol.layer.Vector({
         zIndex: layerIndexes.external,
-        maxResolution: 6,
+        maxResolution: 5,
         source: new ol.source.Vector({
           format: new ol.format.GeoJSON(),
           strategy: ol.loadingstrategy.bbox,
