@@ -125,6 +125,14 @@
           name: 'Boundaries',
           displayName: 'Boundary',
           type: 'Polygon',
+          icon: 'fa-map-o',
+          colour: "0, 0, 0",
+          strokeWidth: 3,
+          checked: true
+        }, {
+          name: 'LandParcels',
+          displayName: 'Land Parcel',
+          type: 'Polygon',
           icon: 'fa-square',
           colour: "46, 139, 87",
           strokeWidth: 3,
