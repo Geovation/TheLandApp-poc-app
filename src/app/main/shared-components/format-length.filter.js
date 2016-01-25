@@ -2,24 +2,8 @@
   'use strict';
 
   angular
-    .module("landAppFilters", [])
-    .filter("formatArea", formatArea)
+    .module("LandApp")
     .filter("formatLength", formatLength);
-
-  /** @ngInject */
-  function formatArea($sce) {
-    return function(area) {
-      if (area > 10000) {
-        area = Math.round(area / 1000000 * 100) / 100 + " km";
-      } else {
-        area = Math.round(area * 100) / 100 + " m";
-      }
-
-      area += "<sup>2</sup>";
-
-      return $sce.trustAsHtml(area);
-    };
-  }
 
   /** @ngInject */
   function formatLength($sce) {
