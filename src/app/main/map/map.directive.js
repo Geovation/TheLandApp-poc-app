@@ -23,6 +23,10 @@
     function linkFunc(scope) {
       mapService.createMap();
 
+      scope.$on('la-fitExtent', function() {
+        mapService.fitExtent();
+      });
+
       scope.$on('toggle-drawingTool-layer', function(e, tool) {
         mapService.setVisibleDrawingToolLayer(tool);
       });

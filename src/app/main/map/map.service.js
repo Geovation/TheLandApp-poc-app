@@ -68,7 +68,6 @@
 
           var layers = userLayers.val();
           var format = new ol.format.GeoJSON();
-          var extent = ol.extent.createEmpty();
 
           // populate drawingLayers with Open Layers vector layers.
           var vectorLayers = [];
@@ -80,7 +79,6 @@
             if (layers && layers[curr.name] && layers[curr.name].features) {
               var features = format.readFeatures(layers[curr.name]);
               obj[curr.name].getSource().addFeatures(features);
-              ol.extent.extend(extent, obj[curr.name].getSource().getExtent());
             }
 
             return obj;
@@ -88,7 +86,7 @@
 
           addControlInteractions(vectorLayers);
 
-          fitExtent(extent);
+          fitExtent();
           $timeout(function() {enableDrawing = true;});
         });
       } else {
@@ -96,6 +94,8 @@
       }
     }
 
+    /** if extent is empty, calculate the extent based on user's layers.
+    */
     function fitExtent(extent) {
       // Britisg extend
       // Latitude: 60.8433° to 49.9553°
@@ -106,6 +106,14 @@
       //
       // Easting: 669031
       // Northing: 12862
+
+      if (!extent) {
+        extent = ol.extent.createEmpty();
+
+        angular.forEach(drawingLayers, function(layer) {
+          ol.extent.extend(extent, layer.getSource().getExtent());
+        });
+      }
 
       if (!ol.extent.isEmpty(extent)) {
         view.fit(extent, map.getSize());
