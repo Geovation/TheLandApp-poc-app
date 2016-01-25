@@ -17,12 +17,16 @@
     function buildVectorSpace(olLayer, mapService) {
       var hover = new ol.interaction.Select({
        condition: ol.events.condition.pointerMove,
-       layers: [olLayer]
+       layers: [olLayer],
+       filter: function() { return !mapService.isAnyDrawingToolActive();}
       });
 
       var click = new ol.interaction.Select({
-       condition: ol.events.condition.click,
-       layers: [olLayer]
+       //condition: ol.events.condition.click,
+       condition: function (e) {return ol.events.condition.click(e) && !mapService.isAnyDrawingToolActive();},
+       layers: [olLayer],
+       // OL bug: the next filter is it is not working
+       // filter: function() { return !mapService.isAnyDrawingToolActive();} // OL bug: it is not working
       });
 
       click.on('select', function(e) {
