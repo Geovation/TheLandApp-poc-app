@@ -8,12 +8,22 @@
   /** @ngInject */
   function projectTagService() {
     var service = {
-      defaultProjectTags: createDefaultProjectTags()
+      findMatchingTags: findMatchingTags
     };
+
+    var defaultTags = createDefaultProjectTags();
 
     return service;
 
     //////////
+
+    function findMatchingTags(searchQuery) {
+      var regex = new RegExp(searchQuery, "i");
+
+      return defaultTags.filter(function(tag) {
+        return regex.test(tag.displayText);
+      });
+    }
 
     function createDefaultProjectTags() {
       return [{

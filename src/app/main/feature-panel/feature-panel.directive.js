@@ -43,11 +43,7 @@
       };
 
       vm.performTagSearch = function(query) {
-        var regex = new RegExp(query, "i");
-
-        return projectTagService.defaultProjectTags.filter(function(tag) {
-          return regex.test(tag.displayText);
-        });
+        return projectTagService.findMatchingTags(query);
       };
 
       vm.saveFeatureData = function(featureTitle) {
