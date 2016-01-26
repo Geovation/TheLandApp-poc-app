@@ -17,7 +17,7 @@
     return directive;
 
     /** @ngInject */
-    function FeaturePanelController(ol, $rootScope, $mdSidenav, $mdDialog, mapService, featureMeasureService) {
+    function FeaturePanelController(ol, $rootScope, $mdSidenav, $mdDialog, mapService, featureMeasureService, projectTagService) {
       var vm = this;
       var activeFeature;
       var panel;
@@ -25,10 +25,6 @@
       vm.featureData = {};
 
       vm.addAttribute = function() {
-        if (!angular.isArray(vm.featureData.attributes)) {
-          vm.featureData.attributes = [];
-        }
-
         vm.featureData.attributes.push({name: "", value: ""});
       };
 
@@ -44,6 +40,10 @@
           mapService.removeFeature(activeFeature);
           panel.close();
         });
+      };
+
+      vm.performTagSearch = function(query) {
+        return projectTagService.findMatchingTags(query);
       };
 
       vm.saveFeatureData = function(featureTitle) {
@@ -64,8 +64,12 @@
         if (selectEvent.selected.length) {
           activeFeature = selectEvent.selected[0];
 
-          vm.featureData = activeFeature.get("featureData") || {};
           vm.readOnlyData = compileReadOnlyData();
+          vm.featureData = angular.extend({
+            title: "",
+            attributes: [],
+            tags: []
+          }, activeFeature.get("featureData"));
 
           panel.open();
         } else {

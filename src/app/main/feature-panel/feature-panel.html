@@ -25,6 +25,33 @@
         </section>
       </section>
 
+      <section layout="row">
+        <md-subheader class="md-primary md-subheader--closer-to-children">
+          <h2 class="md-title feature-title">Project tags</h2>
+
+          <md-chips
+            ng-model="vmPanel.featureData.tags"
+            md-on-add="vmPanel.saveFeatureData()"
+            md-on-remove="vmPanel.saveFeatureData()"
+            md-require-match="true">
+            <md-autocomplete
+              md-selected-item="vmPanel.selectedItem"
+              md-search-text="vmPanel.searchText"
+              md-items="item in vmPanel.performTagSearch(vmPanel.searchText)"
+              md-item-text="item.displayText"
+              placeholder="Search for a project tag">
+              <span md-highlight-text="vmPanel.searchText">{{ item.displayText }}</span>
+            </md-autocomplete>
+
+            <md-chip-template>
+              <span>
+                <strong>{{ $chip.displayText }}</strong>
+              </span>
+            </md-chip-template>
+          </md-chips>
+        </md-subheader>
+      </section>
+
       <section layout="row" layout-align="space-between center">
         <md-subheader class="md-primary md-subheader--closer-to-children">
           <h2 class="md-title feature-title">Attributes</h2>
