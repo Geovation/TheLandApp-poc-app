@@ -1,5 +1,8 @@
 # The Land App PoC
 
+## Architecture
+* [Design docs](docs/design.md)
+
 ## Style Guide
 John Papa code style: https://github.com/johnpapa/angular-styleguide
 from https://github.com/Swiip/generator-gulp-angular/blob/master/docs/usage.md
