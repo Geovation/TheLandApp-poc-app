@@ -14,7 +14,7 @@
     return service;
     /////////////////////
 
-    function buildLayerAndInteractions(layer) {
+    function buildLayerAndInteractions(layer, mapService) {
       if (!layer.olLayer) {
         switch (layer.type) {
           case 'base.mapbox':
@@ -68,7 +68,7 @@
             break;
           case 'vectorspace':
             layer.olLayer = customLayersService.buildVectorSpace(layer);
-            layer.olMapInteractions = layerInteractionsService.buildVectorSpace(layer.olLayer, service);
+            layer.olMapInteractions = layerInteractionsService.buildVectorSpace(layer, mapService);
             break;
           default:
             $log.debug("layer type '" + JSON.stringify(layer.type) + "' not defined");

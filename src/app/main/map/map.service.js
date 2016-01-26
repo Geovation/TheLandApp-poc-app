@@ -275,7 +275,7 @@
       // build and cache all layers
       angular.forEach(layersService, function(layers) {
         layers.forEach(function(layer){
-          olLayersService.buildLayerAndInteractions(layer);
+          olLayersService.buildLayerAndInteractions(layer, service);
         });
       });
 

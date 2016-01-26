@@ -14,23 +14,23 @@
     return service;
     ////////////////
 
-    function buildVectorSpace(olLayer, mapService) {
+    function buildVectorSpace(layer, mapService) {
       var hover = new ol.interaction.Select({
        condition: ol.events.condition.pointerMove,
-       layers: [olLayer],
+       layers: [layer.olLayer],
        filter: function() { return !mapService.isAnyDrawingToolActive();}
       });
 
       var click = new ol.interaction.Select({
        //condition: ol.events.condition.click,
        condition: function (e) {return ol.events.condition.click(e) && !mapService.isAnyDrawingToolActive();},
-       layers: [olLayer],
+       layers: [layer.olLayer],
        // OL bug: the next filter is it is not working
        // filter: function() { return !mapService.isAnyDrawingToolActive();} // OL bug: it is not working
       });
 
       click.on('select', function(e) {
-        var features = olLayer.getSource().getFeaturesAtCoordinate(e.mapBrowserEvent.coordinate);
+        var features = layer.olLayer.getSource().getFeaturesAtCoordinate(e.mapBrowserEvent.coordinate);
         if (features.length) {
           var dialogAddFeature = $mdDialog.confirm()
             .title('Add this LR feature to your farm ?')
