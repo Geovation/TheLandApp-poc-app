@@ -82,7 +82,7 @@
     }
 
     function createDrawingLayers() {
-      var drawingLayers = [
+      return [
         {
           name: 'Water',
           displayName: 'Water line',
@@ -141,8 +141,6 @@
           checked: true
         }
       ];
-
-      return drawingLayers;
     }
   }
 
