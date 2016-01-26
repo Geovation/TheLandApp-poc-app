@@ -27,8 +27,8 @@
         mapService.fitExtent();
       });
 
-      scope.$on('toggle-drawingTool-layer', function(e, tool) {
-        mapService.setVisibleDrawingToolLayer(tool);
+      scope.$on('toggle-drawingTool-layer', function(e, layer) {
+        mapService.setVisibleDrawingToolLayer(layer);
       });
 
       scope.$on('toggle-basemap-layer', function(e, baseMap) {
