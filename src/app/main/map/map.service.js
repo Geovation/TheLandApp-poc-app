@@ -56,7 +56,7 @@
     function addFeaturesToDrawingLayer(drawingLayerName, features) {
       drawingLayers
         .find(function(layer){return layer.name === drawingLayerName;})
-        .ol.getSource().addFeatures(features);
+        .olLayer.getSource().addFeatures(features);
       saveDrawingLayers(drawingLayerName);
     }
 
@@ -72,13 +72,13 @@
           var vectorLayers = [];
 
           drawingLayers.forEach(function(layer){
-            layer.ol = newVectorLayer(layer.name, layer.colour, layer.strokeWidth);
-            vectorLayers.push(layer.ol);
-            map.addLayer(layer.ol);
+            layer.olLayer = newVectorLayer(layer.name, layer.colour, layer.strokeWidth);
+            vectorLayers.push(layer.olLayer);
+            map.addLayer(layer.olLayer);
 
             if (layers && layers[layer.name] && layers[layer.name].features) {
               var features = format.readFeatures(layers[layer.name]);
-              layer.ol.getSource().addFeatures(features);
+              layer.olLayer.getSource().addFeatures(features);
             }
           });
 
@@ -109,7 +109,7 @@
         extent = ol.extent.createEmpty();
 
         angular.forEach(drawingLayers, function(layer) {
-          ol.extent.extend(extent, layer.ol.getSource().getExtent());
+          ol.extent.extend(extent, layer.olLayer.getSource().getExtent());
         });
       }
 
@@ -186,7 +186,7 @@
           layer.active = false;
           map.removeInteraction(layer.draw);
           delete layer.draw;
-          unfocusLayer(layer.ol);
+          unfocusLayer(layer.olLayer);
         }
 
         setVisibleDrawingToolLayer(layer);
@@ -205,7 +205,7 @@
           return;
         }
 
-        var payload = angular.copy(format.writeFeaturesObject(layer.ol.getSource().getFeatures()));
+        var payload = angular.copy(format.writeFeaturesObject(layer.olLayer.getSource().getFeatures()));
 
         firebaseService.getUserLayersRef().child(layerName).set(payload);
       });
@@ -221,7 +221,7 @@
         layer.active = true;
 
         layer.draw = new ol.interaction.Draw({
-            source: layer.ol.getSource(),
+            source: layer.olLayer.getSource(),
             type: layer.type,
             style: new ol.style.Style({
                 fill: new ol.style.Fill({
@@ -241,16 +241,16 @@
         });
 
         map.addInteraction(layer.draw);
-        tooltipMeasurementService.addTooltip(layer.ol, layer.draw);
+        tooltipMeasurementService.addTooltip(layer.olLayer, layer.draw);
 
-        focusLayer(layer.ol);
+        focusLayer(layer.olLayer);
         $mdToast.show({
             template: '<md-toast>Start drawing some ' + layer.name + '!</md-toast>',
             hideDelay: 5000,
             position: "top right"
         });
 
-        layer.ol.setVisible(true);
+        layer.olLayer.setVisible(true);
     }
 
     function zoomIn() {
@@ -335,8 +335,8 @@
       var layerDetails = {};
 
       drawingLayers.forEach(function(layer){
-        if (layer.ol.getSource().getFeatures().indexOf(feature) > -1) {
-          layerDetails.layer = layer.ol;
+        if (layer.olLayer.getSource().getFeatures().indexOf(feature) > -1) {
+          layerDetails.layer = layer.olLayer;
           layerDetails.name = layer.name;
           layerDetails.displayName = layer.displayName;
         }
@@ -350,7 +350,7 @@
     }
 
     function addLayer(layer) {
-      map.addLayer(layer.ol);
+      map.addLayer(layer.olLayer);
 
       angular.forEach(layer.olMapInteractions, function(mapInteraction) {
         map.addInteraction(mapInteraction);
@@ -358,7 +358,7 @@
     }
 
     function removeLayer(layer) {
-      map.removeLayer(layer.ol);
+      map.removeLayer(layer.olLayer);
 
       angular.forEach(layer.olMapInteractions, function(mapInteraction) {
         map.removeInteraction(mapInteraction);
@@ -374,10 +374,10 @@
     }
 
     function buildAndCacheLayer(layer) {
-      if (!layer.ol) {
+      if (!layer.olLayer) {
         switch (layer.type) {
           case 'base.mapbox':
-            layer.ol = new ol.layer.Tile({
+            layer.olLayer = new ol.layer.Tile({
               zIndex: layerIndexes.baseMap,
               source: new ol.source.XYZ({
                 url: layer.url
@@ -385,19 +385,19 @@
             });
             break;
           case 'base.osm':
-            layer.ol = new ol.layer.Tile({
+            layer.olLayer = new ol.layer.Tile({
               zIndex: layerIndexes.baseMap,
               source: new ol.source.OSM()
             });
             break;
           case 'base.mapquest':
-            layer.ol = new ol.layer.Tile({
+            layer.olLayer = new ol.layer.Tile({
               zIndex: layerIndexes.baseMap,
               source: new ol.source.MapQuest({layer: 'osm'})
             });
             break;
           case 'wms':
-            layer.ol = new ol.layer.Tile({
+            layer.olLayer = new ol.layer.Tile({
               zIndex: layerIndexes.external,
               source: new ol.source.TileWMS({
                 url: layer.url,
@@ -406,7 +406,7 @@
             });
             break;
           case 'vector':
-            layer.ol = new ol.layer.Vector({
+            layer.olLayer = new ol.layer.Vector({
               zIndex: layerIndexes.external,
               source: new ol.source.Vector({
                 url: layer.url,
@@ -426,8 +426,8 @@
             });
             break;
           case 'vectorspace':
-            layer.ol = customLayersService.buildVectorSpace(layerIndexes, layer);
-            layer.olMapInteractions = layerInteractionsService.buildVectorSpace(layer.ol, service);
+            layer.olLayer = customLayersService.buildVectorSpace(layerIndexes, layer);
+            layer.olMapInteractions = layerInteractionsService.buildVectorSpace(layer.olLayer, service);
             break;
           default:
             $log.debug("layer type '" + JSON.stringify(layer.type) + "' not defined");
@@ -444,7 +444,7 @@
     /** Hide/Unhide drawing tool layer based on tool being checked.
     */
     function setVisibleDrawingToolLayer(layer) {
-      layer.ol.setVisible(layer.checked);
+      layer.olLayer.setVisible(layer.checked);
       clearSelectedFeatures();
     }
 
