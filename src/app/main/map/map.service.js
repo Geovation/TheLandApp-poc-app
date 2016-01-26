@@ -7,7 +7,7 @@
 
   /** @ngInject */
   function mapService(ol, proj4, $log, $http, $mdToast, $rootScope, $timeout, $window,
-      customLayersService, firebaseService, layerInteractionsService, layersService, tooltipMeasurementService) {
+      customLayersService, firebaseService, layerInteractionsService, layersService, olLayersService, tooltipMeasurementService) {
 
     // define EPSG:27700
     proj4.defs("EPSG:27700", "+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +towgs84=446.448,-125.157,542.06,0.15,0.247,0.842,-20.489 +units=m +no_defs");
@@ -43,11 +43,6 @@
       getProjection: getProjection,
       getDrawingLayerDetailsByFeature: getDrawingLayerDetailsByFeature,
       addFeaturesToDrawingLayer: addFeaturesToDrawingLayer
-    };
-
-    var layerIndexes = {
-      baseMap : -2,
-      external : -1
     };
 
     return service;
@@ -280,7 +275,7 @@
       // build and cache all layers
       angular.forEach(layersService, function(layers) {
         layers.forEach(function(layer){
-          buildAndCacheLayer(layer);
+          olLayersService.buildLayerAndInteractions(layer);
         });
       });
 
@@ -372,68 +367,6 @@
         removeLayer(layer);
       }
     }
-
-    function buildAndCacheLayer(layer) {
-      if (!layer.olLayer) {
-        switch (layer.type) {
-          case 'base.mapbox':
-            layer.olLayer = new ol.layer.Tile({
-              zIndex: layerIndexes.baseMap,
-              source: new ol.source.XYZ({
-                url: layer.url
-              })
-            });
-            break;
-          case 'base.osm':
-            layer.olLayer = new ol.layer.Tile({
-              zIndex: layerIndexes.baseMap,
-              source: new ol.source.OSM()
-            });
-            break;
-          case 'base.mapquest':
-            layer.olLayer = new ol.layer.Tile({
-              zIndex: layerIndexes.baseMap,
-              source: new ol.source.MapQuest({layer: 'osm'})
-            });
-            break;
-          case 'wms':
-            layer.olLayer = new ol.layer.Tile({
-              zIndex: layerIndexes.external,
-              source: new ol.source.TileWMS({
-                url: layer.url,
-                params: {'LAYERS': layer.layers, 'TILED': true}
-              })
-            });
-            break;
-          case 'vector':
-            layer.olLayer = new ol.layer.Vector({
-              zIndex: layerIndexes.external,
-              source: new ol.source.Vector({
-                url: layer.url,
-                format: new ol.format.GeoJSON({
-                  defaultDataProjection: "EPSG:27700"
-                })
-              }),
-              style: new ol.style.Style({
-                fill: new ol.style.Fill({
-                  color: layer.fillColor,
-                }),
-                stroke: new ol.style.Stroke({
-                  color: layer.strokeColor,
-                  width: 2
-                })
-              })
-            });
-            break;
-          case 'vectorspace':
-            layer.olLayer = customLayersService.buildVectorSpace(layerIndexes, layer);
-            layer.olMapInteractions = layerInteractionsService.buildVectorSpace(layer.olLayer, service);
-            break;
-          default:
-            $log.debug("layer type '" + JSON.stringify(layer.type) + "' not defined");
-        }
-      }
-    } //buildAndCacheLayer
 
     function setBaseMap(baseMap) {
       removeLayer(currentBaseMap);
