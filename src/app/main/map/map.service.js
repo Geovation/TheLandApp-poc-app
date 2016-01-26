@@ -19,9 +19,8 @@
     var currentBaseMap = {};
     var view = {};
     var map = {};
-    var drawingTools = layersService.drawingTools;
+    var drawingLayers = layersService.drawingLayers;
     var enableDrawing = false;
-    var drawingLayers = [];
     var mapInteractions = {};
 
     firebaseService.firebaseRef.onAuth(loadUserLayersAndEnableEditing);
@@ -35,7 +34,7 @@
       zoomOut: zoomOut,
       editToggleDrawingTool: editToggleDrawingTool,
       setVisibleDrawingToolLayer: setVisibleDrawingToolLayer,
-      drawingTools: drawingTools,
+      drawingLayers: drawingLayers,
       deactivateAllDrawingTools: deactivateAllDrawingTools,
       isAnyDrawingToolActive: isAnyDrawingToolActive,
       getEnableDrawing: function() {return enableDrawing;},
@@ -55,7 +54,9 @@
 
     ///////////////
     function addFeaturesToDrawingLayer(drawingLayerName, features) {
-      drawingLayers[drawingLayerName].getSource().addFeatures(features);
+      drawingLayers
+        .find(function(layer){return layer.name === drawingLayerName;})
+        .ol.getSource().addFeatures(features);
       saveDrawingLayers(drawingLayerName);
     }
 
@@ -64,25 +65,22 @@
         firebaseService.getUserLayersRef().once("value", function(userLayers) {
           $log.debug(userLayers);
 
-          drawingLayers = [];
-
           var layers = userLayers.val();
           var format = new ol.format.GeoJSON();
 
           // populate drawingLayers with Open Layers vector layers.
           var vectorLayers = [];
-          drawingLayers = drawingTools.reduce(function(obj, curr) {
-            obj[curr.name] = newVectorLayer(curr.name, curr.colour, curr.strokeWidth);
-            vectorLayers.push(obj[curr.name]);
-            map.addLayer(obj[curr.name]);
 
-            if (layers && layers[curr.name] && layers[curr.name].features) {
-              var features = format.readFeatures(layers[curr.name]);
-              obj[curr.name].getSource().addFeatures(features);
+          drawingLayers.forEach(function(layer){
+            layer.ol = newVectorLayer(layer.name, layer.colour, layer.strokeWidth);
+            vectorLayers.push(layer.ol);
+            map.addLayer(layer.ol);
+
+            if (layers && layers[layer.name] && layers[layer.name].features) {
+              var features = format.readFeatures(layers[layer.name]);
+              layer.ol.getSource().addFeatures(features);
             }
-
-            return obj;
-          }, {});
+          });
 
           addControlInteractions(vectorLayers);
 
@@ -111,7 +109,7 @@
         extent = ol.extent.createEmpty();
 
         angular.forEach(drawingLayers, function(layer) {
-          ol.extent.extend(extent, layer.getSource().getExtent());
+          ol.extent.extend(extent, layer.ol.getSource().getExtent());
         });
       }
 
@@ -121,13 +119,13 @@
     }
 
     function isAnyDrawingToolActive() {
-      return drawingTools
+      return drawingLayers
         .filter(function(dt) { return dt.hasOwnProperty('draw');} )
         .length > 0;
     }
 
     function deactivateAllDrawingTools() {
-      drawingTools
+      drawingLayers
         .filter(function(dt) { return dt.hasOwnProperty('draw');} )
         .forEach(deactivateDrawingTool);
     }
@@ -171,27 +169,27 @@
         });
     }
 
-    function editToggleDrawingTool(tool) {
-      if (tool.draw) {
-        deactivateDrawingTool(tool);
+    function editToggleDrawingTool(layer) {
+      if (layer.draw) {
+        deactivateDrawingTool(layer);
       } else {
-        activateDrawingTool(tool);
+        activateDrawingTool(layer);
       }
     }
 
-    function deactivateDrawingTool(tool) {
-        $log.debug('deactivate', tool);
+    function deactivateDrawingTool(layer) {
+        $log.debug('deactivate', layer);
 
-        if (tool.active) {
-          saveDrawingLayers(tool.name);
+        if (layer.active) {
+          saveDrawingLayers(layer.name);
 
-          tool.active = false;
-          map.removeInteraction(tool.draw);
-          delete tool.draw;
-          unfocusLayer(drawingLayers[tool.name]);
+          layer.active = false;
+          map.removeInteraction(layer.draw);
+          delete layer.draw;
+          unfocusLayer(layer.ol);
         }
 
-        setVisibleDrawingToolLayer(tool);
+        setVisibleDrawingToolLayer(layer);
     }
 
     /**
@@ -207,53 +205,52 @@
           return;
         }
 
-        var payload = angular.copy(format.writeFeaturesObject(layer.getSource().getFeatures()));
+        var payload = angular.copy(format.writeFeaturesObject(layer.ol.getSource().getFeatures()));
 
         firebaseService.getUserLayersRef().child(layerName).set(payload);
       });
     }
 
-    function activateDrawingTool(tool) {
-        $log.debug('activate', tool);
+    function activateDrawingTool(layer) {
+        $log.debug('activate', layer);
 
-        drawingTools.forEach(function(dt){
+        drawingLayers.forEach(function(dt){
           deactivateDrawingTool(dt);
         });
 
-        tool.active = true;
+        layer.active = true;
 
-        tool.draw = new ol.interaction.Draw({
-            //features: this.$scope.drawingLayers[tool.name].getSource().getFeatures(),
-            source: drawingLayers[tool.name].getSource(),
-            type: tool.type,
+        layer.draw = new ol.interaction.Draw({
+            source: layer.ol.getSource(),
+            type: layer.type,
             style: new ol.style.Style({
                 fill: new ol.style.Fill({
-                    color: "rgba(" + tool.colour +  ", 0.15)"
+                    color: "rgba(" + layer.colour +  ", 0.15)"
                 }),
                 stroke: new ol.style.Stroke({
-                    color: "rgba(" + tool.colour +  ", 0.9)",
-                    width: tool.strokeWidth
+                    color: "rgba(" + layer.colour +  ", 0.9)",
+                    width: layer.strokeWidth
                 }),
                 image: new ol.style.Circle({
                     radius: 7,
                     fill: new ol.style.Fill({
-                        color: "rgba(" + tool.colour +  ", 0.9)"
+                        color: "rgba(" + layer.colour +  ", 0.9)"
                     })
                 })
             })
         });
 
-        map.addInteraction(tool.draw);
-        tooltipMeasurementService.addTooltip(drawingLayers[tool.name], tool.draw);
+        map.addInteraction(layer.draw);
+        tooltipMeasurementService.addTooltip(layer.ol, layer.draw);
 
-        focusLayer(drawingLayers[tool.name]);
+        focusLayer(layer.ol);
         $mdToast.show({
-            template: '<md-toast>Start drawing some ' + tool.name + '!</md-toast>',
+            template: '<md-toast>Start drawing some ' + layer.name + '!</md-toast>',
             hideDelay: 5000,
             position: "top right"
         });
 
-        drawingLayers[tool.name].setVisible(true);
+        layer.ol.setVisible(true);
     }
 
     function zoomIn() {
@@ -279,6 +276,14 @@
         view: view,
         controls: []
       });
+
+      // build and cache all layers
+      angular.forEach(layersService, function(layers) {
+        layers.forEach(function(layer){
+          buildAndCacheLayer(layer);
+        });
+      });
+
     }
 
     function getProjection() {
@@ -329,16 +334,11 @@
     function getDrawingLayerDetailsByFeature(feature) {
       var layerDetails = {};
 
-      angular.forEach(drawingLayers, function(layer, layerName) {
-        if (layer.getSource().getFeatures().indexOf(feature) > -1) {
-          layerDetails.layer = layer;
-          layerDetails.name = layerName;
-        }
-      });
-
-      drawingTools.forEach(function(tool) {
-        if (tool.name === layerDetails.name) {
-          layerDetails.displayName = tool.displayName;
+      drawingLayers.forEach(function(layer){
+        if (layer.ol.getSource().getFeatures().indexOf(feature) > -1) {
+          layerDetails.layer = layer.ol;
+          layerDetails.name = layer.name;
+          layerDetails.displayName = layer.displayName;
         }
       });
 
@@ -350,7 +350,6 @@
     }
 
     function addLayer(layer) {
-      buildAndCacheLayer(layer);
       map.addLayer(layer.ol);
 
       angular.forEach(layer.olMapInteractions, function(mapInteraction) {
@@ -359,7 +358,6 @@
     }
 
     function removeLayer(layer) {
-      buildAndCacheLayer(layer);
       map.removeLayer(layer.ol);
 
       angular.forEach(layer.olMapInteractions, function(mapInteraction) {
@@ -445,9 +443,8 @@
 
     /** Hide/Unhide drawing tool layer based on tool being checked.
     */
-    function setVisibleDrawingToolLayer(tool) {
-      var layer = drawingLayers[tool.name];
-      layer.setVisible(tool.checked);
+    function setVisibleDrawingToolLayer(layer) {
+      layer.ol.setVisible(layer.checked);
       clearSelectedFeatures();
     }
 

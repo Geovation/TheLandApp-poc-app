@@ -7,11 +7,11 @@
 
 
 <div layout="column" layout-align="center center" class="map-drawing-tools" ng-show="vm.getEnableDrawing()">
-	<md-button aria-label="menu" class="md-fab md-mini" ng-repeat="tool in vm.drawingTools"
-			   ng-click="vm.editToggleDrawingTool(tool)"
-			   ng-class="{'md-primary': !tool.active, 'md-hue-1': tool.active}">
-		<md-tooltip md-direction="right">{{tool.displayName}}</md-tooltip>
-		<i class="fa fa-lg map-drawing-tool__icon" ng-class="tool.icon"></i>
+	<md-button aria-label="menu" class="md-fab md-mini" ng-repeat="layer in vm.drawingLayers"
+			   ng-click="vm.editToggleDrawingTool(layer)"
+			   ng-class="{'md-primary': !layer.active, 'md-hue-1': layer.active}">
+		<md-tooltip md-direction="right">{{layer.displayName}}</md-tooltip>
+		<i class="fa fa-lg map-drawing-tool__icon" ng-class="layer.icon"></i>
 	</md-button>
 </div>
 

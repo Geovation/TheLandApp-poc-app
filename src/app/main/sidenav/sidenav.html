@@ -13,10 +13,10 @@
 
     <md-subheader class="md-primary md-subheader--closer-to-children">My Layers</md-subheader>
     <md-checkbox class="md-raised md-primary md-checkbox--list"
-      ng-repeat="tool in vmSidenav.drawingTools track by $index"
-      ng-disabled="tool.disabled"
-      ng-model="tool.checked"
-      ng-change="$emit('toggle-drawingTool-layer', tool)">{{tool.name}}
+      ng-repeat="layer in vmSidenav.drawingLayers track by $index"
+      ng-disabled="layer.disabled"
+      ng-model="layer.checked"
+      ng-change="$emit('toggle-drawingTool-layer', layer)">{{layer.name}}
     </md-checkbox>
 
     <md-subheader class="md-primary md-subheader--closer-to-children">Environmental</md-subheader>
