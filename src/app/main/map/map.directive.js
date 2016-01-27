@@ -27,12 +27,12 @@
         mapService.fitExtent();
       });
 
-      scope.$on('toggle-drawingTool-layer', function(e, tool) {
-        mapService.setVisibleDrawingToolLayer(tool);
+      scope.$on('toggle-drawingTool-layer', function(e, layer) {
+        mapService.setVisibleDrawingToolLayer(layer);
       });
 
       scope.$on('toggle-basemap-layer', function(e, baseMap) {
-        $log.debug("base map: " + JSON.stringify(baseMap));
+        $log.debug("base map: " + baseMap.name);
         mapService.setBaseMap(baseMap);
       });
 
@@ -62,7 +62,7 @@
       vm.zoomIn = mapService.zoomIn;
       vm.zoomOut = mapService.zoomOut;
       vm.editToggleDrawingTool = mapService.editToggleDrawingTool;
-      vm.drawingTools = mapService.drawingTools;
+      vm.drawingLayers = mapService.drawingLayers;
       vm.deactivateAllDrawingTools = mapService.deactivateAllDrawingTools;
       vm.isAnyDrawingToolActive = mapService.isAnyDrawingToolActive;
       vm.getEnableDrawing = mapService.getEnableDrawing;

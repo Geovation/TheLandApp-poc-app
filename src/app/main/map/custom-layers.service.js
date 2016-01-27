@@ -6,16 +6,16 @@
     .factory('customLayersService', customLayersService);
 
   /** @ngInject */
-  function customLayersService(ol, $http, $log) {
+  function customLayersService(ol, $http, $log, LAYERS_Z_INDEXES) {
     var service = {
       buildVectorSpace: buildVectorSpace
     };
 
     return service;
 
-    function buildVectorSpace(layerIndexes, layer) {
+    function buildVectorSpace(layer) {
       var newLayer = new ol.layer.Vector({
-        zIndex: layerIndexes.external,
+        zIndex: LAYERS_Z_INDEXES.external,
         maxResolution: 5,
         source: new ol.source.Vector({
           format: new ol.format.GeoJSON(),

@@ -11,12 +11,14 @@
       environmentalLayers: createEnvironmentalLayers(),
       baseMapLayers: createBaseMapLayers(),
       farmLayers: createFarmLayers(),
-      drawingTools: createDrawingTools()
+      drawingLayers: createDrawingLayers()
     };
 
     return service;
-
     //////////
+
+
+
     function createEnvironmentalLayers() {
       return [{
         name: 'AONB',
@@ -79,9 +81,9 @@
       }];
     }
 
-    function createDrawingTools() {
+    function createDrawingLayers() {
       return [
-          {
+        {
           name: 'Water',
           displayName: 'Water line',
           type: 'LineString',
