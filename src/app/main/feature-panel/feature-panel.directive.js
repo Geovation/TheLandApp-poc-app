@@ -17,7 +17,8 @@
     return directive;
 
     /** @ngInject */
-    function FeaturePanelController(ol, $rootScope, $mdSidenav, $mdDialog, mapService, featureMeasureService, projectTagService) {
+    function FeaturePanelController(ol, $rootScope, $mdSidenav, $mdDialog,
+        drawingToolsService, featureMeasureService, mapService, projectTagService) {
       var vm = this;
       var activeFeature;
       var panel;
@@ -37,7 +38,7 @@
           .cancel("Cancel");
 
         $mdDialog.show(confirm).then(function() {
-          mapService.removeFeature(activeFeature);
+          drawingToolsService.removeFeature(activeFeature);
           panel.close();
         });
       };
@@ -53,7 +54,7 @@
 
         activeFeature.set("featureData", vm.featureData);
 
-        mapService.saveDrawingLayers();
+        drawingToolsService.saveDrawingLayers();
 
         vm.lastSaveTime = Date.now();
       };
@@ -90,7 +91,7 @@
         var data = {
           area: undefined,
           length: undefined,
-          featureType: mapService.getDrawingLayerDetailsByFeature(activeFeature).displayName
+          featureType: drawingToolsService.getDrawingLayerDetailsByFeature(activeFeature).displayName
         };
 
         var geometry = activeFeature.getGeometry();

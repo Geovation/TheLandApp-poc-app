@@ -6,7 +6,7 @@
     .factory('layerInteractionsService', layerInteractionsService);
 
   /** @ngInject */
-  function layerInteractionsService(ol, $mdDialog, $log) {
+  function layerInteractionsService(ol, $mdDialog, $log, drawingToolsService) {
     var service = {
       buildVectorSpace: buildVectorSpace
     };
@@ -14,19 +14,19 @@
     return service;
     ////////////////
 
-    function buildVectorSpace(layer, mapService) {
+    function buildVectorSpace(layer) {
       var hover = new ol.interaction.Select({
        condition: ol.events.condition.pointerMove,
        layers: [layer.olLayer],
-       filter: function() { return !mapService.isAnyDrawingToolActive();}
+       filter: function() { return !drawingToolsService.isAnyDrawingToolActive();}
       });
 
       var click = new ol.interaction.Select({
        //condition: ol.events.condition.click,
-       condition: function (e) {return ol.events.condition.click(e) && !mapService.isAnyDrawingToolActive();},
+       condition: function (e) {return ol.events.condition.click(e) && !drawingToolsService.isAnyDrawingToolActive();},
        layers: [layer.olLayer],
        // OL bug: the next filter is it is not working
-       // filter: function() { return !mapService.isAnyDrawingToolActive();} // OL bug: it is not working
+       // filter: function() { return !drawingToolsService.isAnyDrawingToolActive();} // OL bug: it is not working
       });
 
       click.on('select', function(e) {
@@ -38,7 +38,7 @@
             .cancel('Ops, sorry...')
             .ok('Sure, do it');
           $mdDialog.show(dialogAddFeature).then(function() {
-            mapService.addFeaturesToDrawingLayer("Boundaries", features);
+            drawingToolsService.addFeaturesToDrawingLayer("Boundaries", features);
             $log.debug("Added feature from LR ");
           });
         }
