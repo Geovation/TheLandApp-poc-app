@@ -76,8 +76,8 @@
       return extent;
     }
 
-    function init(aMap) {
-      map = aMap;
+    function init() {
+      map = mapService.getMap();
     }
 
     function isAnyDrawingToolActive() {

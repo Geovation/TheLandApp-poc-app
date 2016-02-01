@@ -24,7 +24,7 @@
     /** @ngInject */
     function linkFunc(scope) {
       mapService.init();
-      drawingToolsService.init(mapService.getMap());
+      drawingToolsService.init();
 
       // build and cache all layers
       angular.forEach(layersService, function(layers) {
