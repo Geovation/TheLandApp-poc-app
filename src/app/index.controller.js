@@ -6,7 +6,7 @@
     .controller('IndexController', IndexController);
 
   /** @ngInject */
-  function IndexController($log, $document, $mdDialog, firebaseService) {
+  function IndexController($log, $document, $mdDialog, $timeout, firebaseService, Firebase) {
     var vm = this;
 
     var modalConfig;
@@ -14,9 +14,29 @@
     vm.login = login;
     vm.signup = signup;
     vm.logout = logout;
-    vm.authData = firebaseService.auth.$getAuth();
+
+    firebaseService.auth.$onAuth(saveUserConnectedTime);
 
     /////////
+    function saveUserConnectedTime(authData) {
+      vm.authData = authData;
+      if (authData) {
+        firebaseService.getUserInfoRef()
+          .update({"connectedAt": Firebase.ServerValue.TIMESTAMP },
+            function onComplete(error){
+              // it failed to write. Needs to sign in again.
+              if (error) {
+                $log.debug(error);
+                logout();
+              }
+              $timeout(function(){vm.loaded = true;});
+            }
+          );
+      } else { // authData == null
+        $timeout(function(){vm.loaded = true;});
+      }
+    }
+
     function showError(error) {
       $mdDialog.hide(modalConfig);
       modalConfig = $mdDialog
