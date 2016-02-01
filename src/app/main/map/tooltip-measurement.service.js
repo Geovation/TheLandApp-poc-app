@@ -6,9 +6,10 @@
     .factory('tooltipMeasurementService', tooltipMeasurementService);
 
   /** @ngInject */
-  function tooltipMeasurementService(ol, featureMeasureService) {
+  function tooltipMeasurementService(ol, featureMeasureService, mapService) {
     var service = {
-      addTooltip: addTooltip
+      addTooltip: addTooltip,
+      init: init
     };
 
     var measureTooltipNode;
@@ -18,15 +19,18 @@
 
     return service;
 
-    //////////////
+    //////////////////////////// PUBLIC FUNCTIONS ////////////////////////////
+
+    function init() {
+      map = mapService.getMap();
+    }
 
     function addTooltip(layer, drawInteraction) {
-      map = drawInteraction.getMap();
-
       createMeasureTooltip();
-
       addDrawListeners(drawInteraction);
     }
+
+    //////////////////////////// PRIVATE FUNCTIONS ////////////////////////////
 
     function createMeasureTooltip() {
       if (measureTooltipNode) {
@@ -67,8 +71,7 @@
       });
 
       drawInteraction.on("drawend", function() {
-        measureTooltipNode.removeClass("tooltip-measure").addClass("tooltip-static");
-        measureTooltip.setOffset([0, -7]);
+        measureTooltipNode.remove();
 
         currentFeature = undefined;
         measureTooltipNode = undefined;

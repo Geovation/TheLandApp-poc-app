@@ -78,6 +78,7 @@
 
     function init() {
       map = mapService.getMap();
+      tooltipMeasurementService.init();
     }
 
     function isAnyDrawingToolActive() {
