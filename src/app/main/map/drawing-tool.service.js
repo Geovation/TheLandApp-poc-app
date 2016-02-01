@@ -16,9 +16,9 @@
     var service = {
       addFeaturesToDrawingLayer: addFeaturesToDrawingLayer,
       deactivateAllDrawingTools: deactivateAllDrawingTools,
+      drawingLayers: drawingLayers,
       editToggleDrawingTool: editToggleDrawingTool,
       getDrawingLayerDetailsByFeature: getDrawingLayerDetailsByFeature,
-      getDrawingLayers: function() {return drawingLayers;},
       getEnableDrawing: function() {return enableDrawing;},
       getExtent: getExtent,
       init: init,

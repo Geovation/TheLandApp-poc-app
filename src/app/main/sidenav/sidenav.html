@@ -13,7 +13,7 @@
 
     <md-subheader class="md-primary md-subheader--closer-to-children">My Layers</md-subheader>
     <md-checkbox class="md-raised md-primary md-checkbox--list"
-      ng-repeat="layer in vmSidenav.getDrawingLayers() track by $index"
+      ng-repeat="layer in vmSidenav.drawingLayers track by $index"
       ng-disabled="layer.disabled"
       ng-model="layer.checked"
       ng-change="$emit('toggle-drawingTool-layer', layer)">{{layer.name}}
