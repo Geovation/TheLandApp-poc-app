@@ -6,7 +6,7 @@
     .factory('tooltipMeasurementService', tooltipMeasurementService);
 
   /** @ngInject */
-  function tooltipMeasurementService(ol, featureMeasureService) {
+  function tooltipMeasurementService(ol, featureMeasureService, mapService) {
     var service = {
       addTooltip: addTooltip,
       init: init
@@ -21,8 +21,8 @@
 
     //////////////////////////// PUBLIC FUNCTIONS ////////////////////////////
 
-    function init(olMap) {
-      map = olMap;
+    function init() {
+      map = mapService.getMap();
     }
 
     function addTooltip(layer, drawInteraction) {
