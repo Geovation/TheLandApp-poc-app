@@ -67,8 +67,7 @@
       });
 
       drawInteraction.on("drawend", function() {
-        measureTooltipNode.removeClass("tooltip-measure").addClass("tooltip-static");
-        measureTooltip.setOffset([0, -7]);
+        measureTooltipNode.remove();
 
         currentFeature = undefined;
         measureTooltipNode = undefined;
