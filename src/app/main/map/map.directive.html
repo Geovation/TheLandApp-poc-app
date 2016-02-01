@@ -5,9 +5,8 @@
 	<md-button class="btn btn-primary" ng-click="vm.zoomOut()">-</md-button>
 </md-content>
 
-
 <div layout="column" layout-align="center center" class="map-drawing-tools" ng-show="vm.getEnableDrawing()">
-	<md-button aria-label="menu" class="md-fab md-mini" ng-repeat="layer in vm.drawingLayers"
+	<md-button aria-label="menu" class="md-fab md-mini" ng-repeat="layer in vm.getDrawingLayers()"
 			   ng-click="vm.editToggleDrawingTool(layer)"
 			   ng-class="{'md-primary': !layer.active, 'md-hue-1': layer.active}">
 		<md-tooltip md-direction="right">{{layer.displayName}}</md-tooltip>

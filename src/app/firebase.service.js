@@ -3,13 +3,12 @@
 
   angular
     .module('LandApp')
-    .service('firebaseService', firebaseService);
+    .factory('firebaseService', firebaseService);
 
   /** @ngInject */
   function firebaseService($firebaseAuth, Firebase, ENV) {
     var firebaseRef = new Firebase("https://" + ENV.firebase + ".firebaseio.com");
     var service = {
-      firebaseRef : firebaseRef,
       auth : $firebaseAuth(firebaseRef),
       getUserLayersRef : getUserLayersRef
     };
@@ -19,12 +18,11 @@
 
     function getUserLayersRef() {
       var uid = service.auth.$getAuth().uid;
-      return service.firebaseRef
+      return firebaseRef
         .child("users")
         .child(uid)
         .child("layers");
     }
   }
-
 
 })();

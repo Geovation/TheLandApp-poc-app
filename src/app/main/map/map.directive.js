@@ -6,7 +6,9 @@
     .directive('laMap', laMap);
 
   /** @ngInject */
-  function laMap($log, mapService, ol) {
+  function laMap($log, ol,
+      drawingToolsService, layersService, mapService, olLayersService) {
+
     var directive = {
       priority: 2,
       restrict: 'E',
@@ -21,14 +23,22 @@
 
     /** @ngInject */
     function linkFunc(scope) {
-      mapService.createMap();
+      mapService.init();
+      drawingToolsService.init();
+
+      // build and cache all layers
+      angular.forEach(layersService, function(layers) {
+        layers.forEach(function(layer){
+          olLayersService.buildLayerAndInteractions(layer);
+        });
+      });
 
       scope.$on('la-fitExtent', function() {
-        mapService.fitExtent();
+        mapService.fitExtent(drawingToolsService.getExtent());
       });
 
       scope.$on('toggle-drawingTool-layer', function(e, layer) {
-        mapService.setVisibleDrawingToolLayer(layer);
+        drawingToolsService.setVisibleDrawingToolLayer(layer);
       });
 
       scope.$on('toggle-basemap-layer', function(e, baseMap) {
@@ -61,11 +71,11 @@
       var vm = this;
       vm.zoomIn = mapService.zoomIn;
       vm.zoomOut = mapService.zoomOut;
-      vm.editToggleDrawingTool = mapService.editToggleDrawingTool;
-      vm.drawingLayers = mapService.drawingLayers;
-      vm.deactivateAllDrawingTools = mapService.deactivateAllDrawingTools;
-      vm.isAnyDrawingToolActive = mapService.isAnyDrawingToolActive;
-      vm.getEnableDrawing = mapService.getEnableDrawing;
+      vm.editToggleDrawingTool = drawingToolsService.editToggleDrawingTool;
+      vm.getDrawingLayers = drawingToolsService.getDrawingLayers;
+      vm.deactivateAllDrawingTools = drawingToolsService.deactivateAllDrawingTools;
+      vm.isAnyDrawingToolActive = drawingToolsService.isAnyDrawingToolActive;
+      vm.getEnableDrawing = drawingToolsService.getEnableDrawing;
     }
   }
 })();
