@@ -8,7 +8,8 @@
   /** @ngInject */
   function tooltipMeasurementService(ol, featureMeasureService) {
     var service = {
-      addTooltip: addTooltip
+      addTooltip: addTooltip,
+      init: init
     };
 
     var measureTooltipNode;
@@ -18,15 +19,18 @@
 
     return service;
 
-    //////////////
+    //////////////////////////// PUBLIC FUNCTIONS ////////////////////////////
+
+    function init(olMap) {
+      map = olMap;
+    }
 
     function addTooltip(layer, drawInteraction) {
-      map = drawInteraction.getMap();
-
       createMeasureTooltip();
-
       addDrawListeners(drawInteraction);
     }
+
+    //////////////////////////// PRIVATE FUNCTIONS ////////////////////////////
 
     function createMeasureTooltip() {
       if (measureTooltipNode) {
