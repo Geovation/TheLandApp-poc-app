@@ -12,7 +12,7 @@
     ga('create', ENV.gaKey, 'auto');
     ga('send', 'pageview');
 
-    firebaseService.auth.$onAuth(setGAUserID);
+    firebaseService.ref.onAuth(setGAUserID);
 
     $log.debug('runBlock end');
 

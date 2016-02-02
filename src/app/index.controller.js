@@ -6,7 +6,8 @@
     .controller('IndexController', IndexController);
 
   /** @ngInject */
-  function IndexController($log, $document, $mdDialog, $timeout, firebaseService, Firebase) {
+  function IndexController($log, $document, $mdDialog, $timeout, $http, $q, $rootScope,
+      firebaseService, Firebase) {
     var vm = this;
 
     var modalConfig;
@@ -15,9 +16,69 @@
     vm.signup = signup;
     vm.logout = logout;
 
-    firebaseService.auth.$onAuth(saveUserConnectedTime);
+    firebaseService.ref.onAuth(saveUserConnectedTime);
+
+    showOnboardingDialog();
 
     /////////
+
+    function showOnboardingDialog() {
+      firebaseService.getUserInfoRef().once("value").then(function(userInfo) {
+        if (!userInfo.homeCoordinates) {
+          $mdDialog.show({
+            templateUrl: 'app/main/tour/onboarding-dialog.html',
+            parent: angular.element($document.body),
+            clickOutsideToClose: true,
+            controllerAs: 'vmDialog',
+            controller: function($scope, $mdDialog) {
+              var vm = this;
+
+              vm.continue = function() {
+                $mdDialog.hide();
+              };
+
+              vm.selectedItemChange = function(address) {
+                if (address) {
+                  firebaseService.getUserInfoRef().update({
+                    homeCoordinates: {
+                      lat: address.lat,
+                      lon: address.lon,
+                      boundingBox: address.boundingbox
+                    }
+                  }).then(function() {
+                    $rootScope.$broadcast('address-selected', address);
+                  }).catch(function(e) {
+                    // TODO: add error handling
+                    $log.error("Update error:", e);
+                  });
+                }
+              }
+
+              // returns a promise as it is async.
+              vm.querySearch = function(query) {
+                $log.debug("Query search:" + query);
+
+                var url = "https://nominatim.openstreetmap.org/search";
+                var defer = $q.defer();
+
+                $http.get(url, {params:{format:"json", q:query, countrycodes:"gb"}})
+                  .then(
+                    function successCallback(response){
+                      defer.resolve(response.data);
+                    },
+                    function errorCallback(response){
+                      defer.reject(response);
+                    }
+                  );
+
+                return defer.promise;
+              }
+            }
+          });
+        }
+      });
+    }
+
     function saveUserConnectedTime(authData) {
       vm.authData = authData;
       if (authData) {
@@ -71,7 +132,7 @@
     function signup() {
       showMessage("Signing up");
 
-      firebaseService.auth.$createUser({email:vm.email, password:vm.password})
+      firebaseService.ref.createUser({email:vm.email, password:vm.password})
       .then(function(userData) {
         $log.debug("User " + userData.uid + " created successfully!");
         login();
@@ -84,7 +145,7 @@
     function login() {
       showMessage("Logging you in...");
 
-      firebaseService.auth.$authWithPassword({email: vm.email, password: vm.password})
+      firebaseService.ref.authWithPassword({email: vm.email, password: vm.password})
       .then(function(authData) {
         $log.debug("Logged in as:", authData.uid);
         vm.authData = authData;
@@ -96,7 +157,7 @@
     }
 
     function logout() {
-      firebaseService.auth.$unauth();
+      firebaseService.ref.unauth();
       vm.authData = null;
     }
   }
