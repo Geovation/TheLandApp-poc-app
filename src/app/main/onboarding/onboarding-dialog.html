@@ -24,22 +24,22 @@
       </div>
     </md-dialog-content>
     <md-dialog-actions layout="row" layout-margin>
-        <md-autocomplete flex="60"
-          md-selected-item="vmDialog.selectedItem"
-          md-search-text="vmDialog.searchText"
-          md-selected-item-change="vmDialog.selectedItemChange(item)"
-          md-items="item in vmDialog.querySearch(vmDialog.searchText)"
-          md-item-text="item.display_name"
-          md-min-length="3"
-          md-delay="500"
-          placeholder="Search">
-            <md-item-template>
-                <span md-highlight-text="vmDialog.searchText" md-highlight-flags="gi">{{item.display_name}}</span>
-            </md-item-template>
-            <md-not-found>
-                No addresses matching "{{vmDialog.searchText}}" were found.
-            </md-not-found>
-        </md-autocomplete>
+      <md-autocomplete flex="60"
+        md-selected-item="vmDialog.selectedItem"
+        md-search-text="vmDialog.searchText"
+        md-selected-item-change="vmDialog.selectedItemChange(item)"
+        md-items="item in vmDialog.querySearch(vmDialog.searchText)"
+        md-item-text="item.display_name"
+        md-min-length="3"
+        md-delay="500"
+        placeholder="Search">
+          <md-item-template>
+              <span md-highlight-text="vmDialog.searchText" md-highlight-flags="gi">{{item.display_name}}</span>
+          </md-item-template>
+          <md-not-found>
+              No addresses matching "{{vmDialog.searchText}}" were found.
+          </md-not-found>
+      </md-autocomplete>
 
       <md-button flex="40" class="md-primary md-raised" ng-click="vmDialog.continue()" ng-disabled="!vmDialog.selectedItem">
         Okay, let me start drawing
