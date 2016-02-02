@@ -7,7 +7,7 @@
 
   /** @ngInject */
   function laMap($log, ol,
-      drawingToolsService, layersService, mapService, olLayersService) {
+      drawingToolsService, layersService, mapService, olLayersService, onboardingService) {
 
     var directive = {
       priority: 2,
@@ -76,6 +76,7 @@
       vm.drawingLayers = drawingToolsService.drawingLayers;
       vm.getEnableDrawing = drawingToolsService.getEnableDrawing;
       vm.isAnyDrawingToolActive = drawingToolsService.isAnyDrawingToolActive;
+      vm.isOnboardingCompleted = onboardingService.isOnboardingCompleted;
     }
   }
 })();
