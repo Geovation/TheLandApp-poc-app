@@ -24,7 +24,9 @@
 
     function showOnboardingDialog() {
       firebaseService.getUserInfoRef().once("value").then(function(userInfo) {
-        if (!userInfo.val().homeCoordinates) {
+        var selectedAddress;
+
+        if (!userInfo.val().homeBoundingBox) {
           $mdDialog.show({
             templateUrl: 'app/main/tour/onboarding-dialog.html',
             parent: angular.element($document.body),
@@ -34,24 +36,21 @@
               var vm = this;
 
               vm.continue = function() {
-                $mdDialog.hide();
-              };
+                if (selectedAddress) {
+                  $mdDialog.hide();
 
-              vm.selectedItemChange = function(address) {
-                if (address) {
                   firebaseService.getUserInfoRef().update({
-                    homeCoordinates: {
-                      lat: address.lat,
-                      lon: address.lon,
-                      boundingBox: address.boundingbox
-                    }
-                  }).then(function() {
-                    $rootScope.$broadcast('address-selected', address);
+                    homeBoundingBox: selectedAddress.boundingbox
                   }).catch(function(e) {
                     // TODO: add error handling
                     $log.error("Update error:", e);
                   });
                 }
+              };
+
+              vm.selectedItemChange = function(address) {
+                selectedAddress = address;
+                $rootScope.$broadcast('address-selected', selectedAddress);
               }
 
               // returns a promise as it is async.

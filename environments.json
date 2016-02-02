@@ -6,7 +6,8 @@
       "gaKey": "SET ME",
       "mapboxToken": "SET ME",
       "mapboxMapId": "SET ME",
-      "vectorspaceKey": "SET ME"
+      "vectorspaceKey": "SET ME",
+      "defaultMapCenter": "SET ME"
     }
   },
 
@@ -17,7 +18,8 @@
       "gaKey": "UA-72303224-1",
       "mapboxToken": "pk.eyJ1IjoidGltaG9wa2luODciLCJhIjoiY2lqYmRvbmR1MDBienR3a24zbWI1NmJ5dCJ9.a93pKjxkLeNxyW1Wtk77sg",
       "mapboxMapId": "mapbox.satellite",
-      "vectorspaceKey": "22749233807361"
+      "vectorspaceKey": "22749233807361",
+      "defaultMapCenter": [-2.89479, 54.093409]
     }
   }
 }

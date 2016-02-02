@@ -58,8 +58,8 @@
 
       scope.$on("address-selected", function(e, address) {
         if (address) {
-          var coord1 = ol.proj.fromLonLat([Number(address.boundingbox[2]), Number(address.boundingbox[0])]);
-          var coord2 = ol.proj.fromLonLat([Number(address.boundingbox[3]), Number(address.boundingbox[1])]);
+          var coord1 = ol.proj.fromLonLat([+address.boundingbox[2], +address.boundingbox[0]]);
+          var coord2 = ol.proj.fromLonLat([+address.boundingbox[3], +address.boundingbox[1]]);
           var extent = ol.extent.boundingExtent([coord1, coord2]);
           mapService.fitExtent(extent);
         }
