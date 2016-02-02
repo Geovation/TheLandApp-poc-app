@@ -28,7 +28,6 @@
           $mdDialog.show({
             templateUrl: 'app/main/onboarding/onboarding-dialog.html',
             parent: angular.element($document.body),
-            clickOutsideToClose: true,
             controllerAs: 'vmDialog',
             clickOutsideToClose: false,
             escapeToClose: false,
@@ -54,7 +53,7 @@
               vm.selectedItemChange = function(address) {
                 selectedAddress = address;
                 $rootScope.$broadcast('address-selected', selectedAddress);
-              }
+              };
 
               // returns a promise as it is async.
               vm.querySearch = function(query) {
@@ -74,7 +73,7 @@
                   );
 
                 return defer.promise;
-              }
+              };
             }
           });
         }

@@ -6,6 +6,6 @@
     .controller('MainController', MainController);
 
   /** @ngInject */
-  function MainController($document, $mdDialog) {
+  function MainController() {
   }
 })();
