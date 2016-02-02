@@ -110,14 +110,13 @@
 
     function recenterMapToUserHome() {
       firebaseService.getUserInfoRef().once("value").then(function(userInfo) {
-        if (userInfo.val().homeBoundingBox) {
-          var boundingBox = userInfo.val().homeBoundingBox;
+        var boundingBox = userInfo.val().homeBoundingBox;
 
+        if (boundingBox) {
           var coord1 = ol.proj.fromLonLat([+boundingBox[2], +boundingBox[0]]);
           var coord2 = ol.proj.fromLonLat([+boundingBox[3], +boundingBox[1]]);
-          var extent = ol.extent.boundingExtent([coord1, coord2]);
 
-          fitExtent(extent);
+          fitExtent(ol.extent.boundingExtent([coord1, coord2]));
         }
       });
     }
