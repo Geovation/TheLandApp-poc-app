@@ -32,7 +32,7 @@
         md-item-text="item.display_name"
         md-min-length="3"
         md-delay="500"
-        placeholder="Search">
+        placeholder="Where's home?">
           <md-item-template>
               <span md-highlight-text="vmDialog.searchText" md-highlight-flags="gi">{{item.display_name}}</span>
           </md-item-template>
@@ -42,7 +42,7 @@
       </md-autocomplete>
 
       <md-button flex="40" class="md-primary md-raised" ng-click="vmDialog.continue()" ng-disabled="!vmDialog.selectedItem">
-        Okay, let me start drawing
+        Let's get mapping
       </md-button>
     </md-dialog-actions>
   </form>
