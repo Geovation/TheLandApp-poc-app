@@ -41,7 +41,7 @@
             </md-not-found>
         </md-autocomplete>
 
-      <md-button flex="40" class="md-primary md-raised" ng-click="vmDialog.continue()">
+      <md-button flex="40" class="md-primary md-raised" ng-click="vmDialog.continue()" ng-disabled="!vmDialog.selectedItem">
         Okay, let me start drawing
       </md-button>
     </md-dialog-actions>

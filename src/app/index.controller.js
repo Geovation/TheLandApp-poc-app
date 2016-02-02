@@ -6,8 +6,8 @@
     .controller('IndexController', IndexController);
 
   /** @ngInject */
-  function IndexController($log, $document, $mdDialog, $timeout, $http, $q, $rootScope,
-      firebaseService, Firebase) {
+  function IndexController($log, $document, $mdDialog, $timeout,
+      firebaseService, Firebase, onboardingService) {
     var vm = this;
 
     var modalConfig;
@@ -18,65 +18,9 @@
 
     firebaseService.ref.onAuth(saveUserConnectedTime);
 
-    showOnboardingDialog();
+    onboardingService.showOnboardingDialog();
 
     /////////
-
-    function showOnboardingDialog() {
-      firebaseService.getUserInfoRef().once("value").then(function(userInfo) {
-        var selectedAddress;
-
-        if (!userInfo.val().homeBoundingBox) {
-          $mdDialog.show({
-            templateUrl: 'app/main/tour/onboarding-dialog.html',
-            parent: angular.element($document.body),
-            clickOutsideToClose: true,
-            controllerAs: 'vmDialog',
-            controller: function($scope, $mdDialog) {
-              var vm = this;
-
-              vm.continue = function() {
-                if (selectedAddress) {
-                  $mdDialog.hide();
-
-                  firebaseService.getUserInfoRef().update({
-                    homeBoundingBox: selectedAddress.boundingbox
-                  }).catch(function(e) {
-                    // TODO: add error handling
-                    $log.error("Update error:", e);
-                  });
-                }
-              };
-
-              vm.selectedItemChange = function(address) {
-                selectedAddress = address;
-                $rootScope.$broadcast('address-selected', selectedAddress);
-              }
-
-              // returns a promise as it is async.
-              vm.querySearch = function(query) {
-                $log.debug("Query search:" + query);
-
-                var url = "https://nominatim.openstreetmap.org/search";
-                var defer = $q.defer();
-
-                $http.get(url, {params:{format:"json", q:query, countrycodes:"gb"}})
-                  .then(
-                    function successCallback(response){
-                      defer.resolve(response.data);
-                    },
-                    function errorCallback(response){
-                      defer.reject(response);
-                    }
-                  );
-
-                return defer.promise;
-              }
-            }
-          });
-        }
-      });
-    }
 
     function saveUserConnectedTime(authData) {
       vm.authData = authData;
