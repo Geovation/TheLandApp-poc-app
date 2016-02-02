@@ -31,16 +31,6 @@
     /** if extent is empty, calculate the extent based on user's layers.
     */
     function fitExtent(extent) {
-      // Britisg extend
-      // Latitude: 60.8433° to 49.9553°
-      // Longitude: -8.17167° to 1.74944°
-
-      // Easting: 64989
-      // Northing: 1233616
-      //
-      // Easting: 669031
-      // Northing: 12862
-
       if (!ol.extent.isEmpty(extent)) {
         view.fit(extent, map.getSize());
       }
@@ -49,9 +39,9 @@
     function init() {
       view = new ol.View({
         center: ol.proj.fromLonLat(ENV.defaultMapCenter),
-        maxZoom: 20,
-        minZoom: 7,
-        zoom: 7
+        maxZoom: ENV.maxZoom,
+        minZoom: ENV.minZoom,
+        zoom: ENV.defaultZoom
       });
 
       map = new ol.Map({
