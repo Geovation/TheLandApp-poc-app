@@ -24,7 +24,7 @@
 
     function showOnboardingDialog() {
       firebaseService.getUserInfoRef().once("value").then(function(userInfo) {
-        if (!userInfo.homeCoordinates) {
+        if (!userInfo.val().homeCoordinates) {
           $mdDialog.show({
             templateUrl: 'app/main/tour/onboarding-dialog.html',
             parent: angular.element($document.body),
