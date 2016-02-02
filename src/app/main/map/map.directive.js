@@ -72,10 +72,10 @@
       vm.zoomIn = mapService.zoomIn;
       vm.zoomOut = mapService.zoomOut;
       vm.editToggleDrawingTool = drawingToolsService.editToggleDrawingTool;
-      vm.getDrawingLayers = drawingToolsService.getDrawingLayers;
       vm.deactivateAllDrawingTools = drawingToolsService.deactivateAllDrawingTools;
-      vm.isAnyDrawingToolActive = drawingToolsService.isAnyDrawingToolActive;
+      vm.drawingLayers = drawingToolsService.drawingLayers;
       vm.getEnableDrawing = drawingToolsService.getEnableDrawing;
+      vm.isAnyDrawingToolActive = drawingToolsService.isAnyDrawingToolActive;
     }
   }
 })();

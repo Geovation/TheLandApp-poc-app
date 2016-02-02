@@ -6,7 +6,7 @@
 </md-content>
 
 <div layout="column" layout-align="center center" class="map-drawing-tools" ng-show="vm.getEnableDrawing()">
-	<md-button aria-label="menu" class="md-fab md-mini" ng-repeat="layer in vm.getDrawingLayers()"
+	<md-button aria-label="menu" class="md-fab md-mini" ng-repeat="layer in vm.drawingLayers"
 			   ng-click="vm.editToggleDrawingTool(layer)"
 			   ng-class="{'md-primary': !layer.active, 'md-hue-1': layer.active}">
 		<md-tooltip md-direction="right">{{layer.displayName}}</md-tooltip>
