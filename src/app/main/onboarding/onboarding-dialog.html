@@ -4,7 +4,7 @@
       <div class="md-toolbar-tools">
         <h2>Getting started</h2>
         <!--<span flex></span>-->
-        <!--<md-button class="md-primary" ng-click="cancel()">-->
+        <!--<md-button class="md-primary" ng-click="vmDialog.cancel()">-->
           <!--Close-->
         <!--</md-button>-->
       </div>
@@ -23,10 +23,26 @@
         </div>
       </div>
     </md-dialog-content>
-    <md-dialog-actions layout="row">
-      <span flex></span>
-      <md-button class="md-primary md-raised" ng-click="continue()" style="margin-right:20px; margin-bottom:20px;">
-        Okay, let me start drawing
+    <md-dialog-actions layout="row" layout-margin>
+      <md-autocomplete flex="60"
+        md-selected-item="vmDialog.selectedItem"
+        md-search-text="vmDialog.searchText"
+        md-selected-item-change="vmDialog.selectedItemChange(item)"
+        md-items="item in vmDialog.querySearch(vmDialog.searchText)"
+        md-item-text="item.display_name"
+        md-min-length="3"
+        md-delay="500"
+        placeholder="Where's home?">
+          <md-item-template>
+              <span md-highlight-text="vmDialog.searchText" md-highlight-flags="gi">{{item.display_name}}</span>
+          </md-item-template>
+          <md-not-found>
+              No addresses matching "{{vmDialog.searchText}}" were found.
+          </md-not-found>
+      </md-autocomplete>
+
+      <md-button flex="40" class="md-primary md-raised" ng-click="vmDialog.continue()" ng-disabled="!vmDialog.selectedItem">
+        Let's get mapping
       </md-button>
     </md-dialog-actions>
   </form>

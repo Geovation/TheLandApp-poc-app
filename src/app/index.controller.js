@@ -6,7 +6,8 @@
     .controller('IndexController', IndexController);
 
   /** @ngInject */
-  function IndexController($log, $document, $mdDialog, $timeout, firebaseService, Firebase) {
+  function IndexController($log, $document, $mdDialog, $timeout,
+      firebaseService, Firebase, onboardingService) {
     var vm = this;
 
     var modalConfig;
@@ -15,9 +16,12 @@
     vm.signup = signup;
     vm.logout = logout;
 
-    firebaseService.auth.$onAuth(saveUserConnectedTime);
+    firebaseService.ref.onAuth(saveUserConnectedTime);
+
+    onboardingService.showOnboardingDialog();
 
     /////////
+
     function saveUserConnectedTime(authData) {
       vm.authData = authData;
       if (authData) {
@@ -71,7 +75,7 @@
     function signup() {
       showMessage("Signing up");
 
-      firebaseService.auth.$createUser({email:vm.email, password:vm.password})
+      firebaseService.ref.createUser({email:vm.email, password:vm.password})
       .then(function(userData) {
         $log.debug("User " + userData.uid + " created successfully!");
         login();
@@ -84,7 +88,7 @@
     function login() {
       showMessage("Logging you in...");
 
-      firebaseService.auth.$authWithPassword({email: vm.email, password: vm.password})
+      firebaseService.ref.authWithPassword({email: vm.email, password: vm.password})
       .then(function(authData) {
         $log.debug("Logged in as:", authData.uid);
         vm.authData = authData;
@@ -96,7 +100,7 @@
     }
 
     function logout() {
-      firebaseService.auth.$unauth();
+      firebaseService.ref.unauth();
       vm.authData = null;
     }
   }

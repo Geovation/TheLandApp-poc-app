@@ -28,7 +28,7 @@
       setVisibleDrawingToolLayer: setVisibleDrawingToolLayer,
     };
 
-    firebaseService.auth.$onAuth(loadUserLayersAndEnableEditing);
+    firebaseService.ref.onAuth(loadUserLayersAndEnableEditing);
 
     return service;
     /////////////// public functions //////////////////////////////////////////

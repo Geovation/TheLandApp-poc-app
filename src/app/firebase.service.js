@@ -6,12 +6,12 @@
     .factory('firebaseService', firebaseService);
 
   /** @ngInject */
-  function firebaseService($firebaseAuth, Firebase, ENV) {
+  function firebaseService(Firebase, ENV) {
     var firebaseRef = new Firebase("https://" + ENV.firebase + ".firebaseio.com");
     var service = {
-      auth : $firebaseAuth(firebaseRef),
-      getUserInfoRef : getUserInfoRef,
-      getUserLayersRef : getUserLayersRef
+      ref: firebaseRef,
+      getUserInfoRef: getUserInfoRef,
+      getUserLayersRef: getUserLayersRef
     };
 
     return service;
@@ -29,7 +29,7 @@
 
     //////////// privates ////////////////
     function getUserUIDRef() {
-      var uid = service.auth.$getAuth().uid;
+      var uid = firebaseRef.getAuth().uid;
       return firebaseRef
         .child("users")
         .child(uid);
