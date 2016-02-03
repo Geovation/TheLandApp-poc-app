@@ -11,13 +11,20 @@
       environmentalLayers: createEnvironmentalLayers(),
       baseMapLayers: createBaseMapLayers(),
       farmLayers: createFarmLayers(),
-      drawingLayers: createDrawingLayers()
+      drawingLayers: createDrawingLayers(),
+      publicDataLayers: createPublicDataLayers()
     };
 
     return service;
     //////////
 
-
+    function createPublicDataLayers() {
+      return [{
+        name: 'LR Vectors',
+        type: 'vectorspace',
+        url: "https://api.vectorspace.io/spaces/27085816987650/layers/27790585888771/features?key=" + ENV.vectorspaceKey
+      }];
+    }
 
     function createEnvironmentalLayers() {
       return [{
@@ -74,10 +81,6 @@
         url: "/assets/geojson/watership_down_pif.geojson",
         fillColor: "rgba(176, 23, 21, 0.5)",
         strokeColor: "rgba(176, 23, 21, 1)",
-      }, {
-        name: 'LR Vectors',
-        type: 'vectorspace',
-        url: "https://api.vectorspace.io/spaces/27085816987650/layers/27790585888771/features?key=" + ENV.vectorspaceKey
       }];
     }
 
