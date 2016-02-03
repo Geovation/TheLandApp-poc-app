@@ -11,9 +11,9 @@
       ng-change="$emit('toggle-farm-layer', layer)">{{layer.name}}
     </md-checkbox>
 
-    <md-subheader class="md-primary md-subheader--closer-to-children">Public Data</md-subheader>
+    <md-subheader class="md-primary md-subheader--closer-to-children">National Data</md-subheader>
     <md-checkbox class="md-raised md-primary md-checkbox--list"
-      ng-repeat="layer in vmSidenav.publicDataLayers track by $index"
+      ng-repeat="layer in vmSidenav.nationalDataLayers track by $index"
       ng-disabled="layer.disabled"
       ng-model="layer.checked"
       ng-change="$emit('toggle-public-data-layer', layer)">{{layer.name}}
