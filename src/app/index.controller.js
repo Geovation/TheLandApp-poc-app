@@ -17,9 +17,7 @@
     vm.logout = logout;
 
     firebaseService.ref.onAuth(saveUserConnectedTime);
-
-    onboardingService.showOnboardingDialog();
-
+    firebaseService.ref.onAuth(onboardingService.showOnboardingDialog);
     /////////
 
     function saveUserConnectedTime(authData) {
