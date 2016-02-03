@@ -18,23 +18,21 @@
     ////////// public functions //////////////
 
     function getUserInfoRef() {
-      return getUserUIDRef() ? getUserUIDRef().child("info") : null;
+      return getUserUIDRef()
+        .child("info");
     }
 
     function getUserLayersRef() {
-      return getUserUIDRef() ? getUserUIDRef().child("layers") : null;
+      return getUserUIDRef()
+        .child("layers");
     }
 
     //////////// privates ////////////////
     function getUserUIDRef() {
-      var auth = firebaseRef.getAuth();
-      var userUIDRef = null;
-      if (auth) {
-        userUIDRef = firebaseRef
-          .child("users")
-          .child(auth.uid)
-      }
-      return userUIDRef;
+      var uid = firebaseRef.getAuth().uid;
+      return firebaseRef
+        .child("users")
+        .child(uid);
     }
   }
 
