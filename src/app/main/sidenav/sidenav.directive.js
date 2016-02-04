@@ -25,6 +25,7 @@
       vm.farmLayers = layersService.farmLayers;
       vm.basemap = vm.baseMapLayers[0];
       vm.drawingLayers = layersService.drawingLayers;
+      vm.nationalDataLayers = layersService.nationalDataLayers;
 
       $rootScope.$broadcast('toggle-basemap-layer', vm.basemap);
 

@@ -37,7 +37,7 @@
         mapService.fitExtent(drawingToolsService.getExtent());
       });
 
-      scope.$on('toggle-drawingTool-layer', function(e, layer) {
+      scope.$on('toggle-drawing-tool-layer', function(e, layer) {
         drawingToolsService.setVisibleDrawingToolLayer(layer);
       });
 
@@ -48,6 +48,11 @@
 
       scope.$on('toggle-farm-layer', function(e, layer) {
         $log.debug("farm layer:" + layer);
+        mapService.toggleLayerFromCheckProperty(layer);
+      });
+
+      scope.$on('toggle-national-data-layer', function(e, layer) {
+        $log.debug("national data layer:" + layer);
         mapService.toggleLayerFromCheckProperty(layer);
       });
 

@@ -11,13 +11,20 @@
       environmentalLayers: createEnvironmentalLayers(),
       baseMapLayers: createBaseMapLayers(),
       farmLayers: createFarmLayers(),
-      drawingLayers: createDrawingLayers()
+      drawingLayers: createDrawingLayers(),
+      nationalDataLayers: createNationalDataLayers()
     };
 
     return service;
     //////////
 
-
+    function createNationalDataLayers() {
+      return [{
+        name: 'LR Vectors',
+        type: 'vectorspace',
+        url: "https://api.vectorspace.io/spaces/27085816987650/layers/27790585888771/features?key=" + ENV.vectorspaceKey
+      }];
+    }
 
     function createEnvironmentalLayers() {
       return [{
@@ -70,14 +77,15 @@
       }, {
         name: 'RLR PIF',
         type: 'vector',
-        // url: "/data/geojson/land_registry_boundaries.geojson",
         url: "/assets/geojson/watership_down_pif.geojson",
         fillColor: "rgba(176, 23, 21, 0.5)",
         strokeColor: "rgba(176, 23, 21, 1)",
       }, {
-        name: 'LR Vectors',
-        type: 'vectorspace',
-        url: "https://api.vectorspace.io/spaces/27085816987650/layers/27790585888771/features?key=" + ENV.vectorspaceKey
+        name: 'Owned LR',
+        type: 'vector',
+        url: "/assets/geojson/land_registry_boundaries.geojson",
+        fillColor: "rgba(176, 23, 21, 0.5)",
+        strokeColor: "rgba(176, 23, 21, 1)",
       }];
     }
 
@@ -129,14 +137,6 @@
           type: 'Polygon',
           icon: 'fa-map-o',
           colour: "0, 0, 0",
-          strokeWidth: 3,
-          checked: true
-        }, {
-          name: 'LandParcels',
-          displayName: 'Land Parcel',
-          type: 'Polygon',
-          icon: 'fa-square',
-          colour: "46, 139, 87",
           strokeWidth: 3,
           checked: true
         }
