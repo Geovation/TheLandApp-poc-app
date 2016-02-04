@@ -16,7 +16,7 @@
       ng-repeat="layer in vmSidenav.nationalDataLayers track by $index"
       ng-disabled="layer.disabled"
       ng-model="layer.checked"
-      ng-change="$emit('toggle-public-data-layer', layer)">{{layer.name}}
+      ng-change="$emit('toggle-national-data-layer', layer)">{{layer.name}}
     </md-checkbox>
 
     <md-subheader class="md-primary md-subheader--closer-to-children">My Layers</md-subheader>

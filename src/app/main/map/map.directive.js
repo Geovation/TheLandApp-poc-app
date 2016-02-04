@@ -51,8 +51,8 @@
         mapService.toggleLayerFromCheckProperty(layer);
       });
 
-      scope.$on('toggle-public-data-layer', function(e, layer) {
-        $log.debug("public data layer:" + layer);
+      scope.$on('toggle-national-data-layer', function(e, layer) {
+        $log.debug("national data layer:" + layer);
         mapService.toggleLayerFromCheckProperty(layer);
       });
 
