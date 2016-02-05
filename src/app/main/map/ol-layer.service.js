@@ -3,10 +3,10 @@
 
   angular
     .module('LandApp')
-    .factory('ollayerDefinitionsService', ollayerDefinitionsService);
+    .factory('olLayerService', olLayerService);
 
   /** @ngInject */
-  function ollayerDefinitionsService(ol, $log, customLayerService, layerInteractionsService, LAYERS_Z_INDEXES) {
+  function olLayerService(ol, $log, customLayerService, layerInteractionsService, LAYERS_Z_INDEXES) {
     var service = {
       buildLayerAndInteractions: buildLayerAndInteractions
     };

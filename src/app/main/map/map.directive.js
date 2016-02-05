@@ -7,7 +7,7 @@
 
   /** @ngInject */
   function laMap($log, ol,
-      drawingToolsService, layerDefinitionsService, mapService, ollayerDefinitionsService, onboardingService) {
+      drawingToolsService, layerDefinitionsService, mapService, olLayerService, onboardingService) {
 
     var directive = {
       priority: 2,
@@ -30,7 +30,7 @@
       angular.forEach(layerDefinitionsService, function(layers) {
         if (Array.isArray(layers)) {
           layers.forEach(function(layer){
-            ollayerDefinitionsService.buildLayerAndInteractions(layer);
+            olLayerService.buildLayerAndInteractions(layer);
           });
         }
       });
