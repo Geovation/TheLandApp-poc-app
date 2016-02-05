@@ -18,7 +18,7 @@
 
     /** @ngInject */
     function FeaturePanelController(ol, $rootScope, $mdSidenav, $mdDialog,
-        drawingToolsService, featureMeasureService, mapService, projectTagService) {
+        drawingToolsService, featureMeasureService, mapService, projectTagService, firebaseLayerService) {
       var vm = this;
       var activeFeature;
       var panel;
@@ -54,7 +54,7 @@
 
         activeFeature.set("featureData", vm.featureData);
 
-        drawingToolsService.saveDrawingLayers();
+        firebaseLayerService.saveDrawingLayers();
 
         vm.lastSaveTime = Date.now();
       };

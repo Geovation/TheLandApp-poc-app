@@ -6,7 +6,7 @@
     .factory('layerInteractionsService', layerInteractionsService);
 
   /** @ngInject */
-  function layerInteractionsService(ol, $mdDialog, $log, drawingToolsService) {
+  function layerInteractionsService(ol, $mdDialog, $log, drawingToolsService, layerDefinitionsService, firebaseLayerService) {
     var service = {
       buildVectorSpace: buildVectorSpace
     };
@@ -37,8 +37,10 @@
             .textContent('It will be added in the form of hendges and you will be able to edit it.')
             .cancel('Ops, sorry...')
             .ok('Sure, do it');
+
           $mdDialog.show(dialogAddFeature).then(function() {
-            drawingToolsService.addFeaturesToDrawingLayer("Boundaries", features);
+            layerDefinitionsService.getOwnedLRLayer().olLayer.getSource().addFeatures(features);
+            firebaseLayerService.saveFarmLayers();
             $log.debug("Added feature from LR ");
           });
         }

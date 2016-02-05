@@ -17,15 +17,15 @@
     return directive;
 
     /** @ngInject */
-    function SidenavController($rootScope, $mdSidenav, layersService) {
+    function SidenavController($rootScope, $mdSidenav, layerDefinitionsService) {
       var vm = this;
 
-      vm.environmentalLayers = layersService.environmentalLayers;
-      vm.baseMapLayers = layersService.baseMapLayers;
-      vm.farmLayers = layersService.farmLayers;
+      vm.environmentalLayers = layerDefinitionsService.environmentalLayers;
+      vm.baseMapLayers = layerDefinitionsService.baseMapLayers;
+      vm.farmLayers = layerDefinitionsService.farmLayers;
       vm.basemap = vm.baseMapLayers[0];
-      vm.drawingLayers = layersService.drawingLayers;
-      vm.nationalDataLayers = layersService.nationalDataLayers;
+      vm.drawingLayers = layerDefinitionsService.drawingLayers;
+      vm.nationalDataLayers = layerDefinitionsService.nationalDataLayers;
 
       $rootScope.$broadcast('toggle-basemap-layer', vm.basemap);
 
