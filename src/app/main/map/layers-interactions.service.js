@@ -39,8 +39,9 @@
             .ok('Sure, do it');
 
           $mdDialog.show(dialogAddFeature).then(function() {
-            layerDefinitionsService.getOwnedLRLayer().olLayer.getSource().addFeatures(features);
-            firebaseLayerService.saveFarmLayers();
+            var layer = layerDefinitionsService.getOwnedLRLayer();
+            layer.olLayer.getSource().addFeatures(features);
+            firebaseLayerService.saveFarmLayers(layer.name);
             $log.debug("Added feature from LR ");
           });
         }
