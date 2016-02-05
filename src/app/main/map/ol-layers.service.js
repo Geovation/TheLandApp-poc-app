@@ -6,7 +6,7 @@
     .factory('ollayerDefinitionsService', ollayerDefinitionsService);
 
   /** @ngInject */
-  function ollayerDefinitionsService(ol, $log, customlayerDefinitionsService, layerInteractionsService, LAYERS_Z_INDEXES) {
+  function ollayerDefinitionsService(ol, $log, customLayerService, layerInteractionsService, LAYERS_Z_INDEXES) {
     var service = {
       buildLayerAndInteractions: buildLayerAndInteractions
     };
@@ -67,7 +67,7 @@
             });
             break;
           case 'vectorspace':
-            layer.olLayer = customlayerDefinitionsService.buildVectorSpace(layer);
+            layer.olLayer = customLayerService.buildVectorSpace(layer);
             layer.olMapInteractions = layerInteractionsService.buildVectorSpace(layer);
             break;
           default:
