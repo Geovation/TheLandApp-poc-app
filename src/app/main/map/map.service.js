@@ -107,8 +107,6 @@
           var coord2 = ol.proj.fromLonLat([+boundingBox[3], +boundingBox[1]]);
 
           fitExtent(ol.extent.boundingExtent([coord1, coord2]));
-
-          view.setZoom(17);
         }
       });
     }

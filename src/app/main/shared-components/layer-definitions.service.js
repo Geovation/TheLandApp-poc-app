@@ -7,12 +7,16 @@
 
   /** @ngInject */
   function layerDefinitionsService(ENV, firebaseReferenceService) {
-    var service = {
+    var layerDefintions = {
       environmentalLayers: createEnvironmentalLayers(),
       baseMapLayers: createBaseMapLayers(),
       farmLayers: createFarmLayers(),
       drawingLayers: createDrawingLayers(),
       nationalDataLayers: createNationalDataLayers(),
+    };
+
+    var service = {
+      getLayerDefinitons: getLayerDefinitons,
       getOwnedLRLayer: getOwnedLRLayer
     };
 
@@ -20,8 +24,12 @@
 
     //////////
 
+    function getLayerDefinitons() {
+      return layerDefintions;
+    }
+
     function getOwnedLRLayer() {
-      return service.farmLayers
+      return layerDefintions.farmLayers
         .filter(function(layer) {
           return layer.name === "owned-lr";
         })

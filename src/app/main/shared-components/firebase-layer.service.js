@@ -17,7 +17,7 @@
     //////////////// PUBLIC ////////////////
 
     function saveFarmLayers(layerName) {
-      var layers = layerDefinitionsService.farmLayers;
+      var layers = layerDefinitionsService.getLayerDefinitons().farmLayers;
 
       if (layerName) {
         layers = findLayersByName(layerName, layers);
@@ -27,7 +27,7 @@
     }
 
     function saveDrawingLayers(layerName) {
-      var layers = layerDefinitionsService.drawingLayers;
+      var layers = layerDefinitionsService.getLayerDefinitons().drawingLayers;
 
       if (layerName) {
         layers = findLayersByName(layerName, layers);

@@ -27,12 +27,10 @@
       drawingToolsService.init();
 
       // build and cache all layers
-      angular.forEach(layerDefinitionsService, function(layers) {
-        if (Array.isArray(layers)) {
-          layers.forEach(function(layer){
-            olLayerService.buildLayerAndInteractions(layer);
-          });
-        }
+      angular.forEach(layerDefinitionsService.getLayerDefinitons(), function(layerList) {
+        layerList.forEach(function(layer){
+          olLayerService.buildLayerAndInteractions(layer);
+        });
       });
 
       scope.$on('la-fitExtent', function() {

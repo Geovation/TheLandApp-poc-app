@@ -9,7 +9,7 @@
   function drawingToolsService($log, $mdToast, $rootScope, $timeout, ol, firebaseReferenceService,
       layerDefinitionsService, firebaseLayerService, mapService, tooltipMeasurementService) {
 
-    var drawingLayers = layerDefinitionsService.drawingLayers;
+    var drawingLayers = layerDefinitionsService.getLayerDefinitons().drawingLayers;
     var map = null;
     var enableDrawing = false;
     var mapInteractions = {};
