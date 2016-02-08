@@ -79,7 +79,7 @@
       vm.drawingLayers = drawingToolsService.drawingLayers;
       vm.getEnableDrawing = drawingToolsService.getEnableDrawing;
       vm.isAnyDrawingToolActive = drawingToolsService.isAnyDrawingToolActive;
-      vm.isOnboardingCompleted = onboardingService.isOnboardingCompleted;
+      vm.isOnboardingCompleted = function() {return onboardingService.isOnboardingCompleted;};
     }
   }
 })();
