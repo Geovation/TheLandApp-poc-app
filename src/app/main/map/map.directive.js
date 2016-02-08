@@ -7,7 +7,7 @@
 
   /** @ngInject */
   function laMap($log, ol,
-      drawingToolsService, layersService, mapService, olLayersService, onboardingService) {
+      drawingToolsService, layerDefinitionsService, mapService, olLayerService, onboardingService) {
 
     var directive = {
       priority: 2,
@@ -27,10 +27,8 @@
       drawingToolsService.init();
 
       // build and cache all layers
-      angular.forEach(layersService, function(layers) {
-        layers.forEach(function(layer){
-          olLayersService.buildLayerAndInteractions(layer);
-        });
+      angular.forEach(layerDefinitionsService.getLayerDefinitons(), function(layerList) {
+        layerList.forEach(olLayerService.buildLayerAndInteractions);
       });
 
       scope.$on('la-fitExtent', function() {

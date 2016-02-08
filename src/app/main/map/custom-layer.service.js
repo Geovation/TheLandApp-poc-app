@@ -3,10 +3,10 @@
 
   angular
     .module('LandApp')
-    .factory('customLayersService', customLayersService);
+    .factory('customLayerService', customLayerService);
 
   /** @ngInject */
-  function customLayersService(ol, $http, $log, LAYERS_Z_INDEXES) {
+  function customLayerService(ol, $http, $log, LAYERS_Z_INDEXES) {
     var service = {
       buildVectorSpace: buildVectorSpace
     };

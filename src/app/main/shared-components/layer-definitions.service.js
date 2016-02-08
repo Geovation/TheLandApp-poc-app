@@ -3,20 +3,38 @@
 
   angular
     .module('LandApp')
-    .factory('layersService', layersService);
+    .factory('layerDefinitionsService', layerDefinitionsService);
 
   /** @ngInject */
-  function layersService(ENV) {
-    var service = {
+  function layerDefinitionsService(ENV, firebaseReferenceService) {
+    var layerDefintions = {
       environmentalLayers: createEnvironmentalLayers(),
       baseMapLayers: createBaseMapLayers(),
       farmLayers: createFarmLayers(),
       drawingLayers: createDrawingLayers(),
-      nationalDataLayers: createNationalDataLayers()
+      nationalDataLayers: createNationalDataLayers(),
+    };
+
+    var service = {
+      getLayerDefinitons: getLayerDefinitons,
+      getOwnedLRLayer: getOwnedLRLayer
     };
 
     return service;
+
     //////////
+
+    function getLayerDefinitons() {
+      return layerDefintions;
+    }
+
+    function getOwnedLRLayer() {
+      return layerDefintions.farmLayers
+        .filter(function(layer) {
+          return layer.name === "owned-lr";
+        })
+        .shift();
+    }
 
     function createNationalDataLayers() {
       return [{
@@ -69,19 +87,22 @@
 
     function createFarmLayers() {
       return [{
-        name: 'RLR Parcel',
+        name: 'rlr-parcel',
+        displayName: 'RLR Parcel',
         type: 'vector',
         url: "/assets/geojson/watership_down_rpa.geojson",
         fillColor: "rgba(255, 165, 0, 0.5)",
         strokeColor: "rgba(255, 165, 0, 1)",
       }, {
-        name: 'RLR PIF',
+        name: 'rlr-pif',
+        displayName: 'RLR PIF',
         type: 'vector',
         url: "/assets/geojson/watership_down_pif.geojson",
         fillColor: "rgba(176, 23, 21, 0.5)",
         strokeColor: "rgba(176, 23, 21, 1)",
       }, {
-        name: 'Owned LR',
+        name: 'owned-lr',
+        displayName: 'Owned LR',
         type: 'vector',
         url: "/assets/geojson/land_registry_boundaries.geojson",
         fillColor: "rgba(176, 23, 21, 0.5)",

@@ -6,13 +6,13 @@
     .run(runBlock);
 
   /** @ngInject */
-  function runBlock($rootScope, $log, ENV, ga, firebaseService) {
+  function runBlock($rootScope, $log, ENV, ga, firebaseReferenceService) {
     $rootScope.ENV = ENV;
 
     ga('create', ENV.gaKey, 'auto');
     ga('send', 'pageview');
 
-    firebaseService.ref.onAuth(setGAUserID);
+    firebaseReferenceService.ref.onAuth(setGAUserID);
 
     $log.debug('runBlock end');
 

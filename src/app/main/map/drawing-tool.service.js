@@ -6,15 +6,14 @@
     .factory('drawingToolsService', drawingToolsService);
 
   /** @ngInject */
-  function drawingToolsService($log, $mdToast, $rootScope, $timeout, ol, firebaseService,
-      layersService, mapService, tooltipMeasurementService) {
+  function drawingToolsService($log, $mdToast, $rootScope, $timeout, ol, firebaseReferenceService,
+      layerDefinitionsService, firebaseLayerService, mapService, tooltipMeasurementService) {
 
-    var drawingLayers = layersService.drawingLayers;
+    var drawingLayers = layerDefinitionsService.getLayerDefinitons().drawingLayers;
     var map = null;
     var enableDrawing = false;
     var mapInteractions = {};
     var service = {
-      addFeaturesToDrawingLayer: addFeaturesToDrawingLayer,
       deactivateAllDrawingTools: deactivateAllDrawingTools,
       drawingLayers: drawingLayers,
       editToggleDrawingTool: editToggleDrawingTool,
@@ -24,20 +23,14 @@
       init: init,
       isAnyDrawingToolActive: isAnyDrawingToolActive,
       removeFeature: removeFeature,
-      saveDrawingLayers: saveDrawingLayers,
       setVisibleDrawingToolLayer: setVisibleDrawingToolLayer,
     };
 
-    firebaseService.ref.onAuth(loadUserLayersAndEnableEditing);
+    firebaseReferenceService.ref.onAuth(loadUserLayersAndEnableEditing);
 
     return service;
+
     /////////////// public functions //////////////////////////////////////////
-    function addFeaturesToDrawingLayer(drawingLayerName, features) {
-      drawingLayers
-        .find(function(layer){return layer.name === drawingLayerName;})
-        .olLayer.getSource().addFeatures(features);
-      saveDrawingLayers(drawingLayerName);
-    }
 
     function deactivateAllDrawingTools() {
       drawingLayers
@@ -56,12 +49,16 @@
     function getDrawingLayerDetailsByFeature(feature) {
       var layerDetails = {};
 
-      drawingLayers.forEach(function(layer){
+      drawingLayers.some(function(layer){
         if (layer.olLayer.getSource().getFeatures().indexOf(feature) > -1) {
           layerDetails.layer = layer.olLayer;
           layerDetails.name = layer.name;
           layerDetails.displayName = layer.displayName;
+
+          return true;
         }
+
+        return false;
       });
 
       return layerDetails;
@@ -82,9 +79,9 @@
     }
 
     function isAnyDrawingToolActive() {
-      return drawingLayers
-        .filter(function(dt) { return dt.hasOwnProperty('draw');} )
-        .length > 0;
+      return drawingLayers.some(function(dt) {
+        return dt.hasOwnProperty('draw');
+      });
     }
 
     function removeFeature(feature) {
@@ -92,7 +89,7 @@
 
       if (layerDetails.layer) {
         layerDetails.layer.getSource().removeFeature(feature);
-        saveDrawingLayers();
+        firebaseLayerService.saveDrawingLayers(layerDetails.name);
         clearSelectedFeatures();
       }
     }
@@ -103,24 +100,7 @@
       layer.olLayer.setVisible(layer.checked);
       clearSelectedFeatures();
     }
-    /**
-     * Saves the current drawing layers to the database.
-     *
-     * @param {string|undefined} singleLayerName If defined, will only save this named layer.
-     */
-    function saveDrawingLayers(singleLayerName) {
-      var format = new ol.format.GeoJSON();
 
-      angular.forEach(drawingLayers, function(layer) {
-        if (angular.isDefined(singleLayerName) && (layer.name !== singleLayerName)) {
-          return;
-        }
-
-        var payload = angular.copy(format.writeFeaturesObject(layer.olLayer.getSource().getFeatures()));
-
-        firebaseService.getUserLayersRef().child(layer.name).set(payload);
-      });
-    }
     /////////////// private functions /////////////////////////////////////////
     function activateDrawingTool(layer) {
       $log.debug('activate', layer);
@@ -156,9 +136,9 @@
 
       focusLayer(layer.olLayer);
       $mdToast.show({
-          template: '<md-toast>Start drawing some ' + layer.name + '!</md-toast>',
-          hideDelay: 5000,
-          position: "top right"
+        template: '<md-toast>Start drawing some ' + layer.name + '!</md-toast>',
+        hideDelay: 5000,
+        position: "top right"
       });
 
       layer.olLayer.setVisible(true);
@@ -188,7 +168,7 @@
       });
 
       mapInteractions.featureModify.on("modifyend", function() {
-        saveDrawingLayers();
+        firebaseLayerService.saveDrawingLayers();
       });
 
       map.addInteraction(mapInteractions.featureModify);
@@ -199,7 +179,7 @@
       $log.debug('deactivate', layer);
 
       if (layer.active) {
-        saveDrawingLayers(layer.name);
+        firebaseLayerService.saveDrawingLayers(layer.name);
 
         layer.active = false;
         map.removeInteraction(layer.draw);
@@ -215,17 +195,17 @@
     }
 
     function focusLayer(layer) {
-      map.getLayers().getArray()
-        .filter(function(l) { return l !== layer; })
-        .forEach(function(l) {
-            l.oldOpacity = l.getOpacity();
-            l.setOpacity(0.5);
-        });
+      map.getLayers().getArray().forEach(function(l) {
+        if (l !== layer) {
+          l.oldOpacity = l.getOpacity();
+          l.setOpacity(0.5);
+        }
+      });
     }
 
     function loadUserLayersAndEnableEditing(authData) {
       if (authData) {
-        firebaseService.getUserLayersRef().once("value", function(userLayers) {
+        firebaseReferenceService.getUserLayersRef().once("value", function(userLayers) {
           $log.debug(userLayers);
 
           var layers = userLayers.val();
