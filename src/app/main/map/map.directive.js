@@ -28,9 +28,7 @@
 
       // build and cache all layers
       angular.forEach(layerDefinitionsService.getLayerDefinitons(), function(layerList) {
-        layerList.forEach(function(layer){
-          olLayerService.buildLayerAndInteractions(layer);
-        });
+        layerList.forEach(olLayerService.buildLayerAndInteractions);
       });
 
       scope.$on('la-fitExtent', function() {
