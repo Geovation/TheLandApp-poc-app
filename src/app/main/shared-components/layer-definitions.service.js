@@ -6,7 +6,7 @@
     .factory('layerDefinitionsService', layerDefinitionsService);
 
   /** @ngInject */
-  function layerDefinitionsService(ENV, firebaseReferenceService) {
+  function layerDefinitionsService(ENV) {
     var layerDefintions = {
       environmentalLayers: createEnvironmentalLayers(),
       baseMapLayers: createBaseMapLayers(),
