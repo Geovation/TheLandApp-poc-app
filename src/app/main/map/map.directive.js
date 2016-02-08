@@ -77,9 +77,14 @@
       vm.editToggleDrawingTool = drawingToolsService.editToggleDrawingTool;
       vm.deactivateAllDrawingTools = drawingToolsService.deactivateAllDrawingTools;
       vm.drawingLayers = drawingToolsService.drawingLayers;
-      vm.getEnableDrawing = drawingToolsService.getEnableDrawing;
+      vm.isDrawingEnabled = isDrawingEnabled;
       vm.isAnyDrawingToolActive = drawingToolsService.isAnyDrawingToolActive;
-      vm.isOnboardingCompleted = function() {return onboardingService.isOnboardingCompleted;};
+
+      ///////////////////////////////
+      function isDrawingEnabled() {
+        return drawingToolsService.enableDrawing && onboardingService.isOnboardingCompleted;
+      }
+
     }
   }
 })();

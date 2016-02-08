@@ -11,14 +11,13 @@
 
     var drawingLayers = layerDefinitionsService.getLayerDefinitons().drawingLayers;
     var map = null;
-    var enableDrawing = false;
     var mapInteractions = {};
     var service = {
       deactivateAllDrawingTools: deactivateAllDrawingTools,
       drawingLayers: drawingLayers,
       editToggleDrawingTool: editToggleDrawingTool,
+      enableDrawing: false,
       getDrawingLayerDetailsByFeature: getDrawingLayerDetailsByFeature,
-      getEnableDrawing: function() {return enableDrawing;},
       getExtent: getExtent,
       init: init,
       isAnyDrawingToolActive: isAnyDrawingToolActive,
@@ -228,10 +227,8 @@
           addControlInteractions(vectorLayers, map);
 
           mapService.fitExtent(getExtent());
-          $timeout(function() {enableDrawing = true;});
+          $timeout(function() {service.enableDrawing = true;});
         });
-      } else {
-        enableDrawing = false;
       }
     }
 
