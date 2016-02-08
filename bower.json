@@ -24,5 +24,8 @@
         "ol.css"
       ]
     }
+  },
+  "resolutions": {
+    "angular": "1.5.0"
   }
 }

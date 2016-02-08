@@ -6,7 +6,7 @@
     .factory('firebaseLayerService', firebaseLayerService);
 
   /** @ngInject */
-  function firebaseLayerService(firebaseReferenceService, layerDefinitionsService) {
+  function firebaseLayerService(ol, firebaseReferenceService, layerDefinitionsService) {
     var service = {
       saveFarmLayer: saveFarmLayer,
       saveDrawingLayers: saveDrawingLayers
