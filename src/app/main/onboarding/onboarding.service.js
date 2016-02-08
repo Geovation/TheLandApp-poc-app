@@ -6,7 +6,7 @@
     .factory('onboardingService', onboardingService);
 
   /** @ngInject */
-  function onboardingService(firebaseService, $mdDialog, $document, $log, $http, $q, $rootScope) {
+  function onboardingService(firebaseReferenceService, $mdDialog, $document, $log, $http, $q, $rootScope) {
     var isOnboardingCompleted;
 
     var service = {
@@ -19,8 +19,8 @@
     /////////////////////
 
     function showOnboardingDialog() {
-      if (firebaseService.ref.getAuth()) {
-        firebaseService.getUserInfoRef().once("value").then(function(userInfo) {
+      if (firebaseReferenceService.ref.getAuth()) {
+        firebaseReferenceService.getUserInfoRef().once("value").then(function(userInfo) {
           if (userInfo.val().homeBoundingBox) {
             isOnboardingCompleted = true;
           } else {
@@ -43,7 +43,7 @@
 
       vm.continue = function() {
         if (selectedAddress) {
-          firebaseService.getUserInfoRef().update({
+          firebaseReferenceService.getUserInfoRef().update({
             homeBoundingBox: selectedAddress.boundingbox
           })
           .then(function() {

@@ -3,10 +3,10 @@
 
   angular
     .module('LandApp')
-    .factory('firebaseService', firebaseService);
+    .factory('firebaseReferenceService', firebaseReferenceService);
 
   /** @ngInject */
-  function firebaseService(Firebase, ENV) {
+  function firebaseReferenceService(Firebase, ENV) {
     var firebaseRef = new Firebase("https://" + ENV.firebase + ".firebaseio.com");
     var service = {
       ref: firebaseRef,

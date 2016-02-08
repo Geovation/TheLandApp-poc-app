@@ -3,10 +3,10 @@
 
   angular
     .module('LandApp')
-    .factory('olLayersService', olLayersService);
+    .factory('olLayerService', olLayerService);
 
   /** @ngInject */
-  function olLayersService(ol, $log, customLayersService, layerInteractionsService, LAYERS_Z_INDEXES) {
+  function olLayerService(ol, $log, customLayerService, layerInteractionsService, LAYERS_Z_INDEXES) {
     var service = {
       buildLayerAndInteractions: buildLayerAndInteractions
     };
@@ -67,7 +67,7 @@
             });
             break;
           case 'vectorspace':
-            layer.olLayer = customLayersService.buildVectorSpace(layer);
+            layer.olLayer = customLayerService.buildVectorSpace(layer);
             layer.olMapInteractions = layerInteractionsService.buildVectorSpace(layer);
             break;
           default:

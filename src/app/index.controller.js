@@ -7,7 +7,7 @@
 
   /** @ngInject */
   function IndexController($log, $document, $mdDialog, $timeout,
-      firebaseService, Firebase, onboardingService) {
+      firebaseReferenceService, Firebase, onboardingService) {
     var vm = this;
 
     var modalConfig;
@@ -16,14 +16,14 @@
     vm.signup = signup;
     vm.logout = logout;
 
-    firebaseService.ref.onAuth(saveUserConnectedTime);
-    firebaseService.ref.onAuth(onboardingService.showOnboardingDialog);
+    firebaseReferenceService.ref.onAuth(saveUserConnectedTime);
+    firebaseReferenceService.ref.onAuth(onboardingService.showOnboardingDialog);
     /////////
 
     function saveUserConnectedTime(authData) {
       vm.authData = authData;
       if (authData) {
-        firebaseService.getUserInfoRef()
+        firebaseReferenceService.getUserInfoRef()
           .update({"connectedAt": Firebase.ServerValue.TIMESTAMP },
             function onComplete(error){
               // it failed to write. Needs to sign in again.
@@ -73,7 +73,7 @@
     function signup() {
       showMessage("Signing up");
 
-      firebaseService.ref.createUser({email:vm.email, password:vm.password})
+      firebaseReferenceService.ref.createUser({email:vm.email, password:vm.password})
       .then(function(userData) {
         $log.debug("User " + userData.uid + " created successfully!");
         login();
@@ -86,7 +86,7 @@
     function login() {
       showMessage("Logging you in...");
 
-      firebaseService.ref.authWithPassword({email: vm.email, password: vm.password})
+      firebaseReferenceService.ref.authWithPassword({email: vm.email, password: vm.password})
       .then(function(authData) {
         $log.debug("Logged in as:", authData.uid);
         vm.authData = authData;
@@ -98,7 +98,7 @@
     }
 
     function logout() {
-      firebaseService.ref.unauth();
+      firebaseReferenceService.ref.unauth();
       vm.authData = null;
     }
   }
