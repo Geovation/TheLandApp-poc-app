@@ -8,7 +8,7 @@
   /** @ngInject */
   function firebaseLayerService(firebaseReferenceService, layerDefinitionsService) {
     var service = {
-      saveFarmLayers: saveFarmLayers,
+      saveFarmLayer: saveFarmLayer,
       saveDrawingLayers: saveDrawingLayers
     };
 
@@ -16,12 +16,8 @@
 
     //////////////// PUBLIC ////////////////
 
-    function saveFarmLayers(layerName) {
-      var layers = layerDefinitionsService.getLayerDefinitons().farmLayers;
-
-      if (layerName) {
-        layers = findLayersByName(layerName, layers);
-      }
+    function saveFarmLayer(layerName) {
+      var layers = filterLayersByName(layerName, layerDefinitionsService.getLayerDefinitons().farmLayers);
 
       saveLayers(layers);
     }
@@ -30,7 +26,7 @@
       var layers = layerDefinitionsService.getLayerDefinitons().drawingLayers;
 
       if (layerName) {
-        layers = findLayersByName(layerName, layers);
+        layers = filterLayersByName(layerName, layers);
       }
 
       saveLayers(layers);
@@ -38,7 +34,7 @@
 
     //////////////// PRIVATE ////////////////
 
-    function findLayersByName(layerName, layerList) {
+    function filterLayersByName(layerName, layerList) {
       return layerList.filter(function(layer) {
         return layerName === layer.name;
       });
