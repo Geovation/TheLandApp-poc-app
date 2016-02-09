@@ -18,7 +18,8 @@
 
     /** @ngInject */
     function FeaturePanelController(ol, $rootScope, $mdSidenav, $mdDialog,
-        drawingToolsService, featureMeasureService, mapService, projectTagService, firebaseLayerService) {
+        drawingToolsService, featureMeasureService, layerDefinitionsService, mapService, projectTagService, firebaseLayerService) {
+
       var vm = this;
       var activeFeature;
       var panel;
@@ -54,7 +55,7 @@
 
         activeFeature.set("featureData", vm.featureData);
 
-        firebaseLayerService.saveDrawingLayers();
+        firebaseLayerService.saveLayers(layerDefinitionsService.drawingLayers);
 
         vm.lastSaveTime = Date.now();
       };
@@ -91,7 +92,7 @@
         var data = {
           area: undefined,
           length: undefined,
-          featureType: drawingToolsService.getDrawingLayerDetailsByFeature(activeFeature).displayName
+          featureType: drawingToolsService.getDrawingLayerDetailsByFeature(activeFeature).name
         };
 
         var geometry = activeFeature.getGeometry();
