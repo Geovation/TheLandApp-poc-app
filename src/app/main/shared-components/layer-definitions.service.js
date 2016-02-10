@@ -21,7 +21,7 @@
     angular.forEach(service, function(layerFamily) {
       angular.forEach(layerFamily, function(layer, layerKey) {
         layer.key = layerKey;
-        layer.name = layer.name || layerKey;
+        layer.name = layer.name || layerKey.replace(/([A-Z])/g, " $1").trim();
       });
     });
 
@@ -31,7 +31,8 @@
 
     function createNationalDataLayers() {
       return {
-        "LR Vectors": {
+        "LRVectors": {
+          name: 'LR Vectors',
           type: 'vectorspace',
           url: "https://api.vectorspace.io/spaces/27085816987650/layers/27790585888771/features?key=" + ENV.vectorspaceKey
         }
@@ -41,21 +42,24 @@
     function createEnvironmentalLayers() {
       return {
         "AONB": {
+          name: 'AONB',
           type: 'wms',
           url: "https://www.geostore.com/OGC/OGCInterface?UID=UDATAGOV2011&PASSWORD=datagov2011&INTERFACE=ENVIRONMENT&LC=2000000000000040000000000000000000000000000000000001040000000000000000",
           layers: 'eainspire2011-wms-areas_of_onb_inspire'
         },
-        "Ancient Woodland": {
+        "AncientWoodland": {
           type: 'wms',
           url: "https://www.geostore.com/OGC/OGCInterface?UID=UDATAGOV2011&PASSWORD=datagov2011&INTERFACE=ENVIRONMENT&LC=2000000000000040000000000000000000000000000000000001040000000000000000",
           layers: 'eainspire2011-wms-ancient_woodlandv_inspire'
         },
         "SAC": {
+          name: 'SAC',
           type: 'wms',
           url: "https://www.geostore.com/OGC/OGCInterface?UID=UDATAGOV2011&PASSWORD=datagov2011&INTERFACE=ENVIRONMENT&LC=2000000000000000000",
           layers: 'eainspire2011-wms-special_area_of_conservation_inspire'
         },
         "SSSI": {
+          name: 'SSSI',
           type: 'wms',
           url: "https://www.geostore.com/OGC/OGCInterface?UID=UDATAGOV2011&PASSWORD=datagov2011&INTERFACE=ENVIRONMENT&LC=2000000000000040000000000000000000000000000000000001040000000000000000",
           layers: 'eainspire2011-wms-sites_of_ssi_inspire'
@@ -65,17 +69,17 @@
 
     function createBaseMapLayers() {
       return {
-        "Open Street Map": {
+        "OpenStreetMap": {
           type: 'base.osm'
         },
-        "Map Quest": {
+        "MapQuest": {
           type: 'base.mapquest'
         },
         "Aerial": {
           type: 'base.mapbox',
           url: "https://api.tiles.mapbox.com/v4/"+ ENV.mapboxMapId +"/{z}/{x}/{y}.png?access_token=" + ENV.mapboxToken
         },
-        "Ordnance Survey": {
+        "OrdnanceSurvey": {
           type: 'base.os',
           disabled: true
         }
@@ -84,18 +88,21 @@
 
     function createFarmLayers() {
       return {
-        "RLR Parcel": {
+        "RLRParcel": {
+          name: 'RLR Parcel',
           type: 'Polygon',
           fillColor: "rgba(255, 165, 0, 0.5)",
           strokeColor: "rgba(255, 165, 0, 1)"
         },
-        "RLR PIF": {
+        "RLRPIF": {
+          name: 'RLR PIF',
           type: 'vector',
           url: "/assets/geojson/watership_down_pif.geojson",
           fillColor: "rgba(176, 23, 21, 0.5)",
           strokeColor: "rgba(176, 23, 21, 1)"
         },
-        "Owned LR": {
+        "OwnedLR": {
+          name: 'Owned LR',
           type: 'vector',
           url: "/assets/geojson/land_registry_boundaries.geojson",
           fillColor: "rgba(176, 23, 21, 0.5)",
