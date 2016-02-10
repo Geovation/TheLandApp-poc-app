@@ -23,7 +23,7 @@
       "mapboxMapId": "mapbox.satellite",
       "vectorspaceKey": "22749233807361",
       "defaultMapCenter": [-2.89479, 54.093409],
-      "defaultBaseMap": "OpenStreetMap",
+      "defaultBaseMap": "openStreetMap",
       "minZoom": 7,
       "maxZoom": 20,
       "defaultZoom": 7
