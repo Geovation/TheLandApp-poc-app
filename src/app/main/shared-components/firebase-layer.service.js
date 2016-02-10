@@ -10,14 +10,25 @@
       firebaseReferenceService, layerDefinitionsService, messageService) {
 
     var service = {
-      saveLayers: saveLayers
+      saveDrawingLayers: saveDrawingLayers,
+      saveFarmLayers: saveFarmLayers
     };
 
     return service;
 
     //////////////// PUBLIC ////////////////
 
-    function saveLayers(layersList) {
+    function saveDrawingLayers(layersList) {
+      _saveLayer(layersList, firebaseReferenceService.getUserDrawingLayersRef());
+    }
+
+    function saveFarmLayers(layersList) {
+      _saveLayer(layersList, firebaseReferenceService.getUserFarmLayersRef());
+    }
+
+    //////////////// PRIVATE ////////////////
+
+    function _saveLayer(layersList, firebaseRef) {
       var payload = {};
       var format = new ol.format.GeoJSON();
 
@@ -25,13 +36,11 @@
         payload[layer.key] = angular.copy(format.writeFeaturesObject(layer.olLayer.getSource().getFeatures()));
       });
 
-      firebaseReferenceService.getUserLayersRef().update(payload)
+      firebaseRef.update(payload)
         .catch(function(error){
           messageService.error(error);
         });
     }
-
-    //////////////// PRIVATE ////////////////
 
   }
 

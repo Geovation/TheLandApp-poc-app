@@ -11,7 +11,8 @@
     var service = {
       ref: firebaseRef,
       getUserInfoRef: getUserInfoRef,
-      getUserLayersRef: getUserLayersRef
+      getUserDrawingLayersRef: getUserDrawingLayersRef,
+      getUserFarmLayersRef: getUserFarmLayersRef
     };
 
     return service;
@@ -22,9 +23,14 @@
         .child("info");
     }
 
-    function getUserLayersRef() {
+    function getUserDrawingLayersRef() {
       return getUserUIDRef()
-        .child("layers");
+        .child("layers/drawing");
+    }
+
+    function getUserFarmLayersRef() {
+      return getUserUIDRef()
+        .child("layers/farm");
     }
 
     //////////// privates ////////////////

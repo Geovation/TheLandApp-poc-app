@@ -9,12 +9,11 @@
   function drawingToolsService($log, $mdToast, $rootScope, $timeout, ol, firebaseReferenceService,
       layerDefinitionsService, firebaseLayerService, mapService, tooltipMeasurementService) {
 
-    var drawingLayers = layerDefinitionsService.drawingLayers;
     var map = null;
     var mapInteractions = {};
     var service = {
       deactivateAllDrawingTools: deactivateAllDrawingTools,
-      drawingLayers: drawingLayers,
+      drawingLayers: layerDefinitionsService.drawingLayers,
       editToggleDrawingTool: editToggleDrawingTool,
       enableDrawing: false,
       getDrawingLayerDetailsByFeature: getDrawingLayerDetailsByFeature,
@@ -25,14 +24,12 @@
       setVisibleDrawingToolLayer: setVisibleDrawingToolLayer,
     };
 
-    firebaseReferenceService.ref.onAuth(loadUserLayersAndEnableEditing);
-
     return service;
 
     /////////////// public functions //////////////////////////////////////////
 
     function deactivateAllDrawingTools() {
-      angular.forEach(drawingLayers, function(drawingLayer){
+      angular.forEach(service.drawingLayers, function(drawingLayer){
         if (drawingLayer.hasOwnProperty('draw')) {
           deactivateDrawingTool(drawingLayer);
         }
@@ -50,7 +47,7 @@
     function getDrawingLayerDetailsByFeature(feature) {
       var layerDetails = {};
 
-      drawingLayers.some(function(layer){
+      service.drawingLayers.some(function(layer){
         if (layer.olLayer.getSource().getFeatures().indexOf(feature) > -1) {
           layerDetails.layer = layer.olLayer;
           layerDetails.name = layer.name;
@@ -67,7 +64,7 @@
 
     function getExtent() {
       var extent = ol.extent.createEmpty();
-      angular.forEach(drawingLayers, function(layer) {
+      angular.forEach(service.drawingLayers, function(layer) {
         ol.extent.extend(extent, layer.olLayer.getSource().getExtent());
       });
 
@@ -77,12 +74,13 @@
     function init() {
       map = mapService.getMap();
       tooltipMeasurementService.init();
+      firebaseReferenceService.ref.onAuth(loadUserLayersAndEnableEditing);
     }
 
     function isAnyDrawingToolActive() {
       var foundDraw = false;
 
-      angular.forEach(drawingLayers, function(drawingLayer) {
+      angular.forEach(service.drawingLayers, function(drawingLayer) {
         if (drawingLayer.hasOwnProperty('draw')) {
           foundDraw = true;
         }
@@ -112,7 +110,7 @@
     function activateDrawingTool(layer) {
       $log.debug('activate', layer);
 
-      angular.forEach(drawingLayers, function(drawingLayer){
+      angular.forEach(service.drawingLayers, function(drawingLayer){
         deactivateDrawingTool(drawingLayer);
       });
 
@@ -175,7 +173,7 @@
       });
 
       mapInteractions.featureModify.on("modifyend", function() {
-        firebaseLayerService.saveLayers(layerDefinitionsService.drawingLayers);
+        firebaseLayerService.saveDrawingLayers(layerDefinitionsService.drawingLayers);
       });
 
       map.addInteraction(mapInteractions.featureModify);
@@ -186,7 +184,7 @@
       $log.debug('deactivate', layer);
 
       if (layer.active) {
-        firebaseLayerService.saveLayers([layer]);
+        firebaseLayerService.saveDrawingLayers([layer]);
 
         layer.active = false;
         map.removeInteraction(layer.draw);
@@ -212,16 +210,14 @@
 
     function loadUserLayersAndEnableEditing(authData) {
       if (authData) {
-        firebaseReferenceService.getUserLayersRef().once("value", function(userLayers) {
-          $log.debug(userLayers);
-
-          var layers = userLayers.val();
+        firebaseReferenceService.getUserDrawingLayersRef().once("value", function(drawingLayers) {
+          var layers = drawingLayers.val();
           var format = new ol.format.GeoJSON();
+          $log.debug(layers);
 
           // populate drawingLayers with Open Layers vector layers.
           var vectorLayers = [];
-
-          angular.forEach(drawingLayers, function(drawingLayer){
+          angular.forEach(service.drawingLayers, function(drawingLayer){
             drawingLayer.olLayer = newVectorLayer(drawingLayer.name, drawingLayer.colour, drawingLayer.strokeWidth);
             vectorLayers.push(drawingLayer.olLayer);
             map.addLayer(drawingLayer.olLayer);

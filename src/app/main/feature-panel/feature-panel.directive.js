@@ -55,7 +55,7 @@
 
         activeFeature.set("featureData", vm.featureData);
 
-        firebaseLayerService.saveLayers(layerDefinitionsService.drawingLayers);
+        firebaseLayerService.saveDrawingLayers(layerDefinitionsService.drawingLayers);
 
         vm.lastSaveTime = Date.now();
       };
