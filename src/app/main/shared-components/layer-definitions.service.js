@@ -76,7 +76,7 @@
           url: "https://api.tiles.mapbox.com/v4/"+ ENV.mapboxMapId +"/{z}/{x}/{y}.png?access_token=" + ENV.mapboxToken
         },
         "Ordnance Survey": {
-          name: 'Ordnance Survey',
+          type: 'base.os',
           disabled: true
         }
       };
@@ -85,8 +85,7 @@
     function createFarmLayers() {
       return {
         "RLR Parcel": {
-          type: 'vector',
-          url: "/assets/geojson/watership_down_rpa.geojson",
+          type: 'Polygon',
           fillColor: "rgba(255, 165, 0, 0.5)",
           strokeColor: "rgba(255, 165, 0, 1)"
         },
