@@ -90,21 +90,20 @@
       return {
         "RLRParcel": {
           name: 'RLR Parcel',
-          type: 'Polygon',
           fillColor: "rgba(255, 165, 0, 0.5)",
           strokeColor: "rgba(255, 165, 0, 1)"
         },
         "RLRPIF": {
           name: 'RLR PIF',
-          type: 'vector',
-          url: "/assets/geojson/watership_down_pif.geojson",
           fillColor: "rgba(176, 23, 21, 0.5)",
+          strokeColor: "rgba(176, 23, 21, 1)"
+        },
+        "OrdnanceSurveyMasterMap": {
+          fillColor: "rgba(140, 70, 00, 0.5)",
           strokeColor: "rgba(176, 23, 21, 1)"
         },
         "OwnedLR": {
           name: 'Owned LR',
-          type: 'vector',
-          url: "/assets/geojson/land_registry_boundaries.geojson",
           fillColor: "rgba(176, 23, 21, 0.5)",
           strokeColor: "rgba(176, 23, 21, 1)"
         }
