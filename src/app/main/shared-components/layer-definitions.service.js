@@ -103,6 +103,7 @@
           strokeColor: "rgba(176, 23, 21, 1)"
         },
         ordnanceSurveyMasterMap: {
+          name: 'Ordnance Survey MasterMap',
           fillColor: "rgba(140, 70, 00, 0.5)",
           strokeColor: "rgba(176, 23, 21, 1)"
         },
