@@ -36,10 +36,10 @@
         if (authData) {
           // TODO: the same data is read in drawing-tool.service. Find a way to
           // do it once.
-          firebaseReferenceService.getUserLayersRef().once("value", function(userLayers) {
-            $log.debug(userLayers);
+          firebaseReferenceService.getUserFarmLayersRef().once("value", function(farmLayers) {
+            $log.debug(farmLayers);
 
-            var layers = userLayers.val();
+            var layers = farmLayers.val();
             var format = new ol.format.GeoJSON();
 
             // populate farmLayers with Open Layers vector layers.
