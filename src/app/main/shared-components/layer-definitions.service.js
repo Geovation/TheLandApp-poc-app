@@ -21,7 +21,6 @@
     angular.forEach(service, function(layerFamily) {
       angular.forEach(layerFamily, function(layer, layerKey) {
         layer.key = layerKey;
-        layer.name = layer.name || layerKey.replace(/([A-Z])/g, " $1").trim();
       });
     });
 
@@ -31,7 +30,7 @@
 
     function createNationalDataLayers() {
       return {
-        "LRVectors": {
+        lrVectors: {
           name: 'LR Vectors',
           type: 'vectorspace',
           url: "https://api.vectorspace.io/spaces/27085816987650/layers/27790585888771/features?key=" + ENV.vectorspaceKey
@@ -41,24 +40,25 @@
 
     function createEnvironmentalLayers() {
       return {
-        "AONB": {
+        aonb: {
           name: 'AONB',
           type: 'wms',
           url: "https://www.geostore.com/OGC/OGCInterface?UID=UDATAGOV2011&PASSWORD=datagov2011&INTERFACE=ENVIRONMENT&LC=2000000000000040000000000000000000000000000000000001040000000000000000",
           layers: 'eainspire2011-wms-areas_of_onb_inspire'
         },
-        "AncientWoodland": {
+        ancientWoodland: {
+          name: 'Ancient Woodland',
           type: 'wms',
           url: "https://www.geostore.com/OGC/OGCInterface?UID=UDATAGOV2011&PASSWORD=datagov2011&INTERFACE=ENVIRONMENT&LC=2000000000000040000000000000000000000000000000000001040000000000000000",
           layers: 'eainspire2011-wms-ancient_woodlandv_inspire'
         },
-        "SAC": {
+        sac: {
           name: 'SAC',
           type: 'wms',
           url: "https://www.geostore.com/OGC/OGCInterface?UID=UDATAGOV2011&PASSWORD=datagov2011&INTERFACE=ENVIRONMENT&LC=2000000000000000000",
           layers: 'eainspire2011-wms-special_area_of_conservation_inspire'
         },
-        "SSSI": {
+        sssi: {
           name: 'SSSI',
           type: 'wms',
           url: "https://www.geostore.com/OGC/OGCInterface?UID=UDATAGOV2011&PASSWORD=datagov2011&INTERFACE=ENVIRONMENT&LC=2000000000000040000000000000000000000000000000000001040000000000000000",
@@ -69,17 +69,21 @@
 
     function createBaseMapLayers() {
       return {
-        "OpenStreetMap": {
+        openStreetMap: {
+          name: 'Open Street Map',
           type: 'base.osm'
         },
-        "MapQuest": {
+        mapQuest: {
+          name: 'Map Quest',
           type: 'base.mapquest'
         },
-        "Aerial": {
+        aerial: {
+          name: 'Aerial',
           type: 'base.mapbox',
           url: "https://api.tiles.mapbox.com/v4/"+ ENV.mapboxMapId +"/{z}/{x}/{y}.png?access_token=" + ENV.mapboxToken
         },
-        "OrdnanceSurvey": {
+        ordnanceSurvey: {
+          name: 'Ordnance Survey',
           type: 'base.os',
           disabled: true
         }
@@ -88,21 +92,22 @@
 
     function createFarmLayers() {
       return {
-        "RLRParcel": {
+        rlrParcel: {
           name: 'RLR Parcel',
           fillColor: "rgba(255, 165, 0, 0.5)",
           strokeColor: "rgba(255, 165, 0, 1)"
         },
-        "RLRPIF": {
+        rlrPif: {
           name: 'RLR PIF',
           fillColor: "rgba(176, 23, 21, 0.5)",
           strokeColor: "rgba(176, 23, 21, 1)"
         },
-        "OrdnanceSurveyMasterMap": {
+        ordnanceSurveyMasterMap: {
+          name: 'Ordnance Survey MasterMap',
           fillColor: "rgba(140, 70, 00, 0.5)",
           strokeColor: "rgba(176, 23, 21, 1)"
         },
-        "OwnedLR": {
+        ownedLr: {
           name: 'Owned LR',
           fillColor: "rgba(176, 23, 21, 0.5)",
           strokeColor: "rgba(176, 23, 21, 1)"
@@ -112,7 +117,7 @@
 
     function createDrawingLayers() {
       return {
-        "Water" : {
+        water: {
           name: 'Water line',
           type: 'LineString',
           icon: 'fa-tint',
@@ -120,7 +125,7 @@
           strokeWidth: 3,
           checked: true
         },
-        "Electricity": {
+        electricity: {
           name: 'Power line',
           type: 'LineString',
           icon: 'fa-bolt',
@@ -128,7 +133,7 @@
           strokeWidth: 3,
           checked: true
         },
-        "Hedges": {
+        hedges: {
           name: 'Hedge',
           type: 'LineString',
           icon: 'fa-ellipsis-v',
@@ -136,7 +141,7 @@
           strokeWidth: 3,
           checked: true
         },
-        "Trees": {
+        trees: {
           name: 'Tree',
           type: 'Point',
           icon: 'fa-tree',
@@ -144,7 +149,7 @@
           strokeWidth: 3,
           checked: true
         },
-        "Buildings": {
+        buildings: {
           name: 'Building',
           type: 'Polygon',
           icon: 'fa-industry',
@@ -152,7 +157,7 @@
           strokeWidth: 3,
           checked: true
         },
-        "Boundaries": {
+        boundaries: {
           name: 'Boundary',
           type: 'Polygon',
           icon: 'fa-map-o',
