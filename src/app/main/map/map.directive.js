@@ -27,8 +27,8 @@
       drawingToolsService.init();
 
       // build and cache all layers
-      angular.forEach(layerDefinitionsService.getLayerDefinitons(), function(layerList) {
-        layerList.forEach(olLayerService.buildLayerAndInteractions);
+      angular.forEach(layerDefinitionsService, function(layerList) {
+        angular.forEach(layerList, olLayerService.buildLayerAndInteractions);
       });
 
       scope.$on('la-fitExtent', function() {

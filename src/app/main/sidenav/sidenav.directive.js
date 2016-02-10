@@ -19,14 +19,13 @@
     /** @ngInject */
     function SidenavController($rootScope, $mdSidenav, layerDefinitionsService) {
       var vm = this;
-      var layers = layerDefinitionsService.getLayerDefinitons();
 
-      vm.environmentalLayers = layers.environmentalLayers;
-      vm.baseMapLayers = layers.baseMapLayers;
-      vm.farmLayers = layers.farmLayers;
-      vm.basemap = vm.baseMapLayers[0];
-      vm.drawingLayers = layers.drawingLayers;
-      vm.nationalDataLayers = layers.nationalDataLayers;
+      vm.environmentalLayers = layerDefinitionsService.environmentalLayers;
+      vm.baseMapLayers = layerDefinitionsService.baseMapLayers;
+      vm.farmLayers = layerDefinitionsService.farmLayers;
+      vm.basemap = vm.baseMapLayers["Open Street Map"];
+      vm.drawingLayers = layerDefinitionsService.drawingLayers;
+      vm.nationalDataLayers = layerDefinitionsService.nationalDataLayers;
 
       $rootScope.$broadcast('toggle-basemap-layer', vm.basemap);
 
