@@ -17,7 +17,7 @@
     return directive;
 
     /** @ngInject */
-    function SidenavController(ol,
+    function SidenavController(ol, ENV,
         $log, $mdSidenav, $rootScope,
         firebaseReferenceService, layerDefinitionsService) {
       var vm = this;
@@ -25,7 +25,7 @@
       vm.environmentalLayers = layerDefinitionsService.environmentalLayers;
       vm.baseMapLayers = layerDefinitionsService.baseMapLayers;
       vm.farmLayers = layerDefinitionsService.farmLayers;
-      vm.basemap = vm.baseMapLayers["Open Street Map"];
+      vm.basemap = vm.baseMapLayers[ENV.defaultBaseMap];
       vm.drawingLayers = layerDefinitionsService.drawingLayers;
       vm.nationalDataLayers = layerDefinitionsService.nationalDataLayers;
 
@@ -37,10 +37,9 @@
           // TODO: the same data is read in drawing-tool.service. Find a way to
           // do it once.
           firebaseReferenceService.getUserFarmLayersRef().once("value", function(farmLayers) {
-            $log.debug(farmLayers);
-
             var layers = farmLayers.val();
             var format = new ol.format.GeoJSON();
+            $log.debug(layers);
 
             // populate farmLayers with Open Layers vector layers.
             var vectorLayers = [];
