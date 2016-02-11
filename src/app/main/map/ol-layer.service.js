@@ -37,6 +37,16 @@
               source: new ol.source.MapQuest({layer: 'osm'})
             });
             break;
+
+          case 'xyz':
+            layer.olLayer = new ol.layer.Tile({
+              zIndex: LAYERS_Z_INDEXES.baseMap,
+              source: new ol.source.XYZ({
+                  url: layer.url
+                })
+              });
+            break;
+
           case 'wms':
             layer.olLayer = new ol.layer.Tile({
               zIndex: LAYERS_Z_INDEXES.external,
