@@ -21,6 +21,7 @@
       getProjection: getProjection,
       init: init,
       setBaseMap: setBaseMap,
+      setZoom: setZoom,
       toggleLayerFromCheckProperty: toggleLayerFromCheckProperty,
     };
 
@@ -56,6 +57,10 @@
       });
 
       recenterMapToUserHome();
+    }
+
+    function setZoom(zoomLevel) {
+      view.setZoom(zoomLevel);
     }
 
     function getProjection() {

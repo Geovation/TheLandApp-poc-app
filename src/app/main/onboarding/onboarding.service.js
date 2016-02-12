@@ -7,7 +7,7 @@
 
   /** @ngInject */
   function onboardingService($mdDialog, $document, $log, $http, $q, $rootScope, $timeout,
-      firebaseReferenceService, firebaseLayerService, messageService, layerDefinitionsService) {
+      firebaseReferenceService, firebaseLayerService, messageService, layerDefinitionsService, mapService) {
     var service = {
       init: init,
       handleLrFeatureSelect: handleLrFeatureSelect,
@@ -86,6 +86,7 @@
           break;
 
         case _stepNames.lrFeatures:
+          mapService.setZoom(15);
           toggleLrLayers();
           break;
 
