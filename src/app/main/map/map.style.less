@@ -8,24 +8,6 @@ la-map {
 	height: 100%;
 }
 
-.map-zoom-tools {
-	position: absolute;
-	bottom: 0;
-	right: 0;
-	background: none;
-
-	.btn {
-		@size: 30px;
-
-		display: block;
-		margin: 2px;
-		background: rgba(255, 255, 255, 0.9);
-		min-width: @size;
-		min-height: @size;
-		line-height: @size;
-	}
-}
-
 .map-search {
 	position: absolute;
 	top: 9px;
@@ -99,4 +81,22 @@ md-menu-item {
     margin-left: -7px;
     left: 50%;
   }
+}
+
+.ol-zoom {
+    bottom: 64px; /* not 0px */
+    top: auto;
+    right: 0;
+    left:auto;
+}
+
+.ol-zoom button {
+  @size: 30px;
+  color: black;
+  display: block;
+  margin: 2px;
+  background: rgba(255, 255, 255, 0.9);
+  min-width: @size;
+  min-height: @size;
+  line-height: @size;
 }

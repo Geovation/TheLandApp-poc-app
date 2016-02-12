@@ -86,6 +86,7 @@
         ordnanceSurvey: {
           name: 'Ordnance Survey',
           type: 'xyz',
+          attribution: 'OS Maps API &copy; <a src="https://apidocs.os.uk/docs/os-maps-overview">Ordnance Survey</a>',
           // more OS styles : https://apidocs.os.uk/docs/os-maps-technical-detail
           url: 'https://api2.ordnancesurvey.co.uk/mapping_api/v1/service/zxy/EPSG%3A3857/Outdoor 3857/{z}/{x}/{y}.png?key=' + ENV.osKey,
         }

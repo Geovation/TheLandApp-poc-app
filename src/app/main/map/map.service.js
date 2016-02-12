@@ -22,8 +22,6 @@
       init: init,
       setBaseMap: setBaseMap,
       toggleLayerFromCheckProperty: toggleLayerFromCheckProperty,
-      zoomIn: zoomIn,
-      zoomOut: zoomOut,
     };
 
     return service;
@@ -44,12 +42,17 @@
         zoom: ENV.defaultZoom
       });
 
+      var attribution = new ol.control.Attribution({
+        collapsible: false,
+        collapsed: false
+      });
+
       map = new ol.Map({
         target: 'map',
         layers: [],
         loadTilesWhileAnimating: true,
         view: view,
-        controls: []
+        controls: [attribution, new ol.control.Zoom()]
       });
 
       recenterMapToUserHome();
@@ -71,14 +74,6 @@
       } else {
         removeLayer(layer);
       }
-    }
-
-    function zoomIn() {
-      view.setZoom(view.getZoom() + 1);
-    }
-
-    function zoomOut() {
-      view.setZoom(view.getZoom() - 1);
     }
 
     // PRIVATE FUNCTIONS ///////////////////////////////////////////////////////
