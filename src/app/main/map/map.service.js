@@ -22,8 +22,6 @@
       init: init,
       setBaseMap: setBaseMap,
       toggleLayerFromCheckProperty: toggleLayerFromCheckProperty,
-      zoomIn: zoomIn,
-      zoomOut: zoomOut,
     };
 
     return service;
@@ -54,7 +52,7 @@
         layers: [],
         loadTilesWhileAnimating: true,
         view: view,
-        controls: [attribution]
+        controls: [attribution, new ol.control.Zoom()]
       });
 
       recenterMapToUserHome();
@@ -76,14 +74,6 @@
       } else {
         removeLayer(layer);
       }
-    }
-
-    function zoomIn() {
-      view.setZoom(view.getZoom() + 1);
-    }
-
-    function zoomOut() {
-      view.setZoom(view.getZoom() - 1);
     }
 
     // PRIVATE FUNCTIONS ///////////////////////////////////////////////////////

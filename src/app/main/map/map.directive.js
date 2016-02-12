@@ -72,8 +72,6 @@
 
     function Controller() {
       var vm = this;
-      vm.zoomIn = mapService.zoomIn;
-      vm.zoomOut = mapService.zoomOut;
       vm.editToggleDrawingTool = drawingToolsService.editToggleDrawingTool;
       vm.deactivateAllDrawingTools = drawingToolsService.deactivateAllDrawingTools;
       vm.drawingLayers = drawingToolsService.drawingLayers;
