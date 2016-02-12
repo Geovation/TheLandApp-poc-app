@@ -74,10 +74,10 @@
           name: 'Open Street Map',
           type: 'base.osm'
         },
-        mapQuest: {
-          name: 'Map Quest',
-          type: 'base.mapquest'
-        },
+        // mapQuest: {
+        //   name: 'Map Quest',
+        //   type: 'base.mapquest'
+        // },
         aerial: {
           name: 'Aerial',
           type: 'base.mapbox',
