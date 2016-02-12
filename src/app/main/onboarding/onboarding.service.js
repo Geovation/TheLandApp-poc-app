@@ -44,7 +44,7 @@
     }
 
     function copyLrFeaturesToFarm() {
-      var layer = layerDefinitionsService.farmLayers["Owned LR"];
+      var layer = layerDefinitionsService.farmLayers.ownedLr;
       layer.olLayer.getSource().addFeatures(_selectedLrFeatures);
       firebaseLayerService.saveFarmLayers([layer]);
       $log.debug("Added feature to owned LR");
@@ -96,9 +96,9 @@
 
     function toggleLrLayers() {
       $timeout(function() {
-        var layer = layerDefinitionsService.nationalDataLayers["LR Vectors"];
+        var layer = layerDefinitionsService.nationalDataLayers.lrVectors;
         layer.checked = !layer.checked;
-        $rootScope.$broadcast('toggle-environmental-layer', layer)
+        $rootScope.$broadcast('toggle-environmental-layer', layer);
       });
     }
 
