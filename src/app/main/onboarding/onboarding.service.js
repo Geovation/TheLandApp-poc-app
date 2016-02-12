@@ -12,7 +12,9 @@
       init: init,
       handleLrFeatureSelect: handleLrFeatureSelect,
       copyLrFeaturesToFarm: copyLrFeaturesToFarm,
-      isOnboardingCompleted: false,
+      isOnboardingCompleted: function() {
+        return _isOnboardingCompleted;
+      },
       getCurrentStepName: function() {
         return _currentStepName;
       },
@@ -21,6 +23,7 @@
       }
     };
 
+    var _isOnboardingCompleted = false;
     var _selectedLrFeatures = [];
     var _currentStepName;
     var _stepNames = {
@@ -106,7 +109,7 @@
     }
 
     function stepEnd() {
-      service.isOnboardingCompleted = true;
+      _isOnboardingCompleted = true;
     }
 
     function stepShowOnboardingDialog() {

@@ -81,7 +81,7 @@
 
       ///////////////////////////////
       function isDrawingEnabled() {
-        return drawingToolsService.enableDrawing && onboardingService.isOnboardingCompleted;
+        return drawingToolsService.enableDrawing && onboardingService.isOnboardingCompleted();
       }
 
     }

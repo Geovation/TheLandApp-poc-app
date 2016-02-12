@@ -1,4 +1,7 @@
-<md-content ng-switch on="vmOnboarding.getCurrentStepName()" class="onboarding-card-wrapper">
+<md-content
+  ng-if="!vmOnboarding.isOnboardingCompleted()"
+  class="onboarding-card-wrapper"
+  ng-switch on="vmOnboarding.getCurrentStepName()">
   <md-card ng-switch-when="home-location">
 
   </md-card>
