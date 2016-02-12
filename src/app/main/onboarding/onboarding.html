@@ -1,0 +1,30 @@
+<md-content ng-switch on="vmOnboarding.getCurrentStepName()" class="onboarding-card-wrapper">
+  <md-card ng-switch-when="home-location">
+
+  </md-card>
+
+  <md-card ng-switch-when="land-registry-features">
+    <md-card-title>
+      <md-card-title-text>
+        <span class="md-headline">LR title selection</span>
+      </md-card-title-text>
+    </md-card-title>
+    <md-card-content>
+      <p>Hi, welcome to the Land App. Time to start!</p>
+      <p>Starting point is: select your LR titles.</p>
+      <p class="md-caption"><strong>Tip:</strong> Select multiple titles by pressing the shift key.</p>
+    </md-card-content>
+    <md-card-actions
+      ng-if="vmOnboarding.getSelectedLrFeatureAmount() > 0"
+      layout="row"
+      layout-align="end center">
+      <md-button ng-click="vmOnboarding.copyLrFeaturesToFarm()">Copy LR ownership</md-button>
+    </md-card-actions>
+  </md-card>
+
+  <md-card ng-switch-when="end">
+    <md-card-content>
+      <p>Enjoy using The Land App!</p>
+    </md-card-content>
+  </md-card>
+</md-content>

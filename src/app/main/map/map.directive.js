@@ -77,6 +77,7 @@
       vm.drawingLayers = drawingToolsService.drawingLayers;
       vm.isDrawingEnabled = isDrawingEnabled;
       vm.isAnyDrawingToolActive = drawingToolsService.isAnyDrawingToolActive;
+      vm.isOnboardingCompleted = onboardingService.isOnboardingCompleted;
 
       ///////////////////////////////
       function isDrawingEnabled() {

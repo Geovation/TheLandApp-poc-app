@@ -6,12 +6,28 @@
     .factory('onboardingService', onboardingService);
 
   /** @ngInject */
-  function onboardingService($mdDialog, $document, $log, $http, $q, $rootScope,
-      firebaseReferenceService, messageService) {
+  function onboardingService($mdDialog, $document, $log, $http, $q, $rootScope, $timeout,
+      firebaseReferenceService, firebaseLayerService, messageService, layerDefinitionsService) {
 
     var service = {
       init: init,
-      isOnboardingCompleted: false
+      handleLrFeatureSelect: handleLrFeatureSelect,
+      copyLrFeaturesToFarm: copyLrFeaturesToFarm,
+      isOnboardingCompleted: false,
+      getCurrentStepName: function() {
+        return _currentStepName;
+      },
+      getSelectedLrFeatureAmount: function() {
+        return _selectedLrFeatures.length;
+      }
+    };
+
+    var _selectedLrFeatures = [];
+    var _currentStepName;
+    var _stepNames = {
+      homeLocation: "home-location",
+      lrFeatures: "land-registry-features",
+      end: "end"
     };
 
     return service;
@@ -19,6 +35,24 @@
     // PUBLIC //////////////////////////////////////////////////////////////////
     function init() {
       firebaseReferenceService.ref.onAuth(nextStep);
+    }
+
+    function handleLrFeatureSelect(selectedLrFeatures) {
+      if (_currentStepName === _stepNames.lrFeatures) {
+        _selectedLrFeatures = selectedLrFeatures;
+      }
+    }
+
+    function copyLrFeaturesToFarm() {
+      var layer = layerDefinitionsService.farmLayers["Owned LR"];
+      layer.olLayer.getSource().addFeatures(_selectedLrFeatures);
+      firebaseLayerService.saveFarmLayers([layer]);
+      $log.debug("Added feature to owned LR");
+
+      // clear selection here!
+      toggleLrLayers();
+
+      handleStep(_stepNames.end);
     }
 
     // PRIVATE /////////////////////////////////////////////////////////////////
@@ -29,15 +63,43 @@
     function nextStep() {
       if (firebaseReferenceService.ref.getAuth()) {
         firebaseReferenceService.getUserInfoRef().once("value").then(function(userInfo) {
-          if (!userInfo.val().homeBoundingBox) {
-            stepShowOnboardingDialog();
-          // } else if (next step condition) {
-          //   stepNext();
-          } else {
-            stepEnd();
-          }
+          firebaseReferenceService.getUserFarmLayersRef().once("value").then(function(farmLayers) {
+            if (!userInfo.val().homeBoundingBox) {
+              handleStep(_stepNames.homeLocation);
+            } else if (!farmLayers.val()) {
+              handleStep(_stepNames.lrFeatures);
+            } else {
+              handleStep(_stepNames.end);
+            }
+          });
         });
       }
+    }
+
+    function handleStep(stepName) {
+      _currentStepName = stepName;
+
+      switch (_currentStepName) {
+        case _stepNames.homeLocation:
+          stepShowOnboardingDialog();
+          break;
+
+        case _stepNames.lrFeatures:
+          toggleLrLayers();
+          break;
+
+        case _stepNames.end:
+          stepEnd();
+          break;
+      }
+    }
+
+    function toggleLrLayers() {
+      $timeout(function() {
+        var layer = layerDefinitionsService.nationalDataLayers["LR Vectors"];
+        layer.checked = !layer.checked;
+        $rootScope.$broadcast('toggle-environmental-layer', layer)
+      });
     }
 
     function stepEnd() {
