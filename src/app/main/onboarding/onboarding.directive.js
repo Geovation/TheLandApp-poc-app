@@ -33,6 +33,8 @@
       vm.getCurrentStepName = onboardingService.getCurrentStepName;
       vm.getSelectedLrFeatureAmount = onboardingService.getSelectedLrFeatureAmount;
       vm.copyLrFeaturesToFarm = onboardingService.copyLrFeaturesToFarm;
+
+      onboardingService.init();
     }
   }
 })();

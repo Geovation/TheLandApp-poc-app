@@ -8,7 +8,6 @@
   /** @ngInject */
   function onboardingService($mdDialog, $document, $log, $http, $q, $rootScope, $timeout,
       firebaseReferenceService, firebaseLayerService, messageService, layerDefinitionsService) {
-
     var service = {
       init: init,
       handleLrFeatureSelect: handleLrFeatureSelect,

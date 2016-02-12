@@ -7,7 +7,7 @@
 
   /** @ngInject */
   function IndexController(Firebase, $log, $mdDialog, $timeout,
-      firebaseReferenceService, messageService, onboardingService) {
+      firebaseReferenceService, messageService) {
     var vm = this;
 
     vm.login = login;
@@ -16,7 +16,6 @@
 
     firebaseReferenceService.ref.onAuth(saveUserConnectedTime);
 
-    onboardingService.init();
     /////////
 
     function saveUserConnectedTime(authData) {
