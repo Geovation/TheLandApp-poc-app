@@ -49,7 +49,6 @@
       firebaseLayerService.saveFarmLayers([layer]);
       $log.debug("Added feature to owned LR");
 
-      // clear selection here!
       toggleLrLayers();
 
       handleStep(_stepNames.end);
@@ -96,9 +95,14 @@
 
     function toggleLrLayers() {
       $timeout(function() {
-        var layer = layerDefinitionsService.nationalDataLayers.lrVectors;
-        layer.checked = !layer.checked;
-        $rootScope.$broadcast('toggle-environmental-layer', layer);
+        var lrLayer = layerDefinitionsService.nationalDataLayers.lrVectors;
+        var ownedLrLayer = layerDefinitionsService.farmLayers.ownedLr;
+
+        ownedLrLayer.checked = lrLayer.checked;
+        lrLayer.checked = !lrLayer.checked;
+
+        $rootScope.$broadcast('toggle-environmental-layer', lrLayer);
+        $rootScope.$broadcast('toggle-farm-layer', ownedLrLayer);
       });
     }
 
