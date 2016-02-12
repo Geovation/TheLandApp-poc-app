@@ -47,16 +47,12 @@
     function getDrawingLayerDetailsByFeature(feature) {
       var layerDetails = {};
 
-      service.drawingLayers.some(function(layer){
+      angular.forEach(service.drawingLayers, function(layer){
         if (layer.olLayer.getSource().getFeatures().indexOf(feature) > -1) {
           layerDetails.layer = layer.olLayer;
           layerDetails.name = layer.name;
           layerDetails.key = layer.key;
-
-          return true;
         }
-
-        return false;
       });
 
       return layerDetails;
