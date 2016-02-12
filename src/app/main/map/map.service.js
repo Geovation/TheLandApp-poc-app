@@ -44,12 +44,17 @@
         zoom: ENV.defaultZoom
       });
 
+      var attribution = new ol.control.Attribution({
+        collapsible: false,
+        collapsed: false
+      });
+
       map = new ol.Map({
         target: 'map',
         layers: [],
         loadTilesWhileAnimating: true,
         view: view,
-        controls: []
+        controls: [attribution]
       });
 
       recenterMapToUserHome();

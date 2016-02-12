@@ -21,7 +21,8 @@
             layer.olLayer = new ol.layer.Tile({
               zIndex: LAYERS_Z_INDEXES.baseMap,
               source: new ol.source.XYZ({
-                url: layer.url
+                url: layer.url,
+                attributions: _makeAttribution("&copy; <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> &copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>")
               })
             });
             break;
@@ -42,7 +43,8 @@
             layer.olLayer = new ol.layer.Tile({
               zIndex: LAYERS_Z_INDEXES.baseMap,
               source: new ol.source.XYZ({
-                  url: layer.url
+                  url: layer.url,
+                  attributions: _makeAttribution(layer.attribution)
                 })
               });
             break;
@@ -52,6 +54,7 @@
               zIndex: LAYERS_Z_INDEXES.external,
               source: new ol.source.TileWMS({
                 url: layer.url,
+                attributions: _makeAttribution(layer.attribution),
                 params: {'LAYERS': layer.layers, 'TILED': true}
               })
             });
@@ -61,6 +64,7 @@
               zIndex: LAYERS_Z_INDEXES.external,
               source: new ol.source.Vector({
                 url: layer.url,
+                attributions: _makeAttribution(layer.attribution),
                 format: new ol.format.GeoJSON({
                   defaultDataProjection: "EPSG:27700"
                 })
@@ -85,5 +89,11 @@
         }
       }
     } // buildLayerAndInteractions
+
+    function _makeAttribution(attributionHtml) {
+      return [new ol.Attribution({
+        html: (attributionHtml || ('All maps &copy; <a href="https://geovation.uk/">Geovation</a>'))
+      })];
+    }
   }
 })();

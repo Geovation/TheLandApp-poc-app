@@ -18,6 +18,9 @@
         zIndex: LAYERS_Z_INDEXES.external,
         maxResolution: 5,
         source: new ol.source.Vector({
+          attributions: [new ol.Attribution({
+            html: 'LR © ' + '<a href="http://vectorspace.io/">VectorSpace</a>'
+          })],
           format: new ol.format.GeoJSON(),
           strategy: ol.loadingstrategy.bbox,
           loader: function (extent, resolution, projection) {
