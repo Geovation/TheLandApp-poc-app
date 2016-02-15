@@ -4,19 +4,21 @@
   layout-align="center center"
   class="map-drawing-tools"
   ng-show="vm.isDrawingEnabled()">
-	<md-button aria-label="menu" class="md-fab md-mini" ng-repeat="layer in vm.drawingLayers"
-			   ng-click="vm.editToggleDrawingTool(layer)"
-			   ng-class="{'md-primary': !layer.active, 'md-hue-1': layer.active}">
-		<md-tooltip md-direction="right">{{layer.name}}</md-tooltip>
-		<i class="fa fa-lg map-drawing-tool__icon" ng-class="layer.icon"></i>
-	</md-button>
+  <md-button aria-label="menu" class="md-fab md-mini" ng-repeat="layer in vm.drawingLayers"
+         ng-click="vm.editToggleDrawingTool(layer)"
+         ng-class="{'md-primary': !layer.active, 'md-hue-1': layer.active}">
+    <md-tooltip md-direction="right">{{layer.name}}</md-tooltip>
+    <i class="fa fa-lg map-drawing-tool__icon" ng-class="layer.icon"></i>
+  </md-button>
 </div>
 
+<la-onboarding><la-onboarding>
+
 <div layout="column" layout-align="center center" class="map-drawing-tools">
-	<md-button aria-label="menu" class="md-fab md-mini md-warn"
-			   ng-click="vm.deactivateAllDrawingTools()"
-			   ng-show="vm.isAnyDrawingToolActive()">
-		<md-tooltip md-direction="up">Finish Drawing</md-tooltip>
-		<i class="fa fa-lg fa-times"></i>
-	</md-button>
+  <md-button aria-label="menu" class="md-fab md-mini md-warn"
+         ng-click="vm.deactivateAllDrawingTools()"
+         ng-show="vm.isAnyDrawingToolActive()">
+    <md-tooltip md-direction="up">Finish Drawing</md-tooltip>
+    <i class="fa fa-lg fa-times"></i>
+  </md-button>
 </div>
