@@ -6,7 +6,7 @@
     .factory('onboardingService', onboardingService);
 
   /** @ngInject */
-  function onboardingService($mdDialog, $document, $log, $http, $q, $rootScope, $timeout,
+  function onboardingService($mdDialog, $document, $log, $http, $q, $rootScope, $timeout, ENV,
       firebaseReferenceService, firebaseLayerService, messageService, layerDefinitionsService, mapService) {
     var service = {
       init: init,
@@ -86,7 +86,7 @@
           break;
 
         case _stepNames.lrFeatures:
-          mapService.setZoom(15);
+          mapService.setZoom(ENV.minLrDataZoom);
           toggleLrLayers();
           break;
 

@@ -10,7 +10,8 @@
       "defaultMapCenter": "SET ME",
       "minZoom": "",
       "maxZoom": "",
-      "defaultZoom": ""
+      "defaultZoom": "",
+      "minLrDataZoom": ""
     }
   },
 
@@ -27,7 +28,8 @@
       "defaultBaseMap": "openStreetMap",
       "minZoom": 7,
       "maxZoom": 20,
-      "defaultZoom": 7
+      "defaultZoom": 7,
+      "minLrDataZoom": 15
     }
   }
 }
