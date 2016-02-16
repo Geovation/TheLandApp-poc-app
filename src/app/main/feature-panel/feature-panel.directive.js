@@ -98,7 +98,7 @@
         var data = {
           area: undefined,
           length: undefined,
-          featureType: drawingToolsService.getDrawingLayerDetailsByFeature(activeFeature).name,
+          featureType: drawingToolsService.getLayerDetailsByFeature(activeFeature).name,
           featureProperties: activeFeature.getProperties()
         };
 
