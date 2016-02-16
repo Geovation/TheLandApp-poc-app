@@ -71,9 +71,9 @@
                 handleStep(_stepNames.homeLocation);
               } else if (!farmLayers.val()) {
                 handleStep(_stepNames.lrFeatures);
-              } else {
+              } else if (!userInfo.val().onboardingCompletedAt){
                 handleStep(_stepNames.end);
-              }
+              } 
             });
           });
         });
