@@ -45,16 +45,14 @@
     }
 
     function getLayerDetailsByFeature(feature) {
-      var layerDetails = {};
+      var layerDetails;
 
       angular.forEach(layerDefinitionsService, function(layerGroup) {
         angular.forEach(layerGroup, function(layer) {
-          if (!layerDetails.layer &&
+          if (!layerDetails &&
               layer.olLayer.getSource().getFeatures &&
               layer.olLayer.getSource().getFeatures().indexOf(feature) > -1) {
-            layerDetails.layer = layer.olLayer;
-            layerDetails.name = layer.name;
-            layerDetails.key = layer.key;
+            layerDetails = layer;
           }
         });
       });
@@ -92,9 +90,15 @@
     function removeFeature(feature) {
       var layerDetails = getLayerDetailsByFeature(feature);
 
-      if (layerDetails.layer) {
-        layerDetails.layer.getSource().removeFeature(feature);
-        firebaseLayerService.saveLayer(layerDetails);
+      if (layerDetails) {
+        layerDetails.olLayer.getSource().removeFeature(feature);
+
+        if (layerDetails.key === "ownedLr") {
+          firebaseLayerService.saveFarmLayers([layerDetails]);
+        } else {
+          firebaseLayerService.saveDrawingLayers([layerDetails]);
+        }
+
         clearSelectedFeatures();
       }
     }
@@ -121,16 +125,16 @@
         type: layer.type,
         style: new ol.style.Style({
           fill: new ol.style.Fill({
-            color: "rgba(" + layer.colour +  ", 0.15)"
+            color: layer.fillColor
           }),
           stroke: new ol.style.Stroke({
-            color: "rgba(" + layer.colour +  ", 0.9)",
+            color: layer.strokeColor,
             width: layer.strokeWidth
           }),
           image: new ol.style.Circle({
             radius: 7,
             fill: new ol.style.Fill({
-              color: "rgba(" + layer.colour +  ", 0.9)"
+              color: layer.fillColor
             })
           })
         })
@@ -149,37 +153,6 @@
       layer.olLayer.setVisible(true);
     }
 
-    /**
-     * Enables the following drawing layer interactions:
-     *  - removing features (by clicking and pressing backspace)
-     *  - modifying features (adding/moving attributes)
-     */
-    function addControlInteractions(vectorLayers, map) {
-      mapInteractions.featureSelect = new ol.interaction.Select({
-        condition: ol.events.condition.singleClick,
-        toggleCondition: ol.events.condition.never,
-        layers: vectorLayers,
-        filter: function() {
-          return !isAnyDrawingToolActive();
-        }
-      });
-
-      mapInteractions.featureModify = new ol.interaction.Modify({
-        features: mapInteractions.featureSelect.getFeatures()
-      });
-
-      mapInteractions.featureSelect.on("select", function(e) {
-        $rootScope.$broadcast("toggle-feature-panel", e);
-      });
-
-      mapInteractions.featureModify.on("modifyend", function() {
-        firebaseLayerService.saveDrawingLayers(layerDefinitionsService.drawingLayers);
-      });
-
-      map.addInteraction(mapInteractions.featureModify);
-      map.addInteraction(mapInteractions.featureSelect);
-    }
-
     function deactivateDrawingTool(layer) {
       $log.debug('deactivate', layer);
 
@@ -196,7 +169,7 @@
     }
 
     function clearSelectedFeatures() {
-      mapInteractions.featureSelect.getFeatures().clear();
+      mapInteractions.select.getFeatures().clear();
     }
 
     function focusLayer(layer) {
@@ -211,46 +184,107 @@
     function loadUserLayersAndEnableEditing(authData) {
       if (authData) {
         firebaseReferenceService.getUserDrawingLayersRef().once("value", function(drawingLayers) {
-          var layers = drawingLayers.val();
-          var format = new ol.format.GeoJSON();
-          $log.debug(layers);
+          firebaseReferenceService.getUserFarmLayersRef().once("value", function(farmLayers) {
+            var layerData = {
+              drawingLayers: drawingLayers.val(),
+              farmLayers: farmLayers.val()
+            };
 
-          // populate drawingLayers with Open Layers vector layers.
-          var vectorLayers = [];
-          angular.forEach(service.drawingLayers, function(drawingLayer){
-            drawingLayer.olLayer = newVectorLayer(drawingLayer.name, drawingLayer.colour, drawingLayer.strokeWidth);
-            vectorLayers.push(drawingLayer.olLayer);
-            map.addLayer(drawingLayer.olLayer);
-
-            if (layers && layers[drawingLayer.key] && layers[drawingLayer.key].features) {
-              var features = format.readFeatures(layers[drawingLayer.key]);
-              drawingLayer.olLayer.getSource().addFeatures(features);
-            }
+            createLayers(layerData);
           });
-
-          addControlInteractions(vectorLayers, map);
-
-          mapService.fitExtent(getExtent());
-          $timeout(function() {service.enableDrawing = true;});
         });
       }
     }
 
-    function newVectorLayer(name, colour, strokeWidth) {
+    function createLayers(layerData) {
+      var layerCollection = angular.extend({}, layerData.drawingLayers, layerData.farmLayers);
+      var layerDefinitions = angular.extend({}, layerDefinitionsService.drawingLayers, layerDefinitionsService.farmLayers);
+      var format = new ol.format.GeoJSON();
+      var vectorLayers = [];
+
+      angular.forEach(layerDefinitions, function(layerDetails) {
+        layerDetails.olLayer = newVectorLayer(layerDetails);
+        vectorLayers.push(layerDetails.olLayer);
+
+        if (layerDefinitionsService.drawingLayers[layerDetails.key]) {
+          map.addLayer(layerDetails.olLayer);
+        }
+
+        if (layerCollection && layerCollection[layerDetails.key] && layerCollection[layerDetails.key].features) {
+          var features = format.readFeatures(layerCollection[layerDetails.key]);
+          layerDetails.olLayer.getSource().addFeatures(features);
+        }
+      });
+
+      addControlInteractions(vectorLayers);
+
+      mapService.fitExtent(getExtent());
+
+      $timeout(function() {
+        service.enableDrawing = true;
+      });
+    }
+
+    function getDrawingFeatures(vectorLayers) {
+      var features = new ol.Collection();
+
+      vectorLayers.forEach(function(layer) {
+        angular.forEach(layerDefinitionsService.drawingLayers, function(drawingLayer) {
+          if (layer === drawingLayer.olLayer) {
+            features.extend(layer.getSource().getFeatures());
+          }
+        });
+      });
+
+      return features;
+    }
+
+    /**
+     * Enables the following drawing layer interactions:
+     *  - removing features (by clicking and pressing backspace)
+     *  - modifying features (adding/moving attributes)
+     */
+    function addControlInteractions(vectorLayers) {
+      mapInteractions.select = new ol.interaction.Select({
+        condition: ol.events.condition.singleClick,
+        toggleCondition: ol.events.condition.never,
+        layers: vectorLayers,
+        filter: function() {
+          return !isAnyDrawingToolActive();
+        }
+      });
+
+      mapInteractions.modify = new ol.interaction.Modify({
+        features: getDrawingFeatures(vectorLayers)
+      });
+
+      mapInteractions.select.on("select", function(e) {
+        $rootScope.$broadcast("toggle-feature-panel", e);
+      });
+
+      mapInteractions.modify.on("modifyend", function() {
+        firebaseLayerService.saveDrawingLayers(layerDefinitionsService.drawingLayers);
+      });
+
+      map.addInteraction(mapInteractions.modify);
+      map.addInteraction(mapInteractions.select);
+    }
+
+    function newVectorLayer(layerDetails) {
       return new ol.layer.Vector({
         source: new ol.source.Vector({}),
         style: new ol.style.Style({
           fill: new ol.style.Fill({
-            color: "rgba(" + colour +  ", 0.15)"
+            color: layerDetails.fillColor
           }),
           stroke: new ol.style.Stroke({
-            color: "rgba(" + colour +  ", 0.9)",
-            width: strokeWidth
+            color: layerDetails.strokeColor,
+            width: layerDetails.strokeWidth
           }),
           image: new ol.style.Circle({
             radius: 7,
             fill: new ol.style.Fill({
-              color: "rgba(" + colour +  ", 0.9)"
+              color: layerDetails.fillColor
             })
           })
         })
