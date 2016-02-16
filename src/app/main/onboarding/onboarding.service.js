@@ -6,7 +6,7 @@
     .factory('onboardingService', onboardingService);
 
   /** @ngInject */
-  function onboardingService($mdDialog, $document, $log, $http, $q, $rootScope, $timeout, ENV,
+  function onboardingService($mdDialog, $document, $log, $http, $q, $rootScope, $timeout, ENV, Firebase,
       firebaseReferenceService, firebaseLayerService, messageService, layerDefinitionsService, mapService) {
     var service = {
       init: init,
@@ -117,7 +117,12 @@
     }
 
     function stepCompleted() {
-      _isOnboardingCompleted = true;
+      firebaseReferenceService.getUserInfoRef().update({onboardingCompletedAt: Firebase.ServerValue.TIMESTAMP})
+      .then(function(){
+        $timeout(function(){
+          _isOnboardingCompleted = true;
+        });
+      });
     }
 
     function stepShowOnboardingDialog() {
