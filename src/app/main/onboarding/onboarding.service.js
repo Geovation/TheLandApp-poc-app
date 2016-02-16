@@ -73,7 +73,9 @@
                 handleStep(_stepNames.lrFeatures);
               } else if (!userInfo.val().onboardingCompletedAt){
                 handleStep(_stepNames.end);
-              } 
+              } else {
+                _isOnboardingCompleted = true;
+              }
             });
           });
         });
