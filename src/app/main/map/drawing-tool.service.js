@@ -16,7 +16,7 @@
       drawingLayers: layerDefinitionsService.drawingLayers,
       editToggleDrawingTool: editToggleDrawingTool,
       enableDrawing: false,
-      getDrawingLayerDetailsByFeature: getDrawingLayerDetailsByFeature,
+      getLayerDetailsByFeature: getLayerDetailsByFeature,
       getExtent: getExtent,
       init: init,
       isAnyDrawingToolActive: isAnyDrawingToolActive,
@@ -44,15 +44,19 @@
       }
     }
 
-    function getDrawingLayerDetailsByFeature(feature) {
+    function getLayerDetailsByFeature(feature) {
       var layerDetails = {};
 
-      angular.forEach(service.drawingLayers, function(layer){
-        if (layer.olLayer.getSource().getFeatures().indexOf(feature) > -1) {
-          layerDetails.layer = layer.olLayer;
-          layerDetails.name = layer.name;
-          layerDetails.key = layer.key;
-        }
+      angular.forEach(layerDefinitionsService, function(layerGroup) {
+        angular.forEach(layerGroup, function(layer) {
+          if (!layerDetails.layer &&
+              layer.olLayer.getSource().getFeatures &&
+              layer.olLayer.getSource().getFeatures().indexOf(feature) > -1) {
+            layerDetails.layer = layer.olLayer;
+            layerDetails.name = layer.name;
+            layerDetails.key = layer.key;
+          }
+        });
       });
 
       return layerDetails;
@@ -86,7 +90,7 @@
     }
 
     function removeFeature(feature) {
-      var layerDetails = getDrawingLayerDetailsByFeature(feature);
+      var layerDetails = getLayerDetailsByFeature(feature);
 
       if (layerDetails.layer) {
         layerDetails.layer.getSource().removeFeature(feature);

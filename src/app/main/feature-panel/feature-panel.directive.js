@@ -18,8 +18,8 @@
 
     /** @ngInject */
     function FeaturePanelController(ol, $rootScope, $mdSidenav, $mdDialog,
-        drawingToolsService, featureMeasureService, layerDefinitionsService, mapService, projectTagService, firebaseLayerService) {
-
+      drawingToolsService, featureMeasureService, layerDefinitionsService,
+      mapService, projectTagService, firebaseLayerService) {
       var vm = this;
       var activeFeature;
       var panel;
