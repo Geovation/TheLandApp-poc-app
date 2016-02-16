@@ -98,22 +98,26 @@
         rlrParcel: {
           name: 'RLR Parcel',
           fillColor: "rgba(255, 165, 0, 0.5)",
-          strokeColor: "rgba(255, 165, 0, 1)"
+          strokeColor: "rgba(255, 165, 0, 1)",
+          strokeWidth: 3
         },
         rlrPif: {
           name: 'RLR PIF',
           fillColor: "rgba(176, 23, 21, 0.5)",
-          strokeColor: "rgba(176, 23, 21, 1)"
+          strokeColor: "rgba(176, 23, 21, 1)",
+          strokeWidth: 3
         },
         ordnanceSurveyMasterMap: {
           name: 'Ordnance Survey MasterMap',
           fillColor: "rgba(140, 70, 00, 0.5)",
-          strokeColor: "rgba(176, 23, 21, 1)"
+          strokeColor: "rgba(176, 23, 21, 1)",
+          strokeWidth: 3
         },
         ownedLr: {
           name: 'Owned LR',
           fillColor: "rgba(176, 23, 21, 0.5)",
-          strokeColor: "rgba(176, 23, 21, 1)"
+          strokeColor: "rgba(176, 23, 21, 1)",
+          strokeWidth: 3
         }
       };
     }
@@ -124,7 +128,8 @@
           name: 'Water line',
           type: 'LineString',
           icon: 'fa-tint',
-          colour: "0, 178, 238",
+          strokeColor: "rgba(0, 178, 238, 0.9)",
+          fillColor: "rgba(0, 178, 238, 0.15)",
           strokeWidth: 3,
           checked: true
         },
@@ -132,7 +137,8 @@
           name: 'Power line',
           type: 'LineString',
           icon: 'fa-bolt',
-          colour: "238, 238, 0",
+          strokeColor: "rgba(238, 238, 0, 0.9)",
+          fillColor: "rgba(238, 238, 0, 0.15)",
           strokeWidth: 3,
           checked: true
         },
@@ -140,7 +146,8 @@
           name: 'Hedge',
           type: 'LineString',
           icon: 'fa-ellipsis-v',
-          colour: "0, 50, 0",
+          strokeColor: "rgba(0, 50, 0, 0.9)",
+          fillColor: "rgba(0, 50, 0, 0.15)",
           strokeWidth: 3,
           checked: true
         },
@@ -148,7 +155,8 @@
           name: 'Tree',
           type: 'Point',
           icon: 'fa-tree',
-          colour: "46, 139, 87",
+          strokeColor: "rgba(46, 139, 87, 0.9)",
+          fillColor: "rgba(46, 139, 87, 0.15)",
           strokeWidth: 3,
           checked: true
         },
@@ -156,7 +164,8 @@
           name: 'Building',
           type: 'Polygon',
           icon: 'fa-industry',
-          colour: "144, 78, 39",
+          strokeColor: "rgba(144, 78, 39, 0.9)",
+          fillColor: "rgba(144, 78, 39, 0.15)",
           strokeWidth: 3,
           checked: true
         },
@@ -164,7 +173,8 @@
           name: 'Boundary',
           type: 'Polygon',
           icon: 'fa-map-o',
-          colour: "0, 0, 0",
+          strokeColor: "rgba(0, 0, 0, 0.9)",
+          fillColor: "rgba(0, 0, 0, 0.15)",
           strokeWidth: 3,
           checked: true
         }
