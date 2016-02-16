@@ -18,8 +18,8 @@
 
     /** @ngInject */
     function FeaturePanelController(ol, $rootScope, $mdSidenav, $mdDialog,
-        drawingToolsService, featureMeasureService, layerDefinitionsService, mapService, projectTagService, firebaseLayerService) {
-
+      drawingToolsService, featureMeasureService, layerDefinitionsService,
+      mapService, projectTagService, firebaseLayerService) {
       var vm = this;
       var activeFeature;
       var panel;
@@ -92,7 +92,7 @@
         var data = {
           area: undefined,
           length: undefined,
-          featureType: drawingToolsService.getDrawingLayerDetailsByFeature(activeFeature).name
+          featureType: drawingToolsService.getLayerDetailsByFeature(activeFeature).name
         };
 
         var geometry = activeFeature.getGeometry();

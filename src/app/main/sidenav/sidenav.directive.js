@@ -19,7 +19,7 @@
     /** @ngInject */
     function SidenavController(ol, ENV,
         $log, $mdSidenav, $rootScope,
-        firebaseReferenceService, layerDefinitionsService) {
+        firebaseReferenceService, layerDefinitionsService, drawingToolsService, mapService) {
       var vm = this;
 
       vm.environmentalLayers = layerDefinitionsService.environmentalLayers;
@@ -54,8 +54,7 @@
               }
             });
 
-            // TODO: any interaction to be added ?
-            //addControlInteractions(vectorLayers, map);
+            addControlInteractions(vectorLayers);
 
             // enable the directive
             $rootScope.$broadcast('toggle-basemap-layer', vm.basemap);
@@ -66,6 +65,27 @@
           });
         }
       } //activateAndLoadUserFarmLayers
+
+      /**
+       * Binds the select (click) interaction, which triggers
+       * the toggle-feature-panel event on the owned LR features.
+       */
+      function addControlInteractions(vectorLayers) {
+        var select = new ol.interaction.Select({
+          condition: ol.events.condition.singleClick,
+          toggleCondition: ol.events.condition.never,
+          layers: vectorLayers,
+          filter: function() {
+            return !drawingToolsService.isAnyDrawingToolActive();
+          }
+        });
+
+        select.on('select', function(e) {
+          $rootScope.$broadcast('toggle-feature-panel', e);
+        });
+
+        mapService.getMap().addInteraction(select);
+      }
 
       function _newVectorLayer(name, strokeColor, fillColor ) {
         return new ol.layer.Vector({
