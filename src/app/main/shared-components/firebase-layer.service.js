@@ -6,7 +6,7 @@
     .factory('firebaseLayerService', firebaseLayerService);
 
   /** @ngInject */
-  function firebaseLayerService(ol,
+  function firebaseLayerService(ol, $q,
       firebaseReferenceService, layerDefinitionsService, messageService) {
 
     var service = {
@@ -19,16 +19,18 @@
     //////////////// PUBLIC ////////////////
 
     function saveDrawingLayers(layersList) {
-      _saveLayer(layersList, firebaseReferenceService.getUserDrawingLayersRef());
+      return _saveLayer(layersList, firebaseReferenceService.getUserDrawingLayersRef());
     }
 
     function saveFarmLayers(layersList) {
-      _saveLayer(layersList, firebaseReferenceService.getUserFarmLayersRef());
+      return _saveLayer(layersList, firebaseReferenceService.getUserFarmLayersRef());
     }
 
     //////////////// PRIVATE ////////////////
 
     function _saveLayer(layersList, firebaseRef) {
+      var deferred = $q.defer();
+
       var payload = {};
       var format = new ol.format.GeoJSON();
 
@@ -37,9 +39,15 @@
       });
 
       firebaseRef.update(payload)
+        .then(function(){
+          deferred.resolve();
+        })
         .catch(function(error){
+          deferred.reject(error);
           messageService.error(error);
         });
+
+      return deferred.promise;
     }
 
   }

@@ -6,12 +6,13 @@
     .factory('onboardingService', onboardingService);
 
   /** @ngInject */
-  function onboardingService($mdDialog, $document, $log, $http, $q, $rootScope, $timeout, ENV,
+  function onboardingService($mdDialog, $document, $log, $http, $q, $rootScope, $timeout, ENV, Firebase,
       firebaseReferenceService, firebaseLayerService, messageService, layerDefinitionsService, mapService) {
     var service = {
       init: init,
       handleLrFeatureSelect: handleLrFeatureSelect,
       copyLrFeaturesToFarm: copyLrFeaturesToFarm,
+      stepCompleted: stepCompleted,
       isOnboardingCompleted: function() {
         return _isOnboardingCompleted;
       },
@@ -48,12 +49,12 @@
     function copyLrFeaturesToFarm() {
       var layer = layerDefinitionsService.farmLayers.ownedLr;
       layer.olLayer.getSource().addFeatures(_selectedLrFeatures);
-      firebaseLayerService.saveFarmLayers([layer]);
-      $log.debug("Added feature to owned LR");
-
-      toggleLrLayers();
-
-      handleStep(_stepNames.end);
+      firebaseLayerService.saveFarmLayers([layer])
+        .then(function() {
+          $log.debug("Added feature to owned LR");
+          toggleLrLayers();
+          nextStep();
+        });
     }
 
     // PRIVATE /////////////////////////////////////////////////////////////////
@@ -65,13 +66,15 @@
       if (firebaseReferenceService.ref.getAuth()) {
         firebaseReferenceService.getUserInfoRef().once("value").then(function(userInfo) {
           firebaseReferenceService.getUserFarmLayersRef().once("value").then(function(farmLayers) {
-            if (!userInfo.val().homeBoundingBox) {
-              handleStep(_stepNames.homeLocation);
-            } else if (!farmLayers.val()) {
-              handleStep(_stepNames.lrFeatures);
-            } else {
-              handleStep(_stepNames.end);
-            }
+            $timeout(function(){
+              if (!userInfo.val().homeBoundingBox) {
+                handleStep(_stepNames.homeLocation);
+              } else if (!farmLayers.val()) {
+                handleStep(_stepNames.lrFeatures);
+              } else if (!userInfo.val().onboardingCompletedAt){
+                handleStep(_stepNames.end);
+              } 
+            });
           });
         });
       }
@@ -110,7 +113,16 @@
     }
 
     function stepEnd() {
-      _isOnboardingCompleted = true;
+
+    }
+
+    function stepCompleted() {
+      firebaseReferenceService.getUserInfoRef().update({onboardingCompletedAt: Firebase.ServerValue.TIMESTAMP})
+      .then(function(){
+        $timeout(function(){
+          _isOnboardingCompleted = true;
+        });
+      });
     }
 
     function stepShowOnboardingDialog() {

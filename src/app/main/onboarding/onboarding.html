@@ -18,16 +18,20 @@
       <p class="md-caption"><strong>Tip:</strong> Select multiple titles by pressing the shift key.</p>
     </md-card-content>
     <md-card-actions
-      ng-if="vmOnboarding.getSelectedLrFeatureAmount() > 0"
       layout="row"
       layout-align="end center">
-      <md-button ng-click="vmOnboarding.copyLrFeaturesToFarm()">Copy LR ownership</md-button>
+      <md-button class="md-raised" ng-click="vmOnboarding.copyLrFeaturesToFarm()">Next</md-button>
     </md-card-actions>
   </md-card>
 
   <md-card ng-switch-when="end">
     <md-card-content>
       <p>Enjoy using The Land App!</p>
+      <md-card-actions
+        layout="row"
+        layout-align="end center">
+        <md-button class="md-raised" ng-click="vmOnboarding.stepCompleted()">Ok</md-button>
+      </md-card-actions>
     </md-card-content>
   </md-card>
 </md-content>
