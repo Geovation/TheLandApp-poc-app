@@ -49,13 +49,19 @@
       };
 
       vm.saveFeatureData = function(featureTitle) {
-        if (angular.isDefined(featureTitle)) {
+        var parentLayer = drawingToolsService.getLayerDetailsByFeature(activeFeature);
+
+        if (featureTitle) {
           vm.featureData.title = featureTitle;
         }
 
         activeFeature.set("featureData", vm.featureData);
 
-        firebaseLayerService.saveDrawingLayers(layerDefinitionsService.drawingLayers);
+        if (parentLayer.key === "ownedLr") {
+          firebaseLayerService.saveFarmLayers([parentLayer]);
+        } else {
+          firebaseLayerService.saveDrawingLayers([parentLayer]);
+        }
 
         vm.lastSaveTime = Date.now();
       };
