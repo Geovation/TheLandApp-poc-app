@@ -34,6 +34,7 @@
       vm.getSelectedLrFeatureAmount = onboardingService.getSelectedLrFeatureAmount;
       vm.copyLrFeaturesToFarm = onboardingService.copyLrFeaturesToFarm;
       vm.isOnboardingCompleted = onboardingService.isOnboardingCompleted;
+      vm.stepCompleted = onboardingService.stepCompleted;
 
       onboardingService.init();
     }
