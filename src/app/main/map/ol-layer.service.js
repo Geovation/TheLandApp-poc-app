@@ -7,46 +7,25 @@
 
   /** @ngInject */
   function olLayerService(ol, $http, $log, $rootScope, $timeout, LAYERS_Z_INDEXES,
-                          drawingToolsService) 
+                          drawingToolsService)
   {
 
     var service = {
-      buildLayerAndInteractions: buildLayerAndInteractions
+      addLayerAndInteractions: addLayerAndInteractions
     };
 
     return service;
     /////////////////////
 
+    function addLayerAndInteractions(layer) {
+      if (!layer.olLayer && layer.type) {
+        var layerTypeCapitalized = layer.type.charAt(0).toUpperCase() + layer.type.slice(1);
+        var buildFunctionName = "_add" + layerTypeCapitalized + "Layer";
 
-    function buildLayerAndInteractions(layer) {
-      if (!layer.olLayer) {
-        switch (layer.type) {
-          case 'base.mapbox':
-            _addBaseMapboxLayer(layer);
-            break;
-          case 'base.osm':
-            _addBaseOsmLayer(layer);
-            break;
-          case 'base.mapquest':
-            _addBaseMapQuestLayer(layer);
-            break;
-          case 'xyz':
-            _addXyzLayer(layer);
-            break;
-          case 'wms':
-            _addWmsLayer(layer);
-            break;
-          case 'vector':
-            _addVectorLayer(layer);
-            break;
-          case 'vectorspace':
-            _addVectorSpaceLayer(layer);
-            break;
-          default:
-            $log.debug("layer type '" + JSON.stringify(layer.type) + "' not defined");
-        } //switch
+        eval(buildFunctionName)(layer); // TODO: is it the best way ?
+        $log.debug("created layer type '" + JSON.stringify(layer.type));
       }
-    } // buildLayerAndInteractions
+    } // addLayerAndInteractions
 
     /////////////////////
 
@@ -117,7 +96,7 @@
       });
     }
 
-    function _addVectorSpaceLayer(layer) {
+    function _addVectorspaceLayer(layer) {
       layer.olLayer = _buildVectorSpaceOlLayer(layer);
       layer.olMapInteractions = _buildVectorSpaceOlMapInteractions(layer);
     }
@@ -187,8 +166,6 @@
 
       return [click];
     }
-
-
 
   }
 })();
