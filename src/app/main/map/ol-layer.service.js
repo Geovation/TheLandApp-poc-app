@@ -9,7 +9,7 @@
   function olLayerService(ol, $http, $log, $rootScope, $timeout, LAYERS_Z_INDEXES,
                           drawingToolsService)
   {
-
+    var _addLayer = _buildAddLayerFunctions();
     var service = {
       addLayerAndInteractions: addLayerAndInteractions
     };
@@ -21,93 +21,97 @@
       if (!layer.olLayer && layer.type) {
         var layerTypeCapitalized = layer.type.charAt(0).toUpperCase() + layer.type.slice(1);
         var buildFunctionName = "_add" + layerTypeCapitalized + "Layer";
-
-        eval(buildFunctionName)(layer); // TODO: is it the best way ?
+        _addLayer[buildFunctionName](layer);
         $log.debug("created layer type '" + JSON.stringify(layer.type));
       }
     } // addLayerAndInteractions
 
     /////////////////////
 
-    function _addBaseMapboxLayer(layer) {
-      layer.olLayer = new ol.layer.Tile({
-        zIndex: LAYERS_Z_INDEXES.baseMap,
-        source: new ol.source.XYZ({
-          url: layer.url,
-          attributions: _makeAttribution("&copy; <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> &copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>")
-        })
-      });
+    function _buildAddLayerFunctions() {
+      return {
+        _addBaseMapboxLayer: function (layer) {
+          layer.olLayer = new ol.layer.Tile({
+            zIndex: LAYERS_Z_INDEXES.baseMap,
+            source: new ol.source.XYZ({
+              url: layer.url,
+              attributions: _makeAttribution("&copy; <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> &copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>")
+            })
+          });
+        },
+
+        _addWmsLayer: function(layer) {
+          layer.olLayer = new ol.layer.Tile({
+            zIndex: LAYERS_Z_INDEXES.external,
+            source: new ol.source.TileWMS({
+              url: layer.url,
+              attributions: _makeAttribution(layer.attribution),
+              params: {'LAYERS': layer.layers, 'TILED': true}
+            })
+          });
+        },
+
+        _addBaseOsmLayer: function(layer) { // jshint ignore:line
+          layer.olLayer = new ol.layer.Tile({
+            zIndex: LAYERS_Z_INDEXES.baseMap,
+            source: new ol.source.OSM()
+          });
+        },
+
+        _addXyzLayer: function(layer) { // jshint ignore:line
+          layer.olLayer = new ol.layer.Tile({
+            zIndex: LAYERS_Z_INDEXES.baseMap,
+            source: new ol.source.XYZ({
+                url: layer.url,
+                attributions: _makeAttribution(layer.attribution)
+              })
+            });
+        },
+
+        _addVectorLayer: function(layer) { // jshint ignore:line
+          layer.olLayer = new ol.layer.Vector({
+            zIndex: LAYERS_Z_INDEXES.external,
+            source: new ol.source.Vector({
+              url: layer.url,
+              attributions: _makeAttribution(layer.attribution),
+              format: new ol.format.GeoJSON({
+                defaultDataProjection: "EPSG:27700"
+              })
+            }),
+            style: new ol.style.Style({
+              fill: new ol.style.Fill({
+                color: layer.fillColor,
+              }),
+              stroke: new ol.style.Stroke({
+                color: layer.strokeColor,
+                width: 2
+              })
+            })
+          });
+        },
+
+        _addVectorspaceLayer: function(layer) { // jshint ignore:line
+          layer.olLayer = _buildVectorSpaceOlLayer(layer);
+          layer.olMapInteractions = _buildVectorSpaceOlMapInteractions(layer);
+        },
+
+        _addBaseMapQuestLayer: function(layer) { // jshint ignore:line
+          layer.olLayer = new ol.layer.Tile({
+            zIndex: LAYERS_Z_INDEXES.baseMap,
+            source: new ol.source.MapQuest({layer: 'osm'})
+          });
+        }
+      };
     }
 
-    function _addBaseOsmLayer(layer) {
-      layer.olLayer = new ol.layer.Tile({
-        zIndex: LAYERS_Z_INDEXES.baseMap,
-        source: new ol.source.OSM()
-      });
-    }
 
-    function _addBaseMapQuestLayer(layer) {
-      layer.olLayer = new ol.layer.Tile({
-        zIndex: LAYERS_Z_INDEXES.baseMap,
-        source: new ol.source.MapQuest({layer: 'osm'})
-      });
-    }
-
-    function _addXyzLayer(layer) {
-      layer.olLayer = new ol.layer.Tile({
-        zIndex: LAYERS_Z_INDEXES.baseMap,
-        source: new ol.source.XYZ({
-            url: layer.url,
-            attributions: _makeAttribution(layer.attribution)
-          })
-        });
-    }
-
-    function _addWmsLayer(layer) {
-      layer.olLayer = new ol.layer.Tile({
-        zIndex: LAYERS_Z_INDEXES.external,
-        source: new ol.source.TileWMS({
-          url: layer.url,
-          attributions: _makeAttribution(layer.attribution),
-          params: {'LAYERS': layer.layers, 'TILED': true}
-        })
-      });
-    }
-
-    function _addVectorLayer(layer) {
-      layer.olLayer = new ol.layer.Vector({
-        zIndex: LAYERS_Z_INDEXES.external,
-        source: new ol.source.Vector({
-          url: layer.url,
-          attributions: _makeAttribution(layer.attribution),
-          format: new ol.format.GeoJSON({
-            defaultDataProjection: "EPSG:27700"
-          })
-        }),
-        style: new ol.style.Style({
-          fill: new ol.style.Fill({
-            color: layer.fillColor,
-          }),
-          stroke: new ol.style.Stroke({
-            color: layer.strokeColor,
-            width: 2
-          })
-        })
-      });
-    }
-
-    function _addVectorspaceLayer(layer) {
-      layer.olLayer = _buildVectorSpaceOlLayer(layer);
-      layer.olMapInteractions = _buildVectorSpaceOlMapInteractions(layer);
-    }
-
-    function _makeAttribution(attributionHtml) {
+    function _makeAttribution(attributionHtml) { // jshint ignore:line
       return [new ol.Attribution({
         html: (attributionHtml || ('All maps &copy; <a href="https://geovation.uk/">Geovation</a>'))
       })];
     }
 
-    function _buildVectorSpaceOlLayer(layer) {
+    function _buildVectorSpaceOlLayer(layer) { // jshint ignore:line
       var newLayer = new ol.layer.Vector({
         zIndex: LAYERS_Z_INDEXES.external,
         maxResolution: 5,
@@ -150,7 +154,7 @@
       return newLayer;
     } // _buildVectorSpaceOlLayer
 
-    function _buildVectorSpaceOlMapInteractions(layer) {
+    function _buildVectorSpaceOlMapInteractions(layer) { // jshint ignore:line
       var click = new ol.interaction.Select({
         condition: function (e) {
           return ol.events.condition.click(e) && !drawingToolsService.isAnyDrawingToolActive();

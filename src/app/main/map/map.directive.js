@@ -27,7 +27,6 @@
       drawingToolsService.init();
 
       // build and cache all layers
-      [].forEach
       angular.forEach(layerDefinitionsService, function(layerList, layerListName) {
         // drawingLayers layers are build in the drawing tool.
         if (layerListName !== 'drawingLayers') {
