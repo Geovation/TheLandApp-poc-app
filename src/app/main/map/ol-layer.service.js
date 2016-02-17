@@ -5,10 +5,14 @@
     .module('LandApp')
     .factory('olLayerService', olLayerService);
 
+  /** This service responsible of creating OpenLayers Layers and OpenLayers
+  /** Interactions and add them to the  "Land App" layer.   */
   /** @ngInject */
   function olLayerService(ol, $http, $log, $rootScope, $timeout, LAYERS_Z_INDEXES,
                           drawingToolsService)
   {
+    /* Each layer bust have a counter function called _addXXXLayer where XXX is
+    /* the layer.type */
     var _addLayer = _buildAddLayerFunctions();
     var service = {
       addLayerAndInteractions: addLayerAndInteractions
