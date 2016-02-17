@@ -6,7 +6,10 @@
     .factory('olLayerService', olLayerService);
 
   /** @ngInject */
-  function olLayerService(ol, $log, LAYERS_Z_INDEXES) {
+  function olLayerService(ol, $http, $log, $rootScope, $timeout, LAYERS_Z_INDEXES,
+                          drawingToolsService) 
+  {
+
     var service = {
       buildLayerAndInteractions: buildLayerAndInteractions
     };
@@ -14,81 +17,110 @@
     return service;
     /////////////////////
 
+
     function buildLayerAndInteractions(layer) {
       if (!layer.olLayer) {
         switch (layer.type) {
           case 'base.mapbox':
-            layer.olLayer = new ol.layer.Tile({
-              zIndex: LAYERS_Z_INDEXES.baseMap,
-              source: new ol.source.XYZ({
-                url: layer.url,
-                attributions: _makeAttribution("&copy; <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> &copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>")
-              })
-            });
+            _addBaseMapboxLayer(layer);
             break;
           case 'base.osm':
-            layer.olLayer = new ol.layer.Tile({
-              zIndex: LAYERS_Z_INDEXES.baseMap,
-              source: new ol.source.OSM()
-            });
+            _addBaseOsmLayer(layer);
             break;
           case 'base.mapquest':
-            layer.olLayer = new ol.layer.Tile({
-              zIndex: LAYERS_Z_INDEXES.baseMap,
-              source: new ol.source.MapQuest({layer: 'osm'})
-            });
+            _addBaseMapQuestLayer(layer);
             break;
-
           case 'xyz':
-            layer.olLayer = new ol.layer.Tile({
-              zIndex: LAYERS_Z_INDEXES.baseMap,
-              source: new ol.source.XYZ({
-                  url: layer.url,
-                  attributions: _makeAttribution(layer.attribution)
-                })
-              });
+            _addXyzLayer(layer);
             break;
-
           case 'wms':
-            layer.olLayer = new ol.layer.Tile({
-              zIndex: LAYERS_Z_INDEXES.external,
-              source: new ol.source.TileWMS({
-                url: layer.url,
-                attributions: _makeAttribution(layer.attribution),
-                params: {'LAYERS': layer.layers, 'TILED': true}
-              })
-            });
+            _addWmsLayer(layer);
             break;
           case 'vector':
-            layer.olLayer = new ol.layer.Vector({
-              zIndex: LAYERS_Z_INDEXES.external,
-              source: new ol.source.Vector({
-                url: layer.url,
-                attributions: _makeAttribution(layer.attribution),
-                format: new ol.format.GeoJSON({
-                  defaultDataProjection: "EPSG:27700"
-                })
-              }),
-              style: new ol.style.Style({
-                fill: new ol.style.Fill({
-                  color: layer.fillColor,
-                }),
-                stroke: new ol.style.Stroke({
-                  color: layer.strokeColor,
-                  width: 2
-                })
-              })
-            });
+            _addVectorLayer(layer);
             break;
           case 'vectorspace':
-            layer.olLayer = _buildVectorSpaceOlLayer(layer);
-            layer.olMapInteractions = _buildVectorSpaceOlMapInteractions(layer);
+            _addVectorSpaceLayer(layer);
             break;
           default:
             $log.debug("layer type '" + JSON.stringify(layer.type) + "' not defined");
-        }
+        } //switch
       }
     } // buildLayerAndInteractions
+
+    /////////////////////
+
+    function _addBaseMapboxLayer(layer) {
+      layer.olLayer = new ol.layer.Tile({
+        zIndex: LAYERS_Z_INDEXES.baseMap,
+        source: new ol.source.XYZ({
+          url: layer.url,
+          attributions: _makeAttribution("&copy; <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> &copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>")
+        })
+      });
+    }
+
+    function _addBaseOsmLayer(layer) {
+      layer.olLayer = new ol.layer.Tile({
+        zIndex: LAYERS_Z_INDEXES.baseMap,
+        source: new ol.source.OSM()
+      });
+    }
+
+    function _addBaseMapQuestLayer(layer) {
+      layer.olLayer = new ol.layer.Tile({
+        zIndex: LAYERS_Z_INDEXES.baseMap,
+        source: new ol.source.MapQuest({layer: 'osm'})
+      });
+    }
+
+    function _addXyzLayer(layer) {
+      layer.olLayer = new ol.layer.Tile({
+        zIndex: LAYERS_Z_INDEXES.baseMap,
+        source: new ol.source.XYZ({
+            url: layer.url,
+            attributions: _makeAttribution(layer.attribution)
+          })
+        });
+    }
+
+    function _addWmsLayer(layer) {
+      layer.olLayer = new ol.layer.Tile({
+        zIndex: LAYERS_Z_INDEXES.external,
+        source: new ol.source.TileWMS({
+          url: layer.url,
+          attributions: _makeAttribution(layer.attribution),
+          params: {'LAYERS': layer.layers, 'TILED': true}
+        })
+      });
+    }
+
+    function _addVectorLayer(layer) {
+      layer.olLayer = new ol.layer.Vector({
+        zIndex: LAYERS_Z_INDEXES.external,
+        source: new ol.source.Vector({
+          url: layer.url,
+          attributions: _makeAttribution(layer.attribution),
+          format: new ol.format.GeoJSON({
+            defaultDataProjection: "EPSG:27700"
+          })
+        }),
+        style: new ol.style.Style({
+          fill: new ol.style.Fill({
+            color: layer.fillColor,
+          }),
+          stroke: new ol.style.Stroke({
+            color: layer.strokeColor,
+            width: 2
+          })
+        })
+      });
+    }
+
+    function _addVectorSpaceLayer(layer) {
+      layer.olLayer = _buildVectorSpaceOlLayer(layer);
+      layer.olMapInteractions = _buildVectorSpaceOlMapInteractions(layer);
+    }
 
     function _makeAttribution(attributionHtml) {
       return [new ol.Attribution({
@@ -155,5 +187,8 @@
 
       return [click];
     }
+
+
+
   }
 })();
