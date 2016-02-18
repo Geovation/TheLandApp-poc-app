@@ -161,7 +161,7 @@
     function _buildVectorSpaceOlMapInteractions(layer) { // jshint ignore:line
       var click = new ol.interaction.Select({
         condition: function (e) {
-          return ol.events.condition.click(e) && !olUserLayerService.interactionsEnabled();
+          return ol.events.condition.click(e) && olUserLayerService.interactionsEnabled();
         },
         layers: [layer.olLayer]
       });
