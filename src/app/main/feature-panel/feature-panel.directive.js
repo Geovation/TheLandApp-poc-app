@@ -98,7 +98,7 @@
         var data = {
           area: undefined,
           length: undefined,
-          featureType: olUserLayerService.getLayerDetailsByFeature(activeFeature).name,
+          featureType: activeFeatureParentLayer.name,
           featureProperties: activeFeature.getProperties()
         };
 
