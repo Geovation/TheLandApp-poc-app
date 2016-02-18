@@ -72,15 +72,15 @@
       return {
         openStreetMap: {
           name: 'Open Street Map',
-          type: 'base.osm'
+          type: 'baseOsm'
         },
         // mapQuest: {
         //   name: 'Map Quest',
-        //   type: 'base.mapquest'
+        //   type: 'baseMapquest'
         // },
         aerial: {
           name: 'Aerial',
-          type: 'base.mapbox',
+          type: 'baseMapbox',
           url: "https://api.tiles.mapbox.com/v4/"+ ENV.mapboxMapId +"/{z}/{x}/{y}.png?access_token=" + ENV.mapboxToken
         },
         ordnanceSurvey: {

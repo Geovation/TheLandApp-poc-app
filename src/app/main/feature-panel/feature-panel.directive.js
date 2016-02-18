@@ -22,6 +22,7 @@
       mapService, projectTagService, firebaseLayerService) {
       var vm = this;
       var activeFeature;
+      var activeFeatureParentLayer;
       var panel;
 
       vm.featureData = {};
@@ -49,18 +50,16 @@
       };
 
       vm.saveFeatureData = function(featureTitle) {
-        var parentLayer = olUserLayerService.getLayerDetailsByFeature(activeFeature);
-
         if (featureTitle) {
           vm.featureData.title = featureTitle;
         }
 
         activeFeature.set("featureData", vm.featureData);
 
-        if (parentLayer.key === "ownedLr") {
-          firebaseLayerService.saveFarmLayers([parentLayer]);
+        if (activeFeatureParentLayer.key === "ownedLr") {
+          firebaseLayerService.saveFarmLayers([activeFeatureParentLayer]);
         } else {
-          firebaseLayerService.saveDrawingLayers([parentLayer]);
+          firebaseLayerService.saveDrawingLayers([activeFeatureParentLayer]);
         }
 
         vm.lastSaveTime = Date.now();
@@ -71,6 +70,7 @@
 
         if (selectEvent.selected.length) {
           activeFeature = selectEvent.selected[0];
+          activeFeatureParentLayer = olUserLayerService.getLayerDetailsByFeature(activeFeature);
 
           vm.readOnlyData = compileReadOnlyData();
           vm.featureData = angular.extend({

@@ -28,8 +28,11 @@
       olUserLayerService.init();
 
       // build and cache all layers
-      angular.forEach(layerDefinitionsService, function(layerList) {
-        angular.forEach(layerList, olExternalLayerService.buildLayerAndInteractions);
+      angular.forEach(layerDefinitionsService, function(layerList, layerListName) {
+        // drawingLayers layers are build in the drawing tool.
+        if (layerListName !== 'drawingLayers') {
+          angular.forEach(layerList, olExternalLayerService.addLayerAndInteractions);
+        }
       });
 
       scope.$on('la-fitExtent', function() {

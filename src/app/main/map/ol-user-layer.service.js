@@ -22,7 +22,10 @@
       unfocusLayer: unfocusLayer,
       layersCreated: false,
       disableInteractions: disableInteractions,
-      enableInteractions: enableInteractions
+      enableInteractions: enableInteractions,
+      interactionsEnabled: function() {
+        return _interactionsEnabled;
+      }
     };
 
     var _mapInteractions = {};
@@ -86,7 +89,7 @@
      * @return {Object} Layer object (from layerDefinitionsService)
      */
     function getLayerDetailsByFeature(feature) {
-      var layerDetails;
+      var layerDetails = null;
 
       angular.forEach(layerDefinitionsService, function(layerGroup) {
         angular.forEach(layerGroup, function(layer) {
