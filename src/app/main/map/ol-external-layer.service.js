@@ -3,14 +3,14 @@
 
   angular
     .module('LandApp')
-    .factory('olLayerService', olLayerService);
+    .factory('olExternalLayerService', olExternalLayerService);
 
-  /** This service responsible of creating OpenLayers Layers and OpenLayers
-  /** Interactions and add them to the  "Land App" layer.   */
+  /**
+   * This service responsible of creating OpenLayers Layers and OpenLayers
+   * Interactions and add them to the  "Land App" layer.
+   */
   /** @ngInject */
-  function olLayerService(ol, $http, $log, $rootScope, $timeout, LAYERS_Z_INDEXES,
-                          drawingToolsService)
-  {
+  function olExternalLayerService(ol, $http, $log, $rootScope, $timeout, LAYERS_Z_INDEXES, olUserLayerService) {
     /* Each layer bust have a counter function called _addXXXLayer where XXX is
     /* the layer.type */
     var _addLayer = _buildAddLayerFunctions();
@@ -161,7 +161,7 @@
     function _buildVectorSpaceOlMapInteractions(layer) { // jshint ignore:line
       var click = new ol.interaction.Select({
         condition: function (e) {
-          return ol.events.condition.click(e) && !drawingToolsService.isAnyDrawingToolActive();
+          return ol.events.condition.click(e) && !olUserLayerService.interactionsEnabled();
         },
         layers: [layer.olLayer]
       });

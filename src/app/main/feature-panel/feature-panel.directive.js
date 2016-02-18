@@ -18,10 +18,11 @@
 
     /** @ngInject */
     function FeaturePanelController(ol, $rootScope, $mdSidenav, $mdDialog,
-        drawingToolsService, featureMeasureService, layerDefinitionsService, mapService, projectTagService, firebaseLayerService) {
-
+      olUserLayerService, featureMeasureService, layerDefinitionsService,
+      mapService, projectTagService, firebaseLayerService) {
       var vm = this;
       var activeFeature;
+      var activeFeatureParentLayer;
       var panel;
 
       vm.featureData = {};
@@ -39,7 +40,7 @@
           .cancel("Cancel");
 
         $mdDialog.show(confirm).then(function() {
-          drawingToolsService.removeFeature(activeFeature);
+          olUserLayerService.removeFeature(activeFeature);
           panel.close();
         });
       };
@@ -49,13 +50,17 @@
       };
 
       vm.saveFeatureData = function(featureTitle) {
-        if (angular.isDefined(featureTitle)) {
+        if (featureTitle) {
           vm.featureData.title = featureTitle;
         }
 
         activeFeature.set("featureData", vm.featureData);
 
-        firebaseLayerService.saveDrawingLayers(layerDefinitionsService.drawingLayers);
+        if (activeFeatureParentLayer.key === "ownedLr") {
+          firebaseLayerService.saveFarmLayers([activeFeatureParentLayer]);
+        } else {
+          firebaseLayerService.saveDrawingLayers([activeFeatureParentLayer]);
+        }
 
         vm.lastSaveTime = Date.now();
       };
@@ -65,6 +70,7 @@
 
         if (selectEvent.selected.length) {
           activeFeature = selectEvent.selected[0];
+          activeFeatureParentLayer = olUserLayerService.getLayerDetailsByFeature(activeFeature);
 
           vm.readOnlyData = compileReadOnlyData();
           vm.featureData = angular.extend({
@@ -92,7 +98,7 @@
         var data = {
           area: undefined,
           length: undefined,
-          featureType: drawingToolsService.getDrawingLayerDetailsByFeature(activeFeature).name,
+          featureType: activeFeatureParentLayer.name,
           featureProperties: activeFeature.getProperties()
         };
 
