@@ -7,10 +7,10 @@
 
   angular
     .module('LandApp')
-    .factory('userLayerService', userLayerService);
+    .factory('olUserLayerService', olUserLayerService);
 
   /** @ngInject */
-  function userLayerService(ol, $rootScope, $timeout,
+  function olUserLayerService(ol, $rootScope, $timeout,
     firebaseReferenceService, firebaseLayerService, layerDefinitionsService, mapService) {
     var service = {
       init: init,
@@ -232,12 +232,6 @@
 
       return features;
     }
-
-    /**
-     * Enables the following drawing layer interactions:
-     *  - removing features (by clicking and pressing backspace)
-     *  - modifying features (adding/moving attributes)
-     */
 
     /**
      * Adds the select and modify interactions to the provided vector layers.

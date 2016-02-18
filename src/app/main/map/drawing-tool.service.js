@@ -12,7 +12,7 @@
 
   /** @ngInject */
   function drawingToolsService($log, $mdToast, $rootScope, $timeout, ol, firebaseReferenceService,
-      layerDefinitionsService, firebaseLayerService, mapService, tooltipMeasurementService, userLayerService) {
+      layerDefinitionsService, firebaseLayerService, mapService, tooltipMeasurementService, olUserLayerService) {
     var service = {
       init: init,
       deactivateAllDrawingTools: deactivateAllDrawingTools,
@@ -76,7 +76,7 @@
      */
     function setVisibleDrawingToolLayer(layer) {
       layer.olLayer.setVisible(layer.checked);
-      userLayerService.clearSelectedFeatures();
+      olUserLayerService.clearSelectedFeatures();
     }
 
     //////////////////////////// PRIVATE ////////////////////////////
@@ -114,8 +114,8 @@
       mapService.getMap().addInteraction(layer.draw);
       tooltipMeasurementService.addTooltip(layer.olLayer, layer.draw);
 
-      userLayerService.focusLayer(layer.olLayer);
-      userLayerService.disableInteractions();
+      olUserLayerService.focusLayer(layer.olLayer);
+      olUserLayerService.disableInteractions();
 
       $mdToast.show({
         template: '<md-toast>Start drawing some ' + layer.name + '!</md-toast>',
@@ -140,8 +140,8 @@
         mapService.getMap().removeInteraction(layer.draw);
         delete layer.draw;
 
-        userLayerService.unfocusLayer(layer.olLayer);
-        userLayerService.enableInteractions();
+        olUserLayerService.unfocusLayer(layer.olLayer);
+        olUserLayerService.enableInteractions();
       }
 
       setVisibleDrawingToolLayer(layer);
