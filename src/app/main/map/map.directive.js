@@ -7,7 +7,7 @@
 
   /** @ngInject */
   function laMap($log, ol,
-      drawingToolsService, layerDefinitionsService, mapService, olLayerService, onboardingService) {
+      drawingToolsService, layerDefinitionsService, mapService, olLayerService, onboardingService, userLayerService) {
 
     var directive = {
       priority: 2,
@@ -25,6 +25,7 @@
     function linkFunc(scope) {
       mapService.init();
       drawingToolsService.init();
+      userLayerService.init();
 
       // build and cache all layers
       angular.forEach(layerDefinitionsService, function(layerList) {
@@ -32,7 +33,7 @@
       });
 
       scope.$on('la-fitExtent', function() {
-        mapService.fitExtent(drawingToolsService.getExtent());
+        mapService.fitExtent(userLayerService.getExtent());
       });
 
       scope.$on('toggle-drawing-tool-layer', function(e, layer) {
@@ -81,7 +82,7 @@
 
       ///////////////////////////////
       function isDrawingEnabled() {
-        return drawingToolsService.enableDrawing && onboardingService.isOnboardingCompleted();
+        return userLayerService.layersCreated && onboardingService.isOnboardingCompleted();
       }
 
     }

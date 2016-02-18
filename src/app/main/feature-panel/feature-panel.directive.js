@@ -18,7 +18,7 @@
 
     /** @ngInject */
     function FeaturePanelController(ol, $rootScope, $mdSidenav, $mdDialog,
-      drawingToolsService, featureMeasureService, layerDefinitionsService,
+      userLayerService, featureMeasureService, layerDefinitionsService,
       mapService, projectTagService, firebaseLayerService) {
       var vm = this;
       var activeFeature;
@@ -39,7 +39,7 @@
           .cancel("Cancel");
 
         $mdDialog.show(confirm).then(function() {
-          drawingToolsService.removeFeature(activeFeature);
+          userLayerService.removeFeature(activeFeature);
           panel.close();
         });
       };
@@ -49,7 +49,7 @@
       };
 
       vm.saveFeatureData = function(featureTitle) {
-        var parentLayer = drawingToolsService.getLayerDetailsByFeature(activeFeature);
+        var parentLayer = userLayerService.getLayerDetailsByFeature(activeFeature);
 
         if (featureTitle) {
           vm.featureData.title = featureTitle;
@@ -98,7 +98,7 @@
         var data = {
           area: undefined,
           length: undefined,
-          featureType: drawingToolsService.getLayerDetailsByFeature(activeFeature).name,
+          featureType: userLayerService.getLayerDetailsByFeature(activeFeature).name,
           featureProperties: activeFeature.getProperties()
         };
 
