@@ -65,15 +65,18 @@
       var layerDetails = getLayerDetailsByFeature(feature);
 
       if (layerDetails) {
+        var saveAction;
         layerDetails.olLayer.getSource().removeFeature(feature);
 
         if (layerDetails.key === 'ownedLr') {
-          firebaseLayerService.saveFarmLayers([layerDetails]);
+          saveAction = firebaseLayerService.saveFarmLayers([layerDetails]);
         } else {
-          firebaseLayerService.saveDrawingLayers([layerDetails]);
+          saveAction = firebaseLayerService.saveDrawingLayers([layerDetails]);
         }
 
-        clearSelectedFeatures();
+        saveAction.then(function() {
+          clearSelectedFeatures();
+        });
       }
     }
 
