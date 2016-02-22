@@ -168,7 +168,7 @@
 
       click.on('select', function() {
         $timeout(function() {
-          $rootScope.$broadcast('land-registry-features-selected', click.getFeatures().getArray());
+          $rootScope.$broadcast('land-registry-features-selected', click.getFeatures());
         });
       });
 
