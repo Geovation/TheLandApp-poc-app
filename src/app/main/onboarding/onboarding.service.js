@@ -44,6 +44,7 @@
       $rootScope.$on('toggle-national-data-layer', function (e, layer) {
         if (_isOnboardingCompleted && layer.key === "lrVectors" && layer.checked) {
           _canCopyLrFeatures = true;
+          mapService.setZoom(ENV.minLrDataZoom);
         }
       });
     }
