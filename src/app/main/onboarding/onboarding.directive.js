@@ -23,7 +23,7 @@
     /** @ngInject */
     function linkFunc(scope) {
       scope.$on('land-registry-features-selected', function(event, features) {
-        onboardingService.handleLrFeatureSelect(features);
+        onboardingService.setSelectedLrFeatures(features);
       });
     }
 
@@ -31,10 +31,11 @@
     function Controller() {
       var vm = this;
       vm.getCurrentStepName = onboardingService.getCurrentStepName;
-      vm.getSelectedLrFeatureAmount = onboardingService.getSelectedLrFeatureAmount;
       vm.copyLrFeaturesToFarm = onboardingService.copyLrFeaturesToFarm;
       vm.isOnboardingCompleted = onboardingService.isOnboardingCompleted;
       vm.stepCompleted = onboardingService.stepCompleted;
+      vm.canCopyLrFeatures = onboardingService.canCopyLrFeatures;
+      vm.finishAddingLrFeatures = onboardingService.finishAddingLrFeatures;
 
       onboardingService.init();
     }

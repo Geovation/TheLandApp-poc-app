@@ -35,3 +35,29 @@
     </md-card-content>
   </md-card>
 </md-content>
+
+<md-content
+  ng-if="vmOnboarding.canCopyLrFeatures()"
+  class="onboarding-card-wrapper">
+  <md-card>
+    <md-card-title>
+      <md-card-title-text>
+        <span class="md-headline">LR title selection</span>
+      </md-card-title-text>
+    </md-card-title>
+    <md-card-content>
+      <p>Add more titles to your farm!</p>
+      <p class="md-caption"><strong>Tip:</strong> Select multiple titles by pressing the shift key.</p>
+    </md-card-content>
+    <md-card-actions
+      layout="row"
+      layout-align="end center">
+      <md-button class="md-raised" ng-click="vmOnboarding.copyLrFeaturesToFarm()">Next</md-button>
+    </md-card-actions>
+    <md-card-actions
+      layout="row"
+      layout-align="end center">
+      <md-button class="md-raised" ng-click="vmOnboarding.finishAddingLrFeatures()">Finish</md-button>
+    </md-card-actions>
+  </md-card>
+</md-content>

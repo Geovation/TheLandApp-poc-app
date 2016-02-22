@@ -83,11 +83,14 @@
 
     // PRIVATE FUNCTIONS ///////////////////////////////////////////////////////
     function addLayer(layer) {
-      map.addLayer(layer.olLayer);
+      // prevent adding duplicate layers to the map
+      if (map.getLayers().getArray().indexOf(layer.olLayer) === -1) {
+        map.addLayer(layer.olLayer);
 
-      angular.forEach(layer.olMapInteractions, function(mapInteraction) {
-        map.addInteraction(mapInteraction);
-      });
+        angular.forEach(layer.olMapInteractions, function(mapInteraction) {
+          map.addInteraction(mapInteraction);
+        });
+      }
     }
 
     function removeLayer(layer) {
