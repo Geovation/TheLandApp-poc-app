@@ -10,8 +10,10 @@
     // Enable log
     $logProvider.debugEnabled(true);
 
+    // whitelist certain URLs to prevent angular from blocking resource loading
     $sceDelegateProvider.resourceUrlWhitelist([
       'self',
+      // requests to Land Registry based on inspire id
       'https://eservices.landregistry.gov.uk/**'
     ]);
 
