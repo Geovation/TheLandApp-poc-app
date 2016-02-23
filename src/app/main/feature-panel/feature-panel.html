@@ -7,29 +7,40 @@
     </h1>
   </md-toolbar>
   <md-content layout-padding layout="column">
-    <form name="attributeForm" ng-submit="vmPanel.saveFeatureData()">
-      <section class="read-only-data" layout-margin>
-        <section layout="row">
-          <div flex="50" class="heading">Feature type</div>
-          <div flex="50">{{ vmPanel.readOnlyData.featureType }}</div>
-        </section>
-
-        <section layout="row" ng-show="vmPanel.readOnlyData.area">
-          <div flex="50" class="heading">Area</div>
-          <div flex="50" ng-bind-html="vmPanel.readOnlyData.area | formatArea"></div>
-        </section>
-
-        <section layout="row" ng-show="vmPanel.readOnlyData.length">
-          <div flex="50" class="heading">Length</div>
-          <div flex="50" ng-bind-html="vmPanel.readOnlyData.length | formatLength"></div>
-        </section>
-
-        <section layout="row" ng-show="vmPanel.readOnlyData.featureProperties.inspireid">
-          <div flex="50" class="heading">Inspire ID</div>
-          <div flex="50" ng-bind="vmPanel.readOnlyData.featureProperties.inspireid"></div>
-        </section>
+    <section class="read-only-data" layout-margin>
+      <section layout="row">
+        <div flex="50" class="heading">Feature type</div>
+        <div flex="50">{{ vmPanel.readOnlyData.featureType }}</div>
       </section>
 
+      <section layout="row" ng-show="vmPanel.readOnlyData.area">
+        <div flex="50" class="heading">Area</div>
+        <div flex="50" ng-bind-html="vmPanel.readOnlyData.area | formatArea"></div>
+      </section>
+
+      <section layout="row" ng-show="vmPanel.readOnlyData.length">
+        <div flex="50" class="heading">Length</div>
+        <div flex="50" ng-bind-html="vmPanel.readOnlyData.length | formatLength"></div>
+      </section>
+
+      <section layout="row" ng-show="vmPanel.readOnlyData.featureProperties.inspireid">
+        <div flex="50" class="heading">Inspire ID</div>
+        <div flex="50" ng-bind="vmPanel.readOnlyData.featureProperties.inspireid"></div>
+      </section>
+
+      <section layout="row" ng-show="vmPanel.readOnlyData.featureProperties.inspireid">
+        <div flex="50"></div>
+        <div flex="50">
+          <form type="POST" target="_blank" action="{{ ENV.landRegistryFormUrl }}">
+            <input type="hidden" name="enquiryType" value="lrInspireId">
+            <input type="hidden" name="polygonId" value="{{ vmPanel.readOnlyData.featureProperties.inspireid }}">
+            <md-button class="md-raised lr-button" type="submit">View LR</md-button>
+          </form>
+        </div>
+      </section>
+    </section>
+
+    <form name="attributeForm" ng-submit="vmPanel.saveFeatureData()">
       <section layout="row">
         <md-subheader class="md-primary md-subheader--closer-to-children">
           <h2 class="md-title feature-title">Project tags</h2>

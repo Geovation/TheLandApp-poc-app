@@ -11,7 +11,8 @@
       "minZoom": "",
       "maxZoom": "",
       "defaultZoom": "",
-      "minLrDataZoom": ""
+      "minLrDataZoom": "",
+      "landRegistryFormUrl": ""
     }
   },
 
@@ -29,7 +30,8 @@
       "minZoom": 7,
       "maxZoom": 20,
       "defaultZoom": 7,
-      "minLrDataZoom": 15
+      "minLrDataZoom": 15,
+      "landRegistryFormUrl": "https://eservices.landregistry.gov.uk/www/wps/portal/!ut/p/b1/hc5JDoJAEAXQs3CCLrob6C0SpsgQRqE3hAUqRIYFQeX0gjs1SO0qef9XIY4yxLtyqi_lWPddeVt3LhcEMyqKFFuMyArYkmESMZYIULKA_A8wxb38CWVAi6hhg_scM2fWpriZA-w5iW5fXScA1ynShxUmiSpZwczugoCiqlty_KvaN1SwycE_miTAAPIP-LzN8A5Yf38D2BgVkGf1bYXyhSlbPSylaGiTqQ71s6YKwguMW0bb/dl4/d5/L0lDU0lKSmdwcGlRb0tVUW9LVVEhL29Gb2dBRUlRaGpFQ1VJZ0FJQUl5RkFNaHdVaFM0SldsYTRvIS80RzNhRDJnanZ5aERVd3BNaFFqVW81Q2pHcHhBL1o3XzMyODQxMTQySDgzNjcwSTVGRzMxVDUzOFY0LzAvMzE3NDY4ODcxNjczL3NwZl9BY3Rpb25OYW1lL3NwZl9BY3Rpb25MaXN0ZW5lci9zcGZfc3RydXRzQWN0aW9uLyEyZlFEU2VhcmNoLmRv/"
     }
   }
 }
