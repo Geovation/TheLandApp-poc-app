@@ -17,7 +17,7 @@
     return directive;
 
     /** @ngInject */
-    function FeaturePanelController(ol, $rootScope, $mdSidenav, $mdDialog,
+    function FeaturePanelController(ol, $rootScope, $mdSidenav, $mdDialog, ENV,
       olUserLayerService, featureMeasureService, layerDefinitionsService,
       mapService, projectTagService, firebaseLayerService) {
       var vm = this;
