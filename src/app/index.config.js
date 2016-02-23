@@ -6,9 +6,14 @@
     .config(config);
 
   /** @ngInject */
-  function config($logProvider, $mdThemingProvider) {
+  function config($logProvider, $mdThemingProvider, $sceDelegateProvider) {
     // Enable log
     $logProvider.debugEnabled(true);
+
+    $sceDelegateProvider.resourceUrlWhitelist([
+      'self',
+      'https://eservices.landregistry.gov.uk/**'
+    ]);
 
     // // Set options third-party lib
     // toastr.options.timeOut = 3000;
