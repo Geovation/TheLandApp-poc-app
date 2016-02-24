@@ -12,7 +12,8 @@
       ref: firebaseRef,
       getUserInfoRef: getUserInfoRef,
       getUserDrawingLayersRef: getUserDrawingLayersRef,
-      getUserFarmLayersRef: getUserFarmLayersRef
+      getUserFarmLayersRef: getUserFarmLayersRef,
+      getUserProjectsRef: getUserProjectsRef
     };
 
     return service;
@@ -21,6 +22,11 @@
     function getUserInfoRef() {
       return getUserUIDRef()
         .child("info");
+    }
+
+    function getUserProjectsRef() {
+      return getUserUIDRef()
+        .child("projects");
     }
 
     function getUserDrawingLayersRef() {
