@@ -25,12 +25,12 @@
 
     function getUserDrawingLayersRef() {
       return getUserUIDRef()
-        .child("layers/drawing");
+        .child("projects/myFarm/drawing");
     }
 
     function getUserFarmLayersRef() {
       return getUserUIDRef()
-        .child("layers/farm");
+        .child("projects/myFarm/land");
     }
 
     //////////// privates ////////////////
