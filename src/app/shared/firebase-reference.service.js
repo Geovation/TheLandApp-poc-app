@@ -15,7 +15,8 @@
       getUserDrawingLayersRef: getUserDrawingLayersRef,
       getUserFarmLayersRef: getUserFarmLayersRef,
       getUserUIDRef: getUserUIDRef,
-      setUid: setUid
+      setUid: setUid,
+      getUserProjectsRef: getUserProjectsRef
     };
 
     return service;
@@ -24,6 +25,11 @@
     function getUserInfoRef(uid) {
       return getUserUIDRef(uid)
         .child("info");
+    }
+
+    function getUserProjectsRef(uid) {
+      return getUserUIDRef(uid)
+        .child("projects");
     }
 
     function getUserDrawingLayersRef(uid) {

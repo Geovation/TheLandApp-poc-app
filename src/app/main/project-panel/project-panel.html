@@ -1,0 +1,25 @@
+<section class="my-projects">
+  <md-menu>
+    <md-button class="md-warn md-raised md-hue-2" ng-click="vmProjectPanel.openMenu($mdOpenMenu, $event)">
+      My projects
+    </md-button>
+
+    <md-menu-content width="4">
+      <md-menu-item ng-repeat="project in vmProjectPanel.projectList">
+        <md-button ng-click="vmProjectPanel.toggleProject(project)">
+          <i class="fa fa-toggle-{{ project.isActive ? 'on' : 'off' }}"></i>
+          {{ project.projectName }}
+        </md-button>
+      </md-menu-item>
+
+      <md-menu-divider></md-menu-divider>
+
+      <md-menu-item>
+        <md-button ng-click="vmProjectPanel.displayNewProjectModal()">
+          <i class="fa fa-plus-square"></i>
+          New project
+        </md-button>
+      </md-menu-item>
+    </md-menu-content>
+  </md-menu>
+</section>
