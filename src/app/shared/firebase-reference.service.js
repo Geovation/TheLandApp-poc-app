@@ -28,12 +28,12 @@
 
     function getUserDrawingLayersRef(uid) {
       return getUserUIDRef(uid)
-        .child("layers/drawing");
+        .child("projects/myFarm/drawing");
     }
 
     function getUserFarmLayersRef(uid) {
       return getUserUIDRef(uid)
-        .child("layers/farm");
+        .child("projects/myFarm/land");
     }
 
     function getUserUIDRef(uid) {
