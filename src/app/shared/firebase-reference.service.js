@@ -8,11 +8,14 @@
   /** @ngInject */
   function firebaseReferenceService(Firebase, ENV) {
     var firebaseRef = new Firebase("https://" + ENV.firebase + ".firebaseio.com");
+    var _uid = null;
     var service = {
       ref: firebaseRef,
       getUserInfoRef: getUserInfoRef,
       getUserDrawingLayersRef: getUserDrawingLayersRef,
-      getUserFarmLayersRef: getUserFarmLayersRef
+      getUserFarmLayersRef: getUserFarmLayersRef,
+      getUserUIDRef: getUserUIDRef,
+      setUid: setUid
     };
 
     return service;
@@ -33,12 +36,17 @@
         .child("layers/farm");
     }
 
-    //////////// privates ////////////////
-    function getUserUIDRef() {
-      var uid = firebaseRef.getAuth().uid;
+    function getUserUIDRef(uid) {
+      uid = uid || _uid || firebaseRef.getAuth().uid;
       return firebaseRef
         .child("users")
         .child(uid);
+    }
+
+    function setUid(uid) {
+      _uid = uid;
+      // TODO: return null (or exception) if the user doesn't exist.
+      return _uid;
     }
   }
 

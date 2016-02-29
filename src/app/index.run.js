@@ -14,6 +14,22 @@
 
     firebaseReferenceService.ref.onAuth(setGAUserID);
 
+    // $rootScope.loaded = false;
+    //
+    // $rootScope.$on('$routeChangeStart', function() {
+    //   $rootScope.loaded = false;
+    // });
+    //
+    // $rootScope.$on('$routeChangeSuccess', function() {
+    //   $rootScope.loaded = true;
+    // });
+    //
+    // $rootScope.$on('$routeChangeError', function(err) {
+    //   $log.error(err);
+    //   $rootScope.loaded = true;
+    // });
+
+
     $log.debug('runBlock end');
 
     //////////

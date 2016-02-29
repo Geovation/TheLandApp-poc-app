@@ -8,9 +8,22 @@
   function routeConfig($routeProvider) {
     $routeProvider
       .when('/', {
+        resolve: {
+          isLoggedIn: function(loginService) {return loginService.isLoggedIn();}
+        }
+      })
+      .when('/user/:uid', {
         templateUrl: 'app/main/main.html',
         controller: 'MainController',
-        controllerAs: 'main'
+        controllerAs: 'main',
+        resolve: {
+          uid: function(loginService) {return loginService.getUid();}
+        }
+      })
+      .when('/login', {
+        templateUrl: 'app/login.html',
+        controller: 'LoginController',
+        controllerAs: 'loginVm'
       })
       .otherwise({
         redirectTo: '/'
