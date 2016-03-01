@@ -45,7 +45,8 @@
 
     function setUid(uid) {
       _uid = uid;
-      // TODO: return null (or exception) if the user doesn't exist.
+      debugger
+      // TODO: return null (or exception) if the user doesn't exist. It must return a promise.
       return _uid;
     }
   }

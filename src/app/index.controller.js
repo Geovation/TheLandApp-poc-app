@@ -6,13 +6,13 @@
     .controller('IndexController', IndexController);
 
   /** @ngInject */
-  function IndexController($log, $window, firebaseReferenceService, Firebase) {
+  function IndexController($rootScope, $log, $window, firebaseReferenceService, Firebase, loginService) {
     var vm = this;
 
     vm.login = login;
     vm.logout = logout;
 
-    firebaseReferenceService.ref.onAuth(_saveUserConnectedTime);
+    loginService.getAuthData().then(_saveUserConnectedTime);
 
     /////////
 

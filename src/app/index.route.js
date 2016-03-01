@@ -9,7 +9,9 @@
     $routeProvider
       .when('/', {
         resolve: {
-          isLoggedIn: function(loginService) {return loginService.isLoggedIn();}
+          isLoggedIn: function(loginService) {
+            return loginService.checkUser();
+          }
         }
       })
       .when('/user/:uid', {
