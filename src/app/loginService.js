@@ -6,13 +6,15 @@
     .factory('loginService', loginService);
 
   /** @ngInject */
-  function loginService($q, $rootScope, $location, $route, firebaseReferenceService) {
+  function loginService($q, $rootScope, $log, $location, $window, $route, firebaseReferenceService, messageService) {
     var _authDataDefer = $q.defer();
     var service = {
       setAuthData: function(authData) {_authDataDefer.resolve(authData);},
       getAuthData: function() {return _authDataDefer.promise;},
       getUid: getUid,
-      checkUser: checkUser
+      checkUser: checkUser,
+      login: login,
+      signup: signup
     };
 
     return service;
@@ -43,6 +45,32 @@
         // the user doesn't exist
         $location.path('/');
       }
+    }
+
+    function login(email, password) {
+      messageService.message("Logging you in...");
+
+      firebaseReferenceService.ref.authWithPassword({email: email, password: password})
+        .then(function(authData) {
+          $log.debug("Logged in as:", authData.uid);
+          $window.location.href = "/";
+        }).catch(function(error) {
+        $log.error("Error: ", error);
+        messageService.error(error.message);
+      });
+    }
+
+    function signup(email, password) {
+      messageService.message("Signing up");
+
+      firebaseReferenceService.ref.createUser({email:email, password:password})
+        .then(function(userData) {
+          $log.debug("User " + userData.uid + " created successfully!");
+          login(email, password);
+        }).catch(function(error) {
+        $log.debug("Error: ", error);
+        messageService.error(error.message);
+      });
     }
 
     // function getUid() {
