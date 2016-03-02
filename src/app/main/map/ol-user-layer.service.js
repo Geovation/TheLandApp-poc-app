@@ -36,7 +36,7 @@
     ////////////////////////////// PUBLIC //////////////////////////////
 
     function init() {
-      loginService.getAuthData().then(loadUserLayersAndEnableEditing);
+      loginService.onceAuthData().then(loadUserLayersAndEnableEditing);
     }
 
     /**

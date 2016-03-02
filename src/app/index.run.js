@@ -14,28 +14,15 @@
 
     firebaseReferenceService.ref.onAuth(_initServices);
 
-    // $rootScope.loaded = false;
-    //
-    // $rootScope.$on('$routeChangeStart', function() {
-    //   $rootScope.loaded = false;
-    // });
-    //
-    // $rootScope.$on('$routeChangeSuccess', function() {
-    //   $rootScope.loaded = true;
-    // });
-    //
-    // $rootScope.$on('$routeChangeError', function(err) {
-    //   $log.error(err);
-    //   $rootScope.loaded = true;
-    // });
-
-
     $log.debug('runBlock end');
 
     //////////
     function _initServices(authData) {
-      loginService.setAuthData(authData);
+      loginService.registerAuthData(authData);
       _setGAUserID(authData);
+
+      // TODO: move it in the right places
+      $rootScope.loaded=true;
     }
 
     function _setGAUserID(authData) {

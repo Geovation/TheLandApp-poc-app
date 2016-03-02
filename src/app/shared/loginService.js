@@ -9,8 +9,8 @@
   function loginService($q, $rootScope, $log, $location, $window, $route, firebaseReferenceService, messageService) {
     var _authDataDefer = $q.defer();
     var service = {
-      setAuthData: function(authData) {_authDataDefer.resolve(authData);},
-      getAuthData: function() {return _authDataDefer.promise;},
+      registerAuthData: function(authData) {_authDataDefer.resolve(authData);},
+      onceAuthData: function() {return _authDataDefer.promise;},
       getUid: getUid,
       checkUser: checkUser,
       login: login,
@@ -25,14 +25,12 @@
      * if the user is logged in, then get his UID and redirect to the right URL, if not redirect to the login page.
      */
     function checkUser() {
-      service.getAuthData().then(function(authData){
+      service.onceAuthData().then(function(authData){
         if (authData) {
           $location.path('/' + authData.uid);
         } else { // authData == null
           $location.path('/login');
         }
-
-        $rootScope.loaded=true;
       });
     }
 
@@ -45,8 +43,9 @@
         .then(function() {
           deferred.resolve(uid);
         })
-        .catch(function(){
-          $window.location.href = "/";
+        .catch(function(e){
+          deferred.reject(e);
+          $location.path("/");
         });
 
       return deferred.promise;

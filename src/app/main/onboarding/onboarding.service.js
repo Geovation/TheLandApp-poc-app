@@ -39,7 +39,7 @@
 
     // PUBLIC //////////////////////////////////////////////////////////////////
     function init() {
-      loginService.getAuthData().then(nextStep);
+      loginService.onceAuthData().then(nextStep);
 
       $rootScope.$on('toggle-national-data-layer', function (e, layer) {
         if (_isOnboardingCompleted && layer.key === "lrVectors" && layer.checked) {

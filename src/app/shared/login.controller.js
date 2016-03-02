@@ -9,9 +9,18 @@
   function LoginController(loginService) {
     var vm = this;
 
-    vm.login = function(){loginService.login(vm.email, vm.password);};
-    vm.signup = function(){loginService.signup(vm.email, vm.password);};
+    vm.login = login;
+    vm.signup = signup;
 
     /////////
+
+    function login(){
+      loginService.login(vm.email, vm.password);
+    }
+
+    function signup (){
+      loginService.signup(vm.email, vm.password);
+    }
+    
   }
 })();

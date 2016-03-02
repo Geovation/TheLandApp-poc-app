@@ -47,8 +47,8 @@
      * Set the current UID. It verifies that the UID is stored in the DB. If it is not, it is an unexisting user and
      * therefore it reject it.
      *
-     * @param promise which will be resolved if it succeed and rejected if it fails.
-     * @returns {*}
+     * @param uid
+     * @returns {promise} which will be resolved if it succeed and rejected if it there is not any user with that UID.
      */
     function setUid(uid) {
       var deferred = $q.defer();

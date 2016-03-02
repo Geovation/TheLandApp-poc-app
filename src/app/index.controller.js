@@ -6,18 +6,18 @@
     .controller('IndexController', IndexController);
 
   /** @ngInject */
-  function IndexController($rootScope, $log, $window, firebaseReferenceService, Firebase, loginService) {
+  function IndexController($rootScope, $log, $location, $window, firebaseReferenceService, Firebase, loginService) {
     var vm = this;
 
     vm.login = login;
     vm.logout = logout;
 
-    loginService.getAuthData().then(_saveUserConnectedTime);
+    loginService.onceAuthData().then(_saveUserConnectedTime);
 
     /////////
 
     function login() {
-      $window.location.href = "/login";
+      $location.path("/login");
     }
 
     function logout() {
