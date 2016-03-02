@@ -13,7 +13,8 @@
     var service = {
       init: init,
       getProjectList: function() { return _projectList; },
-      createProject: createProject
+      createProject: createProject,
+      toggleProject: toggleProject
     };
 
     var _projectList = {};
@@ -39,6 +40,21 @@
           }
         });
     }
+
+    /**
+     * Toggles the passed project and deactivates all others.
+     *
+     * @param  {Object} toggledProject Project to toggle
+     */
+    function toggleProject(toggledProject) {
+      angular.forEach(_projectList, function(project) {
+        if (project !== toggledProject) {
+          project.isActive = false;
+        }
+      });
+
+      toggledProject.isActive = !toggledProject.isActive;
+    };
 
     /**
      * Creates a new named project.
