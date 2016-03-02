@@ -5,7 +5,7 @@
     </md-button>
 
     <md-menu-content width="4">
-      <md-menu-item ng-repeat="project in vmProjectPanel.projectList">
+      <md-menu-item ng-repeat="project in vmProjectPanel.getProjectList()">
         <md-button ng-click="vmProjectPanel.toggleProject(project)">
           <i class="fa fa-toggle-{{ project.isActive ? 'on' : 'off' }}"></i>
           {{ project.projectName }}
