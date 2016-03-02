@@ -1,3 +1,6 @@
+/**
+ * Handles the interactions and displaying of the projects panel.
+ */
 (function() {
   'use strict';
 
@@ -6,7 +9,7 @@
     .directive('laProjectPanel', projectPanel);
 
   /** @ngInject */
-  function projectPanel($mdBottomSheet, $mdDialog, projectService) {
+  function projectPanel($mdBottomSheet, $mdDialog, $rootScope, projectService) {
     var directive = {
       restrict: 'E',
       templateUrl: 'app/main/project-panel/project-panel.html',
@@ -19,24 +22,44 @@
     /** @ngInject */
     function ProjectPanelController() {
       var vm = this;
-      var originatorEv;
 
-      vm.projectList = {};
+      projectService.init();
 
-      projectService.getProjectList().then(function(projectList) {
-        vm.projectList = projectList;
-        vm.projectList.myFarm.isActive = true;
-      });
+      vm.getProjectList = projectService.getProjectList;
+      vm.activeProject = {};
 
+      /**
+       * Opens the projects menu panel.
+       *
+       * @param  {Function}   $mdOpenMenu Angular mdMenu directive
+       * @param  {MouseEvent} ev          Browser event object
+       */
       vm.openMenu = function($mdOpenMenu, ev) {
-        originatorEv = ev;
         $mdOpenMenu(ev);
       };
 
-      vm.toggleProject = function(project) {
-        project.isActive = !project.isActive;
+      /**
+       * Toggles a given project on/off.
+       *
+       * @param  {Object} toggledProject Project object to toggle
+       */
+      vm.toggleProject = function(toggledProject) {
+        angular.forEach(projectService.getProjectList(), function(project) {
+          if (project !== toggledProject) {
+            project.isActive = false;
+          }
+        });
+
+        toggledProject.isActive = !toggledProject.isActive;
+
+        if (toggledProject.isActive) {
+          vm.activeProject = toggledProject;
+        }
       };
 
+      /**
+       * Displays the dialog used to create a new project.
+       */
       vm.displayNewProjectModal = function() {
         $mdDialog.show({
           templateUrl: 'app/main/project-panel/new-project-dialog.html',
@@ -45,24 +68,37 @@
           clickOutsideToClose: true
         });
 
+        /**
+         * Controller for the modal dialog.
+         */
         function ProjectDialogController() {
-          var vm = this;
+          var dialogVm = this;
 
-          vm.project = {};
+          dialogVm.project = {};
 
-          vm.closeDialog = function() {
+          /**
+           * Closes the active dialog by cancelling it.
+           */
+          dialogVm.closeDialog = function() {
             $mdDialog.cancel();
           };
 
-          vm.createProject = function() {
+          /**
+           * Creates a new project in the database and toggles it.
+           */
+          dialogVm.createProject = function() {
             projectService
-              .createProject(vm.project.name)
-              .then(function() {
+              .createProject(dialogVm.project.name)
+              .then(function(projectKey) {
                 $mdDialog.hide();
-                vm.showConfirmationDialog();
+                dialogVm.showConfirmationDialog();
+                vm.toggleProject(vm.getProjectList()[projectKey]);
               });
           };
 
+          /**
+           * Displays a success dialog after a new project is created in the db.
+           */
           vm.showConfirmationDialog = function() {
             var dialog = $mdDialog.alert()
               .title('Project created')

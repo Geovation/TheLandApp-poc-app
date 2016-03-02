@@ -1,3 +1,6 @@
+/**
+ * Handles the creation and management of projects.
+ */
 (function() {
   'use strict';
 
@@ -6,37 +9,55 @@
     .factory('projectService', projectService);
 
   /** @ngInject */
-  function projectService($q, $timeout, firebaseReferenceService) {
+  function projectService($q, $timeout, firebaseReferenceService, messageService) {
     var service = {
-      getProjectList: getProjectList,
+      init: init,
+      getProjectList: function() { return _projectList; },
       createProject: createProject
     };
+
+    var _projectList = {};
 
     return service;
 
     /////////////////////////// PUBLIC ///////////////////////////
 
-    function getProjectList() {
-      var deferred = $q.defer();
+    /**
+     * Initializes the service by loading project details from the db.
+     */
+    function init() {
+      var isInitialized = false;
 
-      firebaseReferenceService.getUserProjectsRef()
-        .once("value")
-        .then(function(projectList) {
-          deferred.resolve(projectList.val());
-        })
-        .catch(function(error) {
-          deferred.reject(error);
+      firebaseReferenceService
+        .getUserProjectsRef()
+        .on("value", function(projectList) {
+          _projectList = projectList.val();
+
+          if (!isInitialized) {
+            _projectList.myFarm.isActive = true;
+            isInitialized = true;
+          }
         });
-
-      return deferred.promise;
     }
 
+    /**
+     * Creates a new named project.
+     *
+     * @param  {String}   projectName Name of the new project
+     * @return {Promise}              Promise object
+     */
     function createProject(projectName) {
       var deferred = $q.defer();
+      var projectRef = firebaseReferenceService.getUserProjectsRef().push({projectName: projectName});
 
-      $timeout(function() {
-        deferred.resolve();
-      }, 1000);
+      projectRef
+        .then(function() {
+          deferred.resolve(projectRef.key());
+        })
+        .catch(function(error){
+          deferred.reject(error);
+          messageService.error(error);
+        });
 
       return deferred.promise;
     }
