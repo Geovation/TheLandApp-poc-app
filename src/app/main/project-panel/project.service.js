@@ -14,7 +14,8 @@
       init: init,
       getProjectList: function() { return _projectList; },
       createProject: createProject,
-      toggleProject: toggleProject
+      toggleProject: toggleProject,
+      getActiveProject: getActiveProject
     };
 
     var _projectList = {};
@@ -42,6 +43,22 @@
     }
 
     /**
+     * Returns the currently active project.
+     * @return {Object} Project object
+     */
+    function getActiveProject() {
+      var activeProject;
+
+      angular.forEach(_projectList, function(project) {
+        if (project.isActive) {
+          activeProject = project;
+        }
+      });
+
+      return activeProject;
+    }
+
+    /**
      * Toggles the passed project and deactivates all others.
      *
      * @param  {Object} toggledProject Project to toggle
@@ -54,7 +71,7 @@
       });
 
       toggledProject.isActive = !toggledProject.isActive;
-    };
+    }
 
     /**
      * Creates a new named project.
