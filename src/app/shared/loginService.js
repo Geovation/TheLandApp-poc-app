@@ -27,7 +27,7 @@
     function checkUser() {
       service.getAuthData().then(function(authData){
         if (authData) {
-          $location.path('/user/' + authData.uid);
+          $location.path('/' + authData.uid);
         } else { // authData == null
           $location.path('/login');
         }
