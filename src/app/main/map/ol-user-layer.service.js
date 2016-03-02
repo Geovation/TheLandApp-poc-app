@@ -157,18 +157,22 @@
      * @param  {Object} Firebase auth data object
      */
     function loadUserLayersAndEnableEditing(authData) {
-      if (authData || loginService.getUid()) {
-        firebaseReferenceService.getUserDrawingLayersRef().once('value', function(drawingLayers) {
-          firebaseReferenceService.getUserFarmLayersRef().once('value', function(farmLayers) {
-            var layerData = {
-              drawingLayers: drawingLayers.val(),
-              farmLayers: farmLayers.val()
-            };
 
-            createLayers(layerData);
+      loginService.getUid().then(function(uid){
+        if (authData || uid) {
+          firebaseReferenceService.getUserDrawingLayersRef().once('value', function(drawingLayers) {
+            firebaseReferenceService.getUserFarmLayersRef().once('value', function(farmLayers) {
+              var layerData = {
+                drawingLayers: drawingLayers.val(),
+                farmLayers: farmLayers.val()
+              };
+
+              createLayers(layerData);
+            });
           });
-        });
-      }
+        }
+      });
+
     }
 
     /**

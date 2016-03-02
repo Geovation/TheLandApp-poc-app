@@ -38,13 +38,18 @@
 
     // the uid in the route must exist
     function getUid() {
+      var deferred = $q.defer();
+
       var uid = $route.current.params.uid;
-      if (firebaseReferenceService.setUid(uid)) {
-        return uid;
-      } else {
-        // the user doesn't exist
-        $location.path('/');
-      }
+      firebaseReferenceService.setUid(uid)
+        .then(function() {
+          deferred.resolve(uid);
+        })
+        .catch(function(){
+          $window.location.href = "/";
+        });
+
+      return deferred.promise;
     }
 
     function login(email, password) {
@@ -72,23 +77,6 @@
         messageService.error(error.message);
       });
     }
-
-    // function getUid() {
-    //   var defer = $q.defer();
-    //
-    //   var uid = $route.current.params.uid;
-    //   if (firebaseReferenceService.setUid(uid)) {
-    //     defer.resolve(uid);
-    //   } else {
-    //     // the user doesn't exist
-    //     defer.reject();
-    //     $location.path('/');
-    //   }
-    //
-    //   return defer;
-    // }
-
-
 
   }
 
