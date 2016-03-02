@@ -7,7 +7,7 @@
 
   /** @ngInject */
   function onboardingService($mdDialog, $document, $log, $http, $q, $rootScope, $timeout, ENV, Firebase,
-      firebaseReferenceService, firebaseLayerService, messageService, layerDefinitionsService, mapService) {
+      firebaseReferenceService, firebaseLayerService, messageService, loginService, layerDefinitionsService, mapService) {
     var service = {
       init: init,
       setSelectedLrFeatures: setSelectedLrFeatures,
@@ -39,7 +39,7 @@
 
     // PUBLIC //////////////////////////////////////////////////////////////////
     function init() {
-      firebaseReferenceService.ref.onAuth(nextStep);
+      loginService.onceAuthData().then(nextStep);
 
       $rootScope.$on('toggle-national-data-layer', function (e, layer) {
         if (_isOnboardingCompleted && layer.key === "lrVectors" && layer.checked) {
@@ -88,7 +88,7 @@
      * needs to continue from there.
      */
     function nextStep() {
-      if (!_isOnboardingCompleted && firebaseReferenceService.ref.getAuth()) {
+      if (!_isOnboardingCompleted) {
         firebaseReferenceService.getUserInfoRef().once("value").then(function(userInfo) {
           firebaseReferenceService.getUserFarmLayersRef().once("value").then(function(farmLayers) {
             $timeout(function(){

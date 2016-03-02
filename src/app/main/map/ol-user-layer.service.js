@@ -11,7 +11,7 @@
 
   /** @ngInject */
   function olUserLayerService(ol, $rootScope, $timeout,
-    firebaseReferenceService, firebaseLayerService, layerDefinitionsService, mapService) {
+    firebaseReferenceService, firebaseLayerService, layerDefinitionsService, loginService, mapService) {
     var service = {
       init: init,
       clearSelectedFeatures: clearSelectedFeatures,
@@ -36,7 +36,7 @@
     ////////////////////////////// PUBLIC //////////////////////////////
 
     function init() {
-      firebaseReferenceService.ref.onAuth(loadUserLayersAndEnableEditing);
+      loginService.onceAuthData().then(loadUserLayersAndEnableEditing);
     }
 
     /**
@@ -157,18 +157,22 @@
      * @param  {Object} Firebase auth data object
      */
     function loadUserLayersAndEnableEditing(authData) {
-      if (authData) {
-        firebaseReferenceService.getUserDrawingLayersRef().once('value', function(drawingLayers) {
-          firebaseReferenceService.getUserFarmLayersRef().once('value', function(farmLayers) {
-            var layerData = {
-              drawingLayers: drawingLayers.val(),
-              farmLayers: farmLayers.val()
-            };
 
-            createLayers(layerData);
+      loginService.getUid().then(function(uid){
+        if (authData || uid) {
+          firebaseReferenceService.getUserDrawingLayersRef().once('value', function(drawingLayers) {
+            firebaseReferenceService.getUserFarmLayersRef().once('value', function(farmLayers) {
+              var layerData = {
+                drawingLayers: drawingLayers.val(),
+                farmLayers: farmLayers.val()
+              };
+
+              createLayers(layerData);
+            });
           });
-        });
-      }
+        }
+      });
+
     }
 
     /**

@@ -8,9 +8,19 @@
   function routeConfig($routeProvider) {
     $routeProvider
       .when('/', {
+        resolve: {
+          checkUser: function(loginService) {
+            return loginService.checkUser();
+          }
+        }
+      })
+      .when('/:uid', {
         templateUrl: 'app/main/main.html',
         controller: 'MainController',
-        controllerAs: 'main'
+        controllerAs: 'main',
+        resolve: {
+          uid: function(loginService) {return loginService.getUid();}
+        }
       })
       .otherwise({
         redirectTo: '/'
