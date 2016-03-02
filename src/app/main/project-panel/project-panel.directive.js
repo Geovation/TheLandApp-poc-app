@@ -26,7 +26,7 @@
       projectService.init();
 
       vm.getProjectList = projectService.getProjectList;
-      vm.activeProject = {};
+      vm.toggleProject = projectService.toggleProject;
 
       /**
        * Opens the projects menu panel.
@@ -36,25 +36,6 @@
        */
       vm.openMenu = function($mdOpenMenu, ev) {
         $mdOpenMenu(ev);
-      };
-
-      /**
-       * Toggles a given project on/off.
-       *
-       * @param  {Object} toggledProject Project object to toggle
-       */
-      vm.toggleProject = function(toggledProject) {
-        angular.forEach(projectService.getProjectList(), function(project) {
-          if (project !== toggledProject) {
-            project.isActive = false;
-          }
-        });
-
-        toggledProject.isActive = !toggledProject.isActive;
-
-        if (toggledProject.isActive) {
-          vm.activeProject = toggledProject;
-        }
       };
 
       /**
