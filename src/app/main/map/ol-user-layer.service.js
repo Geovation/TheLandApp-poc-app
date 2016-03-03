@@ -160,14 +160,11 @@
 
       loginService.getUid().then(function(uid){
         if (authData || uid) {
-          firebaseReferenceService.getUserDrawingLayersRef().once('value', function(drawingLayers) {
-            firebaseReferenceService.getUserFarmLayersRef().once('value', function(farmLayers) {
-              var layerData = {
-                drawingLayers: drawingLayers.val(),
-                farmLayers: farmLayers.val()
-              };
-
-              createLayers(layerData);
+          firebaseReferenceService.getUserProjectsRef().once("value", function(projectCollectionSnapshot) {
+            projectCollectionSnapshot.forEach(function(projectSnapshot) {
+              if (projectSnapshot.hasChild("drawing") || projectSnapshot.hasChild("land")) {
+                createLayers(projectSnapshot);
+              }
             });
           });
         }
@@ -179,13 +176,7 @@
      * Instantiates the OL layers, adds features and adds them to the map.
      * @param  {Object} Collection of farm and drawing layers
      */
-    function createLayers(layerData) {
-      var layerCollection = angular.extend(
-        {},
-        layerData.drawingLayers,
-        layerData.farmLayers
-      );
-
+    function createLayers(projectSnapshot) {
       var layerDefinitions = angular.extend(
         {},
         layerDefinitionsService.drawingLayers,
@@ -204,12 +195,18 @@
         }
 
         // read + add features
-        if (layerCollection &&
-            layerCollection[layerDetails.key] &&
-            layerCollection[layerDetails.key].features) {
-          var features = format.readFeatures(layerCollection[layerDetails.key]);
-          layerDetails.olLayer.getSource().addFeatures(features);
-        }
+        projectSnapshot.forEach(function(layerGroupSnapshot) {
+          if (layerGroupSnapshot.hasChild(layerDetails.key)) {
+            // cache the snapshot reference so the layer can be manipulated
+            // TODO: gauge the efficiency of caching this object vs just caching the key
+            layerDetails.ref = layerGroupSnapshot.child(layerDetails.key);
+
+            if (layerDetails.ref.hasChild("features")) {
+              var features = format.readFeatures(layerDetails.ref.val());
+              layerDetails.olLayer.getSource().addFeatures(features);
+            }
+          }
+        });
       });
 
       // select + modify interactions

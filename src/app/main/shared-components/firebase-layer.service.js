@@ -7,7 +7,7 @@
 
   /** @ngInject */
   function firebaseLayerService(ol, $q,
-      firebaseReferenceService, layerDefinitionsService, messageService) {
+      firebaseReferenceService, layerDefinitionsService, projectService, messageService) {
 
     var service = {
       saveDrawingLayers: saveDrawingLayers,
