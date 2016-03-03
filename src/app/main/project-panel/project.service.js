@@ -14,7 +14,6 @@
       init: init,
       getProjectList: function() { return _projectList; },
       createProject: createProject,
-      toggleProject: toggleProject,
       getActiveProject: getActiveProject,
       getBaseFarmProject: getBaseFarmProject
     };
@@ -60,21 +59,6 @@
      */
     function getBaseFarmProject() {
       return _getProjectByAttribute("isBaseFarmProject", true);
-    }
-
-    /**
-     * Toggles the passed project and deactivates all others.
-     *
-     * @param  {Object} toggledProject Project to toggle
-     */
-    function toggleProject(toggledProject) {
-      angular.forEach(_projectList, function(project) {
-        if (project !== toggledProject) {
-          project.isActive = false;
-        }
-      });
-
-      toggledProject.isActive = !toggledProject.isActive;
     }
 
     /**

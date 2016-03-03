@@ -7,7 +7,8 @@
 
   /** @ngInject */
   function onboardingService($mdDialog, $document, $log, $http, $q, $rootScope, $timeout, ENV, Firebase,
-      firebaseReferenceService, firebaseLayerService, messageService, loginService, projectService, layerDefinitionsService, mapService) {
+      firebaseReferenceService, firebaseLayerService, messageService,
+      loginService, projectService, layerDefinitionsService, mapService) {
     var service = {
       init: init,
       setSelectedLrFeatures: setSelectedLrFeatures,

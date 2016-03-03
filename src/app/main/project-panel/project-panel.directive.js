@@ -26,7 +26,19 @@
       projectService.init();
 
       vm.getProjectList = projectService.getProjectList;
-      vm.toggleProject = projectService.toggleProject;
+
+      /**
+       * Deactivates all projects except for the one that is being toggled.
+       *
+       * @param  {Object} toggledProject Project to toggle
+       */
+      vm.deactiveOtherProjects = function(toggledProject) {
+        angular.forEach(vm.getProjectList(), function(project) {
+          if (project !== toggledProject) {
+            project.isActive = false;
+          }
+        });
+      };
 
       /**
        * Opens the projects menu panel.

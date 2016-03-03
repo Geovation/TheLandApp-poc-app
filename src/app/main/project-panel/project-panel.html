@@ -6,9 +6,10 @@
 
     <md-menu-content width="4">
       <md-menu-item ng-repeat="project in vmProjectPanel.getProjectList()">
-        <md-button ng-click="vmProjectPanel.toggleProject(project)">
-          <i class="fa fa-toggle-{{ project.isActive ? 'on' : 'off' }}"></i>
-          {{ project.projectName }}
+        <md-button>
+          <md-switch
+            ng-model="project.isActive"
+            ng-change="vmProjectPanel.deactiveOtherProjects(project)">{{ project.projectName }}</md-switch>
         </md-button>
       </md-menu-item>
 
@@ -16,7 +17,7 @@
 
       <md-menu-item>
         <md-button ng-click="vmProjectPanel.displayNewProjectModal()">
-          <i class="fa fa-plus-square"></i>
+          <md-icon>add_box</md-icon>
           New project
         </md-button>
       </md-menu-item>
