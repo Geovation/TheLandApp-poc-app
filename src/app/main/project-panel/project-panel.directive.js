@@ -28,15 +28,11 @@
       vm.getProjectList = projectService.getProjectList;
 
       /**
-       * Deactivates all projects except for the one that is being toggled.
-       *
-       * @param  {Object} toggledProject Project to toggle
+       * Deactivates all projects.
        */
-      vm.deactiveOtherProjects = function(toggledProject) {
+      vm.deactiveAllProjects = function() {
         angular.forEach(vm.getProjectList(), function(project) {
-          if (project !== toggledProject) {
-            project.isActive = false;
-          }
+          project.isActive = false;
         });
       };
 

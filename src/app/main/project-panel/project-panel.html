@@ -9,7 +9,7 @@
         <md-button>
           <md-switch
             ng-model="project.isActive"
-            ng-change="vmProjectPanel.deactiveOtherProjects(project)">{{ project.projectName }}</md-switch>
+            ng-click="vmProjectPanel.deactiveAllProjects()">{{ project.projectName }}</md-switch>
         </md-button>
       </md-menu-item>
 
