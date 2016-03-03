@@ -1,0 +1,23 @@
+<md-content layout-padding>
+  <form name="newProjectForm" novalidate ng-submit="newProjectForm.$valid && vmProjectDialog.createProject()">
+    <h2 class="md-subhead">New project</h2>
+    <section>
+      <md-input-container>
+        <label>Project name</label>
+        <input required name="projectName" ng-model="vmProjectDialog.project.name">
+        <div ng-messages="newProjectForm.projectName.$error">
+          <div ng-message="required">This field is required.</div>
+        </div>
+      </md-input-container>
+    </section>
+
+    <section>
+      <md-button
+        class="md-raised md-warn"
+        ng-click="vmProjectDialog.closeDialog()">Cancel</md-button>
+      <md-button
+        class="md-raised md-primary"
+        type="submit">Create</md-button>
+    </section>
+  </form>
+</md-content>
