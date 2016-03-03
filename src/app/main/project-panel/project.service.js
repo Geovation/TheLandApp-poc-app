@@ -15,7 +15,8 @@
       getProjectList: function() { return _projectList; },
       createProject: createProject,
       toggleProject: toggleProject,
-      getActiveProject: getActiveProject
+      getActiveProject: getActiveProject,
+      getBaseFarmProject: getBaseFarmProject
     };
 
     var _projectList = {};
@@ -33,10 +34,13 @@
       firebaseReferenceService
         .getUserProjectsRef()
         .on("value", function(projectList) {
-          _projectList = projectList.val();
+          if (projectList.val()) {
+            _projectList = projectList.val();
 
-          if (!isInitialized) {
-            _projectList.myFarm.isActive = true;
+            if (!isInitialized && getBaseFarmProject()) {
+              getBaseFarmProject().isActive = true;
+            }
+
             isInitialized = true;
           }
         });
@@ -47,15 +51,15 @@
      * @return {Object} Project object
      */
     function getActiveProject() {
-      var activeProject;
+      return _getProjectByAttribute("isActive", true);
+    }
 
-      angular.forEach(_projectList, function(project) {
-        if (project.isActive) {
-          activeProject = project;
-        }
-      });
-
-      return activeProject;
+    /**
+     * Returns the base farm project.
+     * @return {Object} Project object
+     */
+    function getBaseFarmProject() {
+      return _getProjectByAttribute("isBaseFarmProject", true);
     }
 
     /**
@@ -76,23 +80,55 @@
     /**
      * Creates a new named project.
      *
-     * @param  {String}   projectName Name of the new project
-     * @return {Promise}              Promise object
+     * @param  {String}   projectName       Name of the new project
+     * @param  {Bool}     isBaseFarmProject Whether this is a base farm project
+     * @return {Promise}                    Promise object
      */
-    function createProject(projectName) {
+    function createProject(projectName, isBaseFarmProject) {
       var deferred = $q.defer();
-      var projectRef = firebaseReferenceService.getUserProjectsRef().push({projectName: projectName});
 
-      projectRef
-        .then(function() {
-          deferred.resolve(projectRef.key());
-        })
-        .catch(function(error){
-          deferred.reject(error);
-          messageService.error(error);
-        });
+      if (isBaseFarmProject && getBaseFarmProject()) {
+        deferred.reject("A base farm layer already exists");
+      } else {
+        var payload = {
+          projectName: projectName,
+          isBaseFarmProject: !!isBaseFarmProject
+        };
+
+        var projectRef = firebaseReferenceService.getUserProjectsRef().push(payload);
+
+        projectRef
+          .then(function() {
+            deferred.resolve(projectRef.key());
+          })
+          .catch(function(error){
+            deferred.reject(error);
+            messageService.error(error);
+          });
+      }
 
       return deferred.promise;
+    }
+
+    /////////////////////////// PRIVATE ///////////////////////////
+
+    /**
+     * Finds a project based on a specific attribute value.
+     *
+     * @param  {String} attributeName  Attribute name (key)
+     * @param  {mixed}  attributeValue Attribute value
+     * @return {Object}                Found project or undefined
+     */
+    function _getProjectByAttribute(attributeName, attributeValue) {
+      var foundProject;
+
+      angular.forEach(_projectList, function(project) {
+        if (project[attributeName] === attributeValue && !foundProject) {
+          foundProject = project;
+        }
+      });
+
+      return foundProject;
     }
   }
 

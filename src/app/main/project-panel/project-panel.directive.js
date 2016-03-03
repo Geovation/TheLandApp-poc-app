@@ -80,7 +80,7 @@
           /**
            * Displays a success dialog after a new project is created in the db.
            */
-          vm.showConfirmationDialog = function() {
+          dialogVm.showConfirmationDialog = function() {
             var dialog = $mdDialog.alert()
               .title('Project created')
               .textContent('Your new project has been created. All new features will automatically be added to it.')
