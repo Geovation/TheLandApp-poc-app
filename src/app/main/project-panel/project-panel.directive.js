@@ -23,18 +23,21 @@
     function ProjectPanelController() {
       var vm = this;
 
-      projectService.init();
-
       vm.getProjectList = projectService.getProjectList;
+      vm.deactiveAllProjects = deactiveAllProjects;
+      vm.openMenu = openMenu;
+      vm.displayNewProjectModal = displayNewProjectModal;
+
+      projectService.init();
 
       /**
        * Deactivates all projects.
        */
-      vm.deactiveAllProjects = function() {
+      function deactiveAllProjects() {
         angular.forEach(vm.getProjectList(), function(project) {
           project.isActive = false;
         });
-      };
+      }
 
       /**
        * Opens the projects menu panel.
@@ -42,14 +45,14 @@
        * @param  {Function}   $mdOpenMenu Angular mdMenu directive
        * @param  {MouseEvent} ev          Browser event object
        */
-      vm.openMenu = function($mdOpenMenu, ev) {
+      function openMenu($mdOpenMenu, ev) {
         $mdOpenMenu(ev);
-      };
+      }
 
       /**
        * Displays the dialog used to create a new project.
        */
-      vm.displayNewProjectModal = function() {
+      function displayNewProjectModal() {
         $mdDialog.show({
           templateUrl: 'app/main/project-panel/new-project-dialog.html',
           controller: ProjectDialogController,
@@ -63,41 +66,45 @@
         function ProjectDialogController() {
           var dialogVm = this;
 
+          dialogVm.closeDialog = closeDialog;
+          dialogVm.createProject = createProject;
+          dialogVm.showConfirmationDialog = showConfirmationDialog;
           dialogVm.project = {};
 
           /**
            * Closes the active dialog by cancelling it.
            */
-          dialogVm.closeDialog = function() {
+          function closeDialog() {
             $mdDialog.cancel();
-          };
+          }
 
           /**
            * Creates a new project in the database and toggles it.
            */
-          dialogVm.createProject = function() {
+          function createProject() {
             projectService
               .createProject(dialogVm.project.name)
               .then(function(projectKey) {
                 $mdDialog.hide();
                 dialogVm.showConfirmationDialog();
-                vm.toggleProject(vm.getProjectList()[projectKey]);
+                vm.deactiveAllProjects();
+                vm.getProjectList()[projectKey].isActive = true;
               });
-          };
+          }
 
           /**
            * Displays a success dialog after a new project is created in the db.
            */
-          dialogVm.showConfirmationDialog = function() {
+          function showConfirmationDialog() {
             var dialog = $mdDialog.alert()
               .title('Project created')
               .textContent('Your new project has been created. All new features will automatically be added to it.')
               .ok('Ok, thanks!');
 
             $mdDialog.show(dialog);
-          };
+          }
         }
-      };
+      }
     }
   }
 
