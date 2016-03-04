@@ -7,22 +7,17 @@
 
   /** @ngInject */
   function onboardingService($mdDialog, $document, $log, $http, $q, $rootScope, $timeout, ENV, Firebase,
-      firebaseReferenceService, firebaseLayerService, messageService, loginService, layerDefinitionsService, mapService) {
+      firebaseReferenceService, firebaseLayerService, messageService,
+      loginService, projectService, layerDefinitionsService, mapService) {
     var service = {
       init: init,
       setSelectedLrFeatures: setSelectedLrFeatures,
       copyLrFeaturesToFarm: copyLrFeaturesToFarm,
       stepCompleted: stepCompleted,
       finishAddingLrFeatures: finishAddingLrFeatures,
-      isOnboardingCompleted: function() {
-        return _isOnboardingCompleted;
-      },
-      getCurrentStepName: function() {
-        return _currentStepName;
-      },
-      canCopyLrFeatures: function() {
-        return _canCopyLrFeatures;
-      }
+      isOnboardingCompleted: function() { return _isOnboardingCompleted; },
+      getCurrentStepName: function() { return _currentStepName; },
+      canCopyLrFeatures: function() { return _canCopyLrFeatures; }
     };
 
     var _isOnboardingCompleted = false;
@@ -40,6 +35,7 @@
     // PUBLIC //////////////////////////////////////////////////////////////////
     function init() {
       loginService.onceAuthData().then(nextStep);
+      projectService.init();
 
       $rootScope.$on('toggle-national-data-layer', function (e, layer) {
         if (_isOnboardingCompleted && layer.key === "lrVectors" && layer.checked) {
@@ -116,6 +112,10 @@
           break;
 
         case _stepNames.lrFeatures:
+          if (!projectService.getBaseFarmProject()) {
+            projectService.createProject("My farm", true);
+          }
+
           mapService.setZoom(ENV.minLrDataZoom);
           toggleLrLayers();
           break;
