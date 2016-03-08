@@ -33,11 +33,21 @@
       firebaseReferenceService
         .getUserProjectsRef()
         .on("value", function(projectList) {
-          if (projectList.val()) {
-            _projectList = projectList.val();
+          _projectList = {};
+
+          if (projectList.exists()) {
+            projectList.forEach(function(project) {
+              var data = project.val();
+              data.key = project.key();
+
+              _projectList[data.key] = data;
+            });
 
             if (!isInitialized && getBaseFarmProject()) {
               getBaseFarmProject().isActive = true;
+
+              firebaseReferenceService.setBaseFarmProjectKey(getBaseFarmProject().key);
+              firebaseReferenceService.setActiveProjectKey(getActiveProject().key);
             }
 
             isInitialized = true;
@@ -79,11 +89,19 @@
           isBaseFarmProject: !!isBaseFarmProject
         };
 
-        var projectRef = firebaseReferenceService.getUserProjectsRef().push(payload);
+        var projectListRef = firebaseReferenceService.getUserProjectsRef();
+        var projectRef;
+
+        if (isBaseFarmProject) {
+          projectRef = projectListRef.child("myFarm").update(payload);
+        } else {
+          projectRef = projectListRef.push(payload);
+        }
 
         projectRef
           .then(function() {
-            deferred.resolve(projectRef.key());
+            var key = isBaseFarmProject ? "myFarm" : projectRef.key();
+            deferred.resolve(key);
           })
           .catch(function(error){
             deferred.reject(error);

@@ -9,6 +9,7 @@
   function firebaseReferenceService($q, Firebase, ENV) {
     var firebaseRef = new Firebase("https://" + ENV.firebase + ".firebaseio.com");
     var _uid = null;
+    var _projectKeys = {};
     var service = {
       ref: firebaseRef,
       getUserInfoRef: getUserInfoRef,
@@ -16,7 +17,10 @@
       getUserFarmLayersRef: getUserFarmLayersRef,
       getUserUIDRef: getUserUIDRef,
       setUid: setUid,
-      getUserProjectsRef: getUserProjectsRef
+      getUserProjectsRef: getUserProjectsRef,
+
+      setActiveProjectKey: setActiveProjectKey,
+      setBaseFarmProjectKey: setBaseFarmProjectKey
     };
 
     return service;
@@ -33,13 +37,14 @@
     }
 
     function getUserDrawingLayersRef(uid) {
-      return getUserUIDRef(uid)
-        .child("projects/myFarm/drawing");
+      return getUserProjectsRef(uid)
+        .child(_projectKeys.activeProject)
+        .child("layers/drawing");
     }
 
     function getUserFarmLayersRef(uid) {
-      return getUserUIDRef(uid)
-        .child("projects/myFarm/land");
+      return getUserProjectsRef(uid)
+        .child("myFarm/layers/farm");
     }
 
     function getUserUIDRef(uid) {
@@ -47,6 +52,14 @@
       return firebaseRef
         .child("users")
         .child(uid);
+    }
+
+    function setActiveProjectKey(key) {
+      _projectKeys.activeProject = key;
+    }
+
+    function setBaseFarmProjectKey(key) {
+      _projectKeys.baseFarmProject = key;
     }
 
     /**

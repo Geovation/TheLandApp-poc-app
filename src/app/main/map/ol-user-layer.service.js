@@ -162,9 +162,7 @@
         if (authData || uid) {
           firebaseReferenceService.getUserProjectsRef().once("value", function(projectCollectionSnapshot) {
             projectCollectionSnapshot.forEach(function(projectSnapshot) {
-              if (projectSnapshot.hasChild("drawing") || projectSnapshot.hasChild("land")) {
-                createLayers(projectSnapshot);
-              }
+              createLayers(projectSnapshot);
             });
           });
         }
@@ -195,14 +193,12 @@
         }
 
         // read + add features
-        projectSnapshot.forEach(function(layerGroupSnapshot) {
+        projectSnapshot.child("layers").forEach(function(layerGroupSnapshot) {
           if (layerGroupSnapshot.hasChild(layerDetails.key)) {
-            // cache the snapshot reference so the layer can be manipulated
-            // TODO: gauge the efficiency of caching this object vs just caching the key
-            layerDetails.ref = layerGroupSnapshot.child(layerDetails.key);
+            var layerSnapshot = layerGroupSnapshot.child(layerDetails.key);
 
-            if (layerDetails.ref.hasChild("features")) {
-              var features = format.readFeatures(layerDetails.ref.val());
+            if (layerSnapshot.hasChild("features")) {
+              var features = format.readFeatures(layerSnapshot.val());
               layerDetails.olLayer.getSource().addFeatures(features);
             }
           }
