@@ -13,37 +13,22 @@
             </md-not-found>
         </md-autocomplete>
         <span flex></span>
-        <md-button class="md-primary narrow" ng-click="vmHeader.toggleLayersPanel()">
-          <md-icon md-svg-src="assets/images/icons/layers_128.svg"></md-icon>
+
+        <md-button class="narrow" ng-if="indexVm.authData" ng-click="vmHeader.shareDialog()">
+          <md-icon>group</md-icon>Share
         </md-button>
-        <md-menu md-position-mode="target-right target">
-            <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
-                <i class="fa fa-lg fa-ellipsis-v top-menu__icon"></i>
-            </md-button>
-            <md-menu-content width="3">
-                <md-menu-item>
-                    <md-button ng-click="vmHeader.shareThisMap()">
-                        <div layout="row">
-                          <md-icon>group</md-icon>
-                          <p flex>Share this map</p>
-                        </div>
-                    </md-button>
-                </md-menu-item>
-                <md-menu-item>
-                    <md-button ng-click="indexVm.logout()" ng-if="indexVm.authData">
-                        <div layout="row">
-                           <md-icon>exit_to_app</md-icon>
-                          <p flex>Log out ({{indexVm.authData.password.email}})</p>
-                        </div>
-                    </md-button>
-                    <md-button ng-click="indexVm.login()" ng-if="!indexVm.authData">
-                      <div layout="row">
-                         <md-icon>account_box</md-icon>
-                        <p flex>Log in</p>
-                      </div>
-                    </md-button>
-                </md-menu-item>
-            </md-menu-content>
-        </md-menu>
+
+        <md-button class="narrow" ng-click="vmHeader.toggleLayersPanel()">
+          <md-icon>filter_none</md-icon>Layers
+        </md-button>
+
+        <md-button ng-click="indexVm.logout()" ng-if="indexVm.authData">
+          <md-icon>exit_to_app</md-icon>Log out ({{indexVm.authData.password.email}})
+        </md-button>
+
+        <md-button ng-click="indexVm.login()" ng-if="!indexVm.authData">
+          <md-icon>account_box</md-icon>Log in
+        </md-button>
+
     </div>
 </md-toolbar>

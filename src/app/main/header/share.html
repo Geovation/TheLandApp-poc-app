@@ -1,0 +1,30 @@
+<md-dialog>
+  <md-dialog-content>
+
+    <div>
+      <md-checkbox class="md-primary" ng-model="vmHeader.sharedPublic.read" aria-label="Read">Read </md-checkbox>
+      <md-checkbox class="md-primary" ng-model="vmHeader.sharedPublic.write" aria-label="Write">Write </md-checkbox>
+      (<md-icon>group</md-icon><span> Public</span>)
+    </div>
+
+    <div ng-repeat="sharedUser in vmShare.sharedUsers">
+      <md-checkbox class="md-primary" ng-model="sharedUser.read" aria-label="Read">Read </md-checkbox>
+      <md-checkbox class="md-primary" ng-model="sharedUser.write" aria-label="Write">Write </md-checkbox>
+      (<md-icon>person</md-icon><span> <{{sharedUser.email}}></span>)
+    </div>
+
+    <div>
+      <label>Email</label>
+      <input type=""email>
+
+      <md-checkbox class="md-primary" aria-label="Read">Read</md-checkbox>
+      <md-checkbox class="md-primary" aria-label="Write">Write</md-checkbox>
+
+      <md-button ng-click="vmShare.addUserClick()">
+        <md-icon>person</md-icon>add user
+      </md-button>
+    </div>
+
+  </md-dialog-content>
+
+</md-dialog>
