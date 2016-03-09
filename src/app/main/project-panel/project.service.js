@@ -9,11 +9,12 @@
     .factory('projectService', projectService);
 
   /** @ngInject */
-  function projectService($q, $timeout, firebaseReferenceService, messageService) {
+  function projectService($q, $timeout, firebaseReferenceService, messageService, olLayerGroupService) {
     var service = {
       init: init,
       getProjectList: function() { return _projectList; },
       createProject: createProject,
+      toggleProject: toggleProject,
       getActiveProject: getActiveProject,
       getBaseFarmProject: getBaseFarmProject
     };
@@ -36,11 +37,10 @@
           _projectList = {};
 
           if (projectList.exists()) {
-            projectList.forEach(function(project) {
-              var data = project.val();
-              data.key = project.key();
+            _projectList = projectList.val();
 
-              _projectList[data.key] = data;
+            angular.forEach(_projectList, function(value, key) {
+              value.key = key;
             });
 
             if (!isInitialized && getBaseFarmProject()) {
@@ -56,6 +56,21 @@
     }
 
     /**
+     * Toggles a project's visiblity.
+     *
+     * @param {Object} toggledProject Project to toggle
+     */
+    function toggleProject(toggledProject) {
+      angular.forEach(_projectList, function(project) {
+        if (project !== toggledProject) {
+          project.isActive = false;
+        }
+      });
+
+      olLayerGroupService.toggleGroupVisibility(toggledProject.key, toggledProject.isActive);
+    }
+
+    /**
      * Returns the currently active project.
      * @return {Object} Project object
      */
@@ -68,7 +83,7 @@
      * @return {Object} Project object
      */
     function getBaseFarmProject() {
-      return _getProjectByAttribute("isBaseFarmProject", true);
+      return _projectList.myFarm;
     }
 
     /**

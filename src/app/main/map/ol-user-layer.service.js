@@ -11,7 +11,7 @@
 
   /** @ngInject */
   function olUserLayerService(ol, $rootScope, $timeout,
-    firebaseReferenceService, firebaseLayerService, layerDefinitionsService, loginService, mapService) {
+    firebaseReferenceService, firebaseLayerService, layerDefinitionsService, loginService, mapService, olLayerGroupService) {
     var service = {
       init: init,
       clearSelectedFeatures: clearSelectedFeatures,
@@ -157,17 +157,13 @@
      * @param  {Object} Firebase auth data object
      */
     function loadUserLayersAndEnableEditing(authData) {
-
       loginService.getUid().then(function(uid){
         if (authData || uid) {
           firebaseReferenceService.getUserProjectsRef().once("value", function(projectCollectionSnapshot) {
-            projectCollectionSnapshot.forEach(function(projectSnapshot) {
-              createLayers(projectSnapshot);
-            });
+            projectCollectionSnapshot.forEach(createLayers);
           });
         }
       });
-
     }
 
     /**
@@ -188,10 +184,6 @@
         layerDetails.olLayer = newVectorLayer(layerDetails);
         vectorLayers.push(layerDetails.olLayer);
 
-        if (layerDefinitionsService.drawingLayers[layerDetails.key]) {
-          mapService.getMap().addLayer(layerDetails.olLayer);
-        }
-
         // read + add features
         projectSnapshot.child("layers").forEach(function(layerGroupSnapshot) {
           if (layerGroupSnapshot.hasChild(layerDetails.key)) {
@@ -204,6 +196,13 @@
           }
         });
       });
+
+      olLayerGroupService.createLayerGroup(projectSnapshot.key(), vectorLayers);
+
+      // by default, enable the myFarm project
+      if (projectSnapshot.key() === "myFarm") {
+        olLayerGroupService.toggleGroupVisibility(projectSnapshot.key(), true);
+      }
 
       // select + modify interactions
       addControlInteractions(vectorLayers);
@@ -219,7 +218,7 @@
      * Returns a collection of all drawing features that belong
      * to the given set of vector layers.
      *
-     * @param  {Array<ol.layer.Vector>} Set of vector layers
+     * @param  {ol.layer.Vector[]} Set of vector layers
      * @return {ol.Collection<ol.Feature>}
      */
     function getDrawingFeatures(vectorLayers) {
@@ -238,7 +237,7 @@
 
     /**
      * Adds the select and modify interactions to the provided vector layers.
-     * @param  {Array<ol.layer.Vector>} Set of vector layers
+     * @param  {ol.layer.Vector[]} Set of vector layers
      */
     function addControlInteractions(vectorLayers) {
       _mapInteractions.select = new ol.interaction.Select({
