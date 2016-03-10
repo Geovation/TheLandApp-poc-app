@@ -78,7 +78,7 @@
               .then(function(projectKey) {
                 $mdDialog.hide();
                 dialogVm.showConfirmationDialog();
-                vm.deactiveAllProjects();
+                vm.toggleProject(vm.getProjectList()[projectKey]);
                 vm.getProjectList()[projectKey].isActive = true;
               });
           }

@@ -20,7 +20,8 @@
       getUserProjectsRef: getUserProjectsRef,
 
       setActiveProjectKey: setActiveProjectKey,
-      setBaseFarmProjectKey: setBaseFarmProjectKey
+      setBaseFarmProjectKey: setBaseFarmProjectKey,
+      getActiveProjectKey: getActiveProjectKey
     };
 
     return service;
@@ -52,6 +53,10 @@
       return firebaseRef
         .child("users")
         .child(uid);
+    }
+
+    function getActiveProjectKey() {
+      return _projectKeys.activeProject;
     }
 
     function setActiveProjectKey(key) {

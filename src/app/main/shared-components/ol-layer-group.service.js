@@ -10,7 +10,7 @@
     .factory('olLayerGroupService', olLayerGroupService);
 
   /** @ngInject */
-  function olLayerGroupService(mapService) {
+  function olLayerGroupService(ol, mapService) {
     var service = {
       createLayerGroup: createLayerGroup,
       toggleGroupVisibility: toggleGroupVisibility
@@ -28,6 +28,7 @@
      *
      * @param  {String}            groupName Name of the group
      * @param  {ol.layer.Vector[]} layerList Array of layers
+     * @return {ol.layer.Group}              Newly created group
      */
     function createLayerGroup(groupName, layerList) {
       var group = new ol.layer.Group({
@@ -35,8 +36,13 @@
         visible: false
       });
 
+
+      // TODO: upgrade openlayers?
+
       mapService.getMap().addLayer(group);
       _groupCollection[groupName] = group;
+
+      return group;
     }
 
     /**

@@ -7,7 +7,7 @@
 
   /** @ngInject */
   function firebaseLayerService(ol, $q,
-      firebaseReferenceService, layerDefinitionsService, projectService, messageService) {
+      firebaseReferenceService, layerDefinitionsService, messageService) {
 
     var service = {
       saveDrawingLayers: saveDrawingLayers,
@@ -42,14 +42,8 @@
             format.writeFeaturesObject(layer.olLayer.getSource().getFeatures())
           );
 
-          angular.forEach(projectService.getProjectList(), function(project) {
-            if (!projectService.getActiveProject()) {
-              project.isActive = true;
-            }
-          });
-
           var promise = firebaseReferenceService.getUserProjectsRef()
-            .child(projectService.getActiveProject().key)
+            .child(firebaseReferenceService.getActiveProjectKey())
             .child("layers")
             .child(layerGroupName)
             .child(layer.key)

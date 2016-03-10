@@ -23,9 +23,8 @@
       layersCreated: false,
       disableInteractions: disableInteractions,
       enableInteractions: enableInteractions,
-      interactionsEnabled: function() {
-        return _interactionsEnabled;
-      }
+      interactionsEnabled: function() { return _interactionsEnabled; },
+      createLayers: createLayers
     };
 
     var _mapInteractions = {};
