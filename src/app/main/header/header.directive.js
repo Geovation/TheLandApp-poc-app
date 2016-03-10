@@ -18,7 +18,7 @@
     return directive;
 
     /** @ngInject */
-    function HeaderController($rootScope, $log, $q, $http, $mdDialog, $timeout) {
+    function HeaderController($rootScope, $log, $q, $http, $mdDialog, $timeout, firebaseReferenceService) {
       var vm = this;
       vm.selectedItem = null;
       vm.searchText = "";
@@ -26,35 +26,17 @@
       vm.searchTextChange = searchTextChange;
       vm.selectedItemChange = selectedItemChange;
       vm.querySearch = querySearch;
-      vm.sharedUsers = [
-        {
-          email: "one@lad.com",
-          name: "some name",
-          read: true,
-          write: true
-        },
-        {
-          email: "two@lad.com",
-          name: "some name",
-          read: false,
-          write: true
-        },
-        {
-          email: "three@lad.com",
-          name: "some name",
-          read: true,
-          write: false
-        },
-        {
-          email: "four@lad.com",
-          name: "some name",
-          read: false,
-          write: false
-        }
-      ];
-      vm.sharedPublic = {read:true, write:false};
       vm.shareDialog = shareDialog;
+      vm.mapOwner = "";
+
+      _initData();
       /////////
+      function _initData() {
+        firebaseReferenceService.getUserInfoRef().child("email").on("value", function(email) {
+          vm.mapOwner = email.val();
+        });
+      }
+
       function toggleLayersPanel () {
         $log.debug('toggleLayersPanel');
         $rootScope.$broadcast('open-layers-panel');
@@ -99,8 +81,7 @@
         $mdDialog.show(dialogConfig);
       }
 
-      /** @ngInject */
-      function shareController($mdDialog) {
+      function shareController() {
         var vm = this;
 
         vm.sharedUsers = [];

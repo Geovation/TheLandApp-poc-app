@@ -1,9 +1,10 @@
 <md-toolbar class="app-header">
     <div class="md-toolbar-tools md-toolbar-tools--no-left-padding">
-        <img src="assets/images/land-app-logo-transparent.png" class="logo" ng-click="$emit('la-fitExtent')"/>
+        <img src="assets/images/land-app-logo-transparent.png"
+             class="logo" ng-click="$emit('la-fitExtent')"/>
         <h2>
-      <span title="{{ENV | json}}">The&nbsp;Land&nbsp;App</span>
-    </h2>
+          <span title="{{ENV | json}}">The&nbsp;Land&nbsp;App</span>
+        </h2>
         <md-autocomplete md-selected-item="vmHeader.selectedItem" md-search-text-change="vmHeader.searchTextChange(vmHeader.searchText)" md-search-text="vmHeader.searchText" md-selected-item-change="vmHeader.selectedItemChange(item)" md-items="item in vmHeader.querySearch(vmHeader.searchText)" md-item-text="item.display_name" md-min-length="3" md-delay="500" placeholder="Search">
             <md-item-template>
                 <span md-highlight-text="vmHeader.searchText" md-highlight-flags="gi">{{item.display_name}}</span>
@@ -13,6 +14,8 @@
             </md-not-found>
         </md-autocomplete>
         <span flex></span>
+
+        <span>{{vmHeader.mapOwner}}</span>
 
         <md-button class="narrow" ng-if="indexVm.authData" ng-click="vmHeader.shareDialog()">
           <md-icon>group</md-icon>Share
