@@ -7,7 +7,7 @@
 
   /** @ngInject */
   function firebaseLayerService(ol, $q,
-      firebaseReferenceService, layerDefinitionsService, messageService, activeProjectService) {
+      firebaseReferenceService, messageService, activeProjectService) {
 
     var service = {
       saveDrawingLayers: saveDrawingLayers,
@@ -32,38 +32,26 @@
       var deferred = $q.defer();
 
       var format = new ol.format.GeoJSON();
-
-      var i = 0;
-      var canContinue = true;
+      var payload = {};
 
       angular.forEach(layersList, function(layer) {
-        if (canContinue) {
-          var payload = angular.copy(
-            format.writeFeaturesObject(layer.olLayer.getSource().getFeatures())
-          );
-
-          var promise = firebaseReferenceService.getUserProjectsRef()
-            .child(activeProjectService.getActiveProjectKey())
-            .child("layers")
-            .child(layerGroupName)
-            .child(layer.key)
-            .update(payload);
-
-          promise
-            .then(function() {
-              i++;
-
-              if (layersList.length === i) {
-                deferred.resolve();
-              }
-            })
-            .catch(function(error) {
-              canContinue = false;
-              deferred.reject(error);
-              messageService.error(error);
-            });
-        }
+        payload[layer.key] = angular.copy(
+          format.writeFeaturesObject(layer.olLayer.getSource().getFeatures())
+        );
       });
+
+      var promise = firebaseReferenceService.getUserProjectsRef()
+        .child(activeProjectService.getActiveProjectKey())
+        .child("layers")
+        .child(layerGroupName)
+        .update(payload);
+
+      promise
+        .then(deferred.resolve)
+        .catch(function(error) {
+          deferred.reject(error);
+          messageService.error(error);
+        });
 
       return deferred.promise;
     }
