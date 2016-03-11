@@ -113,11 +113,14 @@
 
         case _stepNames.lrFeatures:
           if (!projectService.getBaseFarmProject()) {
-            projectService.createProject("My farm", true);
+            projectService
+              .createProject("My farm", true)
+              .then(toggleLrLayers);
+          } else {
+            toggleLrLayers();
           }
 
           mapService.setZoom(ENV.minLrDataZoom);
-          toggleLrLayers();
           break;
 
         case _stepNames.end:
