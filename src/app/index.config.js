@@ -95,9 +95,10 @@
       'contrastLightColors': undefined // could also specify this if default was 'dark'
     });
 
-    $mdThemingProvider.theme('default')
-      .primaryPalette('landAppGreen')
-      .accentPalette('landAppBlue');
+
+     $mdThemingProvider.theme('default')
+       .primaryPalette('green')
+       .accentPalette('green');
   }
 
 })();

@@ -18,7 +18,7 @@
     return directive;
 
     /** @ngInject */
-    function HeaderController($rootScope, $log, $q, $http, $mdDialog) {
+    function HeaderController($rootScope, $log, $q, $http, $mdDialog, $timeout, firebaseReferenceService) {
       var vm = this;
       vm.selectedItem = null;
       vm.searchText = "";
@@ -26,8 +26,17 @@
       vm.searchTextChange = searchTextChange;
       vm.selectedItemChange = selectedItemChange;
       vm.querySearch = querySearch;
-      vm.shareThisMap = shareThisMap;
+      vm.shareDialog = shareDialog;
+      vm.mapOwner = "";
+
+      _initData();
       /////////
+      function _initData() {
+        firebaseReferenceService.getUserInfoRef().child("email").on("value", function(email) {
+          vm.mapOwner = email.val();
+        });
+      }
+
       function toggleLayersPanel () {
         $log.debug('toggleLayersPanel');
         $rootScope.$broadcast('open-layers-panel');
@@ -62,13 +71,73 @@
         return defer.promise;
       }
 
-      // open a dialog with a shareable link
-      function shareThisMap() {
-        var dialogConfig = $mdDialog
-          .alert()
-          .title('Share Map: coming soon!')
-          .ok('Ok, awesome');
+      function shareDialog() {
+        var dialogConfig = {
+          templateUrl: "app/main/header/share.html",
+          clickOutsideToClose:true,
+          controller: shareController,
+          controllerAs: "vmShare"
+        };
         $mdDialog.show(dialogConfig);
+      }
+
+      function shareController() {
+        var vm = this;
+
+        vm.sharedUsers = [];
+        vm.sharedPublic = {};
+
+        vm.addUserClick = addUserClick;
+
+        _initFb();
+        ///////////////////////
+
+        function addUserClick() {
+          var dialogConfig = $mdDialog
+            .alert()
+            .title('Saving to our DB is coming soon!')
+            .ok('Ok, awesome');
+          $mdDialog.show(dialogConfig);
+        }
+
+        /**
+         * Sync with FB.
+         *
+         * @private
+         */
+        // TODO
+        function _initFb() {
+          $timeout(function() {
+            vm.sharedPublic = {read:true, write:false};
+            vm.sharedUsers =  [
+              {
+                email: "one@lad.com",
+                name: "some name",
+                read: true,
+                write: true
+              },
+              {
+                email: "two@lad.com",
+                name: "some name",
+                read: false,
+                write: true
+              },
+              {
+                email: "three@lad.com",
+                name: "some name",
+                read: true,
+                write: false
+              },
+              {
+                email: "four@lad.com",
+                name: "some name",
+                read: false,
+                write: false
+              }
+            ];
+          });
+        }
+
       }
 
     }

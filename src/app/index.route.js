@@ -14,7 +14,7 @@
           }
         }
       })
-      .when('/:uid', {
+      .when('/main/:uid', {
         templateUrl: 'app/main/main.html',
         controller: 'MainController',
         controllerAs: 'main',

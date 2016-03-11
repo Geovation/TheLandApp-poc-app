@@ -6,11 +6,15 @@
     .run(runBlock);
 
   /** @ngInject */
-  function runBlock($rootScope, $log, ENV, ga, firebaseReferenceService, loginService) {
+  function runBlock($rootScope, $log, ENV, ga, firebaseReferenceService, loginService, editableThemes) {
     $rootScope.ENV = ENV;
 
     ga('create', ENV.gaKey, 'auto');
     ga('send', 'pageview');
+
+    editableThemes.default.submitTpl = '<button type="submit"><i class="fa fa-check"></i></button>';
+    editableThemes.default.cancelTpl = '<button type="button" ng-click="$form.$cancel()"><i class="fa fa-times"></i></button>';
+    editableThemes.default.formTpl = '<form class="editable-wrap md-toolbar-tools"></form>';
 
     firebaseReferenceService.ref.onAuth(_initServices);
 
