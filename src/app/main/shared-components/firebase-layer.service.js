@@ -7,7 +7,7 @@
 
   /** @ngInject */
   function firebaseLayerService(ol, $q,
-      firebaseReferenceService, layerDefinitionsService, messageService) {
+      firebaseReferenceService, layerDefinitionsService, messageService, activeProjectService) {
 
     var service = {
       saveDrawingLayers: saveDrawingLayers,
@@ -43,7 +43,7 @@
           );
 
           var promise = firebaseReferenceService.getUserProjectsRef()
-            .child(firebaseReferenceService.getActiveProjectKey())
+            .child(activeProjectService.getActiveProjectKey())
             .child("layers")
             .child(layerGroupName)
             .child(layer.key)

@@ -42,7 +42,9 @@
      * Clears all selected (highlighted) features
      */
     function clearSelectedFeatures() {
-      _mapInteractions.select.getFeatures().clear();
+      if (_mapInteractions.select) {
+        _mapInteractions.select.getFeatures().clear();
+      }
     }
 
     /**
@@ -90,7 +92,7 @@
     function getLayerDetailsByFeature(feature) {
       var layerDetails = null;
 
-      angular.forEach(layerDefinitionsService, function(layerGroup) {
+      angular.forEach(olLayerGroupService.getActiveLayerGroup(), function(layerGroup) {
         angular.forEach(layerGroup, function(layer) {
           if (!layerDetails &&
               layer.olLayer.getSource().getFeatures &&
@@ -110,15 +112,17 @@
     function getExtent() {
       var extent = ol.extent.createEmpty();
 
-      var layers = angular.extend(
-        {},
-        layerDefinitionsService.drawingLayers,
-        layerDefinitionsService.farmLayers
-      );
+      if (olLayerGroupService.getActiveLayerGroup()) {
+        var layers = angular.extend(
+          {},
+          olLayerGroupService.getActiveLayerGroup().drawingLayers,
+          olLayerGroupService.getActiveLayerGroup().farmLayers
+        );
 
-      angular.forEach(layers, function(layer) {
-        ol.extent.extend(extent, layer.olLayer.getSource().getExtent());
-      });
+        angular.forEach(layers, function(layer) {
+          ol.extent.extend(extent, layer.olLayer.getSource().getExtent());
+        });
+      }
 
       return extent;
     }
@@ -159,7 +163,20 @@
       loginService.getUid().then(function(uid){
         if (authData || uid) {
           firebaseReferenceService.getUserProjectsRef().once("value", function(projectCollectionSnapshot) {
-            projectCollectionSnapshot.forEach(createLayers);
+            var layersCollection = [];
+
+            projectCollectionSnapshot.forEach(function(projectSnapshot) {
+              angular.extend(layersCollection, createLayers(projectSnapshot));
+            });
+
+            mapService.fitExtent(getExtent());
+
+            // select + modify interactions
+            addControlInteractions(layersCollection);
+
+            $timeout(function() {
+              service.layersCreated = true;
+            });
           });
         }
       });
@@ -167,50 +184,49 @@
 
     /**
      * Instantiates the OL layers, adds features and adds them to the map.
-     * @param  {Object} Collection of farm and drawing layers
+     * @param  {DataSnapshot}      projectSnapshot  Collection of farm and drawing layers
+     * @return {ol.layer.Vector[]}                  List of created layer instances
      */
     function createLayers(projectSnapshot) {
-      var layerDefinitions = angular.extend(
-        {},
-        layerDefinitionsService.drawingLayers,
-        layerDefinitionsService.farmLayers
-      );
+      var layerDefinitions = {
+        drawingLayers: angular.copy(layerDefinitionsService.drawingLayers),
+        farmLayers: angular.copy(layerDefinitionsService.farmLayers)
+      };
 
       var format = new ol.format.GeoJSON();
       var vectorLayers = [];
 
-      angular.forEach(layerDefinitions, function(layerDetails) {
-        layerDetails.olLayer = newVectorLayer(layerDetails);
-        vectorLayers.push(layerDetails.olLayer);
+      angular.forEach(layerDefinitions, function(layerList) {
+        angular.forEach(layerList, function(layerDetails) {
+          layerDetails.olLayer = newVectorLayer(layerDetails);
+          vectorLayers.push(layerDetails.olLayer);
 
-        // read + add features
-        projectSnapshot.child("layers").forEach(function(layerGroupSnapshot) {
-          if (layerGroupSnapshot.hasChild(layerDetails.key)) {
-            var layerSnapshot = layerGroupSnapshot.child(layerDetails.key);
+          // read + add features
+          projectSnapshot.child("layers").forEach(function(layerGroupSnapshot) {
+            if (layerGroupSnapshot.hasChild(layerDetails.key)) {
+              var layerSnapshot = layerGroupSnapshot.child(layerDetails.key);
 
-            if (layerSnapshot.hasChild("features")) {
-              var features = format.readFeatures(layerSnapshot.val());
-              layerDetails.olLayer.getSource().addFeatures(features);
+              if (layerSnapshot.hasChild("features")) {
+                var features = format.readFeatures(layerSnapshot.val());
+                layerDetails.olLayer.getSource().addFeatures(features);
+              }
             }
-          }
+          });
         });
       });
 
-      olLayerGroupService.createLayerGroup(projectSnapshot.key(), vectorLayers);
+      olLayerGroupService.createLayerGroup(
+        projectSnapshot.key(),
+        vectorLayers,
+        layerDefinitions
+      );
 
-      // by default, enable the myFarm project
+      // by default enable the myFarm project
       if (projectSnapshot.key() === "myFarm") {
         olLayerGroupService.toggleGroupVisibility(projectSnapshot.key(), true);
       }
 
-      // select + modify interactions
-      addControlInteractions(vectorLayers);
-
-      mapService.fitExtent(getExtent());
-
-      $timeout(function() {
-        service.layersCreated = true;
-      });
+      return vectorLayers;
     }
 
     /**
@@ -224,7 +240,7 @@
       var features = new ol.Collection();
 
       vectorLayers.forEach(function(layer) {
-        angular.forEach(layerDefinitionsService.drawingLayers, function(drawingLayer) {
+        angular.forEach(olLayerGroupService.getActiveLayerGroup().drawingLayers, function(drawingLayer) {
           if (layer === drawingLayer.olLayer) {
             features.extend(layer.getSource().getFeatures());
           }
@@ -257,7 +273,7 @@
       });
 
       _mapInteractions.modify.on('modifyend', function() {
-        firebaseLayerService.saveDrawingLayers(layerDefinitionsService.drawingLayers);
+        firebaseLayerService.saveDrawingLayers(olLayerGroupService.getActiveLayerGroup().drawingLayers);
       });
 
       mapService.getMap().addInteraction(_mapInteractions.modify);

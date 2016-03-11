@@ -10,7 +10,7 @@
 
   /** @ngInject */
   function projectService($q, $timeout,
-    firebaseReferenceService, messageService, olLayerGroupService, olUserLayerService) {
+    firebaseReferenceService, messageService, olLayerGroupService, olUserLayerService, activeProjectService) {
     var service = {
       init: init,
       getProjectList: function() { return _projectList; },
@@ -47,8 +47,7 @@
             if (!isInitialized && getBaseFarmProject()) {
               getBaseFarmProject().isActive = true;
 
-              firebaseReferenceService.setBaseFarmProjectKey(getBaseFarmProject().key);
-              firebaseReferenceService.setActiveProjectKey(getActiveProject().key);
+              activeProjectService.setActiveProjectKey(getActiveProject().key);
             }
 
             isInitialized = true;
@@ -72,7 +71,7 @@
 
       var activeProjectKey = toggledProject.isActive ? toggledProject.key : '';
 
-      firebaseReferenceService.setActiveProjectKey(activeProjectKey);
+      activeProjectService.setActiveProjectKey(activeProjectKey);
     }
 
     /**
@@ -118,7 +117,7 @@
         // create layers and group for new project
 
         projectRef.set(payload)
-          .then(function(a) {
+          .then(function() {
             projectRef.once("value", olUserLayerService.createLayers);
             deferred.resolve(projectRef.key());
           })

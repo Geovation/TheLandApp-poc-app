@@ -10,13 +10,17 @@
     .factory('olLayerGroupService', olLayerGroupService);
 
   /** @ngInject */
-  function olLayerGroupService(ol, mapService) {
+  function olLayerGroupService(ol, $rootScope, mapService, activeProjectService) {
     var service = {
       createLayerGroup: createLayerGroup,
-      toggleGroupVisibility: toggleGroupVisibility
+      toggleGroupVisibility: toggleGroupVisibility,
+      getActiveLayerGroup: getActiveLayerGroup,
+      getBaseFarmLayerGroup: getBaseFarmLayerGroup,
+      getActiveLayerByKey: getActiveLayerByKey
     };
 
     var _groupCollection = {};
+    var _layerDefinitions = {};
 
     return service;
 
@@ -26,23 +30,53 @@
      * Creates a new group of layers and appends them to the map.
      * The group is invisible by default.
      *
-     * @param  {String}            groupName Name of the group
-     * @param  {ol.layer.Vector[]} layerList Array of layers
-     * @return {ol.layer.Group}              Newly created group
+     * @param  {String}            groupName        Name of the group
+     * @param  {ol.layer.Vector[]} layerList        Array of layers
+     * @param  {Object}            layerDefinitions Object of all layer definitions
+     * @return {ol.layer.Group}                     Newly created group
      */
-    function createLayerGroup(groupName, layerList) {
+    function createLayerGroup(groupName, layerList, layerDefinitions) {
       var group = new ol.layer.Group({
         layers: layerList,
         visible: false
       });
 
-
-      // TODO: upgrade openlayers?
+      // TODO: update openlayers?
 
       mapService.getMap().addLayer(group);
       _groupCollection[groupName] = group;
+      _layerDefinitions[groupName] = layerDefinitions;
 
       return group;
+    }
+
+    /**
+     * Returns a collection of the active group layers.
+     * @return {Object} Object of layer definition objects, grouped by type
+     */
+    function getActiveLayerGroup() {
+      return _layerDefinitions[activeProjectService.getActiveProjectKey()];
+    }
+
+    /**
+     * Returns the base farm group object
+     * @return {Object} Group definition object
+     */
+    function getBaseFarmLayerGroup() {
+      return _layerDefinitions.myFarm;
+    }
+
+    /**
+     * Returns a specific named layer from the active group.
+     *
+     * @param  {String}  layerKey       Layer name/key
+     * @param  {Boolean} isDrawingLayer Is this a drawing layer?
+     * @return {Object}                 Layer definition object
+     */
+    function getActiveLayerByKey(layerKey, isDrawingLayer) {
+      var subKey = isDrawingLayer ? "drawingLayers" : "farmLayers";
+
+      return _layerDefinitions[activeProjectService.getActiveProjectKey()][subKey][layerKey];
     }
 
     /**
@@ -57,6 +91,12 @@
       });
 
       _groupCollection[groupName].setVisible(isVisible);
+
+      angular.forEach(_layerDefinitions, function(layerList) {
+        layerList.farmLayers.ownedLr.checked = false;
+      });
+
+      _layerDefinitions[groupName].farmLayers.ownedLr.checked = isVisible;
     }
   }
 })();
