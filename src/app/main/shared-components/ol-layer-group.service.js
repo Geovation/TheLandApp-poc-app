@@ -91,12 +91,6 @@
       });
 
       _groupCollection[groupName].setVisible(isVisible);
-
-      angular.forEach(_layerDefinitions, function(layerList) {
-        layerList.farmLayers.ownedLr.checked = false;
-      });
-
-      _layerDefinitions[groupName].farmLayers.ownedLr.checked = isVisible;
     }
   }
 })();

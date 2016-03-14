@@ -27,10 +27,12 @@
       vm.drawingLayers = layerDefinitionsService.drawingLayers;
       vm.nationalDataLayers = layerDefinitionsService.nationalDataLayers;
 
-      $timeout(function() {
-        vm.farmLayers = olLayerGroupService.getActiveLayerGroup().farmLayers;
-        vm.drawingLayers = olLayerGroupService.getActiveLayerGroup().drawingLayers;
-      }, 2000);
+      $rootScope.$watch(olLayerGroupService.getActiveLayerGroup, function() {
+        if (olLayerGroupService.getActiveLayerGroup()) {
+          vm.farmLayers = olLayerGroupService.getActiveLayerGroup().farmLayers;
+          vm.drawingLayers = olLayerGroupService.getActiveLayerGroup().drawingLayers;
+        }
+      });
 
       // enable the directive
       $rootScope.$broadcast('toggle-basemap-layer', vm.basemap);
