@@ -28,6 +28,7 @@
       vm.querySearch = querySearch;
       vm.shareDialog = shareDialog;
       vm.mapOwner = "";
+      vm.usersAccedingCurrentMap = [];
 
       _initData();
       /////////
@@ -35,6 +36,34 @@
         firebaseReferenceService.getUserInfoRef().child("email").on("value", function(email) {
           vm.mapOwner = email.val();
         });
+
+        _initUsersAccedingCurrentMap();
+      }
+
+      // TODO
+      function _initUsersAccedingCurrentMap() {
+
+        $timeout(function() {
+          vm.usersAccedingCurrentMap = [
+            {
+              color: "yellow",
+              email: "some.user@here",
+              initials: "AS"
+            },
+            {
+              color: "red",
+              email: "another.user@here",
+              initials: "RE"
+            },
+            {
+              color: "orange",
+              email: "another.one@here",
+              initials: "GP"
+            }
+          ];
+        });
+
+
       }
 
       function toggleLayersPanel () {
