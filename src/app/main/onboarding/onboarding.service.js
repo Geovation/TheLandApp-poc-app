@@ -8,7 +8,7 @@
   /** @ngInject */
   function onboardingService($mdDialog, $document, $log, $http, $q, $rootScope, $timeout, ENV, Firebase,
       firebaseReferenceService, firebaseLayerService, messageService,
-      loginService, projectService, layerDefinitionsService, mapService) {
+      loginService, projectService, layerDefinitionsService, mapService, olLayerGroupService) {
     var service = {
       init: init,
       setSelectedLrFeatures: setSelectedLrFeatures,
@@ -67,7 +67,7 @@
      * into the owned LR farm layer.
      */
     function copyLrFeaturesToFarm() {
-      var layer = layerDefinitionsService.farmLayers.ownedLr;
+      var layer = olLayerGroupService.getBaseFarmLayerGroup().farmLayers.ownedLr;
       layer.olLayer.getSource().addFeatures(_selectedLrFeatures.getArray());
       firebaseLayerService.saveFarmLayers([layer])
         .then(function() {
@@ -113,11 +113,14 @@
 
         case _stepNames.lrFeatures:
           if (!projectService.getBaseFarmProject()) {
-            projectService.createProject("My farm", true);
+            projectService
+              .createProject("My farm", true)
+              .then(toggleLrLayers);
+          } else {
+            toggleLrLayers();
           }
 
           mapService.setZoom(ENV.minLrDataZoom);
-          toggleLrLayers();
           break;
 
         case _stepNames.end:
@@ -132,7 +135,7 @@
     function toggleLrLayers() {
       $timeout(function() {
         var lrLayer = layerDefinitionsService.nationalDataLayers.lrVectors;
-        var ownedLrLayer = layerDefinitionsService.farmLayers.ownedLr;
+        var ownedLrLayer = (olLayerGroupService.getActiveLayerGroup() || layerDefinitionsService).farmLayers.ownedLr;
 
         if (_isOnboardingCompleted) {
           // when adding additional LR titles, always show the owned LR layer

@@ -68,7 +68,10 @@
     }
 
     function setBaseMap(baseMap) {
-      removeLayer(currentBaseMap);
+      if (currentBaseMap.olLayer) {
+        removeLayer(currentBaseMap);
+      }
+
       currentBaseMap = baseMap;
       addLayer(currentBaseMap);
     }
@@ -85,6 +88,7 @@
     function addLayer(layer) {
       // prevent adding duplicate layers to the map
       if (map.getLayers().getArray().indexOf(layer.olLayer) === -1) {
+        layer.olLayer.setVisible(true);
         map.addLayer(layer.olLayer);
 
         angular.forEach(layer.olMapInteractions, function(mapInteraction) {
@@ -94,6 +98,7 @@
     }
 
     function removeLayer(layer) {
+      layer.olLayer.setVisible(false);
       map.removeLayer(layer.olLayer);
 
       angular.forEach(layer.olMapInteractions, function(mapInteraction) {

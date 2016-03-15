@@ -11,7 +11,7 @@
 
   /** @ngInject */
   function olUserLayerService(ol, $rootScope, $timeout,
-    firebaseReferenceService, firebaseLayerService, layerDefinitionsService, loginService, mapService) {
+    firebaseReferenceService, firebaseLayerService, layerDefinitionsService, loginService, mapService, olLayerGroupService) {
     var service = {
       init: init,
       clearSelectedFeatures: clearSelectedFeatures,
@@ -23,9 +23,8 @@
       layersCreated: false,
       disableInteractions: disableInteractions,
       enableInteractions: enableInteractions,
-      interactionsEnabled: function() {
-        return _interactionsEnabled;
-      }
+      interactionsEnabled: function() { return _interactionsEnabled; },
+      createLayers: createLayers
     };
 
     var _mapInteractions = {};
@@ -43,7 +42,9 @@
      * Clears all selected (highlighted) features
      */
     function clearSelectedFeatures() {
-      _mapInteractions.select.getFeatures().clear();
+      if (_mapInteractions.select) {
+        _mapInteractions.select.getFeatures().clear();
+      }
     }
 
     /**
@@ -91,7 +92,7 @@
     function getLayerDetailsByFeature(feature) {
       var layerDetails = null;
 
-      angular.forEach(layerDefinitionsService, function(layerGroup) {
+      angular.forEach(olLayerGroupService.getActiveLayerGroup(), function(layerGroup) {
         angular.forEach(layerGroup, function(layer) {
           if (!layerDetails &&
               layer.olLayer.getSource().getFeatures &&
@@ -111,15 +112,17 @@
     function getExtent() {
       var extent = ol.extent.createEmpty();
 
-      var layers = angular.extend(
-        {},
-        layerDefinitionsService.drawingLayers,
-        layerDefinitionsService.farmLayers
-      );
+      if (olLayerGroupService.getActiveLayerGroup()) {
+        var layers = angular.extend(
+          {},
+          olLayerGroupService.getActiveLayerGroup().drawingLayers,
+          olLayerGroupService.getActiveLayerGroup().farmLayers
+        );
 
-      angular.forEach(layers, function(layer) {
-        ol.extent.extend(extent, layer.olLayer.getSource().getExtent());
-      });
+        angular.forEach(layers, function(layer) {
+          ol.extent.extend(extent, layer.olLayer.getSource().getExtent());
+        });
+      }
 
       return extent;
     }
@@ -157,83 +160,87 @@
      * @param  {Object} Firebase auth data object
      */
     function loadUserLayersAndEnableEditing(authData) {
-
       loginService.getUid().then(function(uid){
         if (authData || uid) {
-          firebaseReferenceService.getUserDrawingLayersRef().once('value', function(drawingLayers) {
-            firebaseReferenceService.getUserFarmLayersRef().once('value', function(farmLayers) {
-              var layerData = {
-                drawingLayers: drawingLayers.val(),
-                farmLayers: farmLayers.val()
-              };
+          firebaseReferenceService.getUserProjectsRef().once("value", function(projectCollectionSnapshot) {
+            var layersCollection = [];
 
-              createLayers(layerData);
+            projectCollectionSnapshot.forEach(function(projectSnapshot) {
+              angular.extend(layersCollection, createLayers(projectSnapshot));
+            });
+
+            mapService.fitExtent(getExtent());
+
+            // select + modify interactions
+            addControlInteractions(layersCollection);
+
+            $timeout(function() {
+              service.layersCreated = true;
             });
           });
         }
       });
-
     }
 
     /**
      * Instantiates the OL layers, adds features and adds them to the map.
-     * @param  {Object} Collection of farm and drawing layers
+     * @param  {DataSnapshot}      projectSnapshot  Collection of farm and drawing layers
+     * @return {ol.layer.Vector[]}                  List of created layer instances
      */
-    function createLayers(layerData) {
-      var layerCollection = angular.extend(
-        {},
-        layerData.drawingLayers,
-        layerData.farmLayers
-      );
-
-      var layerDefinitions = angular.extend(
-        {},
-        layerDefinitionsService.drawingLayers,
-        layerDefinitionsService.farmLayers
-      );
+    function createLayers(projectSnapshot) {
+      var layerDefinitions = {
+        drawingLayers: angular.copy(layerDefinitionsService.drawingLayers),
+        farmLayers: angular.copy(layerDefinitionsService.farmLayers)
+      };
 
       var format = new ol.format.GeoJSON();
       var vectorLayers = [];
 
-      angular.forEach(layerDefinitions, function(layerDetails) {
-        layerDetails.olLayer = newVectorLayer(layerDetails);
-        vectorLayers.push(layerDetails.olLayer);
+      angular.forEach(layerDefinitions, function(layerList) {
+        angular.forEach(layerList, function(layerDetails) {
+          layerDetails.olLayer = newVectorLayer(layerDetails);
+          vectorLayers.push(layerDetails.olLayer);
 
-        if (layerDefinitionsService.drawingLayers[layerDetails.key]) {
-          mapService.getMap().addLayer(layerDetails.olLayer);
-        }
+          // read + add features
+          projectSnapshot.child("layers").forEach(function(layerGroupSnapshot) {
+            if (layerGroupSnapshot.hasChild(layerDetails.key)) {
+              var layerSnapshot = layerGroupSnapshot.child(layerDetails.key);
 
-        // read + add features
-        if (layerCollection &&
-            layerCollection[layerDetails.key] &&
-            layerCollection[layerDetails.key].features) {
-          var features = format.readFeatures(layerCollection[layerDetails.key]);
-          layerDetails.olLayer.getSource().addFeatures(features);
-        }
+              if (layerSnapshot.hasChild("features")) {
+                var features = format.readFeatures(layerSnapshot.val());
+                layerDetails.olLayer.getSource().addFeatures(features);
+              }
+            }
+          });
+        });
       });
 
-      // select + modify interactions
-      addControlInteractions(vectorLayers);
+      olLayerGroupService.createLayerGroup(
+        projectSnapshot.key(),
+        vectorLayers,
+        layerDefinitions
+      );
 
-      mapService.fitExtent(getExtent());
+      // by default enable the myFarm project
+      if (projectSnapshot.key() === "myFarm") {
+        olLayerGroupService.toggleGroupVisibility(projectSnapshot.key(), true);
+      }
 
-      $timeout(function() {
-        service.layersCreated = true;
-      });
+      return vectorLayers;
     }
 
     /**
      * Returns a collection of all drawing features that belong
      * to the given set of vector layers.
      *
-     * @param  {Array<ol.layer.Vector>} Set of vector layers
+     * @param  {ol.layer.Vector[]} Set of vector layers
      * @return {ol.Collection<ol.Feature>}
      */
     function getDrawingFeatures(vectorLayers) {
       var features = new ol.Collection();
 
       vectorLayers.forEach(function(layer) {
-        angular.forEach(layerDefinitionsService.drawingLayers, function(drawingLayer) {
+        angular.forEach(olLayerGroupService.getActiveLayerGroup().drawingLayers, function(drawingLayer) {
           if (layer === drawingLayer.olLayer) {
             features.extend(layer.getSource().getFeatures());
           }
@@ -245,7 +252,7 @@
 
     /**
      * Adds the select and modify interactions to the provided vector layers.
-     * @param  {Array<ol.layer.Vector>} Set of vector layers
+     * @param  {ol.layer.Vector[]} Set of vector layers
      */
     function addControlInteractions(vectorLayers) {
       _mapInteractions.select = new ol.interaction.Select({
@@ -266,7 +273,7 @@
       });
 
       _mapInteractions.modify.on('modifyend', function() {
-        firebaseLayerService.saveDrawingLayers(layerDefinitionsService.drawingLayers);
+        firebaseLayerService.saveDrawingLayers(olLayerGroupService.getActiveLayerGroup().drawingLayers);
       });
 
       mapService.getMap().addInteraction(_mapInteractions.modify);

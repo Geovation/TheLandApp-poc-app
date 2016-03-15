@@ -17,7 +17,7 @@
     return directive;
 
     /** @ngInject */
-    function SidenavController(ENV, $mdSidenav, $rootScope, layerDefinitionsService) {
+    function SidenavController(ENV, $mdSidenav, $rootScope, $timeout, layerDefinitionsService, olLayerGroupService) {
       var vm = this;
 
       vm.environmentalLayers = layerDefinitionsService.environmentalLayers;
@@ -26,6 +26,13 @@
       vm.basemap = vm.baseMapLayers[ENV.defaultBaseMap];
       vm.drawingLayers = layerDefinitionsService.drawingLayers;
       vm.nationalDataLayers = layerDefinitionsService.nationalDataLayers;
+
+      $rootScope.$watch(olLayerGroupService.getActiveLayerGroup, function() {
+        if (olLayerGroupService.getActiveLayerGroup()) {
+          vm.farmLayers = olLayerGroupService.getActiveLayerGroup().farmLayers;
+          vm.drawingLayers = olLayerGroupService.getActiveLayerGroup().drawingLayers;
+        }
+      });
 
       // enable the directive
       $rootScope.$broadcast('toggle-basemap-layer', vm.basemap);

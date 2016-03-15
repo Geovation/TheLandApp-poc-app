@@ -6,7 +6,7 @@
     .factory('firebaseReferenceService', firebaseReferenceService);
 
   /** @ngInject */
-  function firebaseReferenceService($q, Firebase, ENV) {
+  function firebaseReferenceService($q, Firebase, ENV, activeProjectService) {
     var firebaseRef = new Firebase("https://" + ENV.firebase + ".firebaseio.com");
     var _uid = null;
     var service = {
@@ -33,13 +33,14 @@
     }
 
     function getUserDrawingLayersRef(uid) {
-      return getUserUIDRef(uid)
-        .child("projects/myFarm/drawing");
+      return getUserProjectsRef(uid)
+        .child(activeProjectService.getActiveProjectKey())
+        .child("layers/drawing");
     }
 
     function getUserFarmLayersRef(uid) {
-      return getUserUIDRef(uid)
-        .child("projects/myFarm/land");
+      return getUserProjectsRef(uid)
+        .child("myFarm/layers/farm");
     }
 
     function getUserUIDRef(uid) {

@@ -24,20 +24,11 @@
       var vm = this;
 
       vm.getProjectList = projectService.getProjectList;
-      vm.deactiveAllProjects = deactiveAllProjects;
+      vm.toggleProject = projectService.toggleProject;
       vm.openMenu = openMenu;
       vm.displayNewProjectModal = displayNewProjectModal;
 
       projectService.init();
-
-      /**
-       * Deactivates all projects.
-       */
-      function deactiveAllProjects() {
-        angular.forEach(vm.getProjectList(), function(project) {
-          project.isActive = false;
-        });
-      }
 
       /**
        * Opens the projects menu panel.
@@ -87,7 +78,7 @@
               .then(function(projectKey) {
                 $mdDialog.hide();
                 dialogVm.showConfirmationDialog();
-                vm.deactiveAllProjects();
+                vm.toggleProject(vm.getProjectList()[projectKey]);
                 vm.getProjectList()[projectKey].isActive = true;
               });
           }

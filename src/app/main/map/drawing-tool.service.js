@@ -12,7 +12,8 @@
 
   /** @ngInject */
   function drawingToolsService($log, $mdToast, $rootScope, $timeout, ol, firebaseReferenceService,
-      layerDefinitionsService, firebaseLayerService, mapService, tooltipMeasurementService, olUserLayerService) {
+      layerDefinitionsService, firebaseLayerService, mapService, tooltipMeasurementService,
+      olUserLayerService, olLayerGroupService) {
     var service = {
       init: init,
       deactivateAllDrawingTools: deactivateAllDrawingTools,
@@ -75,7 +76,8 @@
      * @param {Object}  Layer object (from layerDefinitionsService)
      */
     function setVisibleDrawingToolLayer(layer) {
-      layer.olLayer.setVisible(layer.checked);
+      var drawingLayer = olLayerGroupService.getActiveLayerByKey(layer.key, true);
+      drawingLayer.olLayer.setVisible(layer.checked);
       olUserLayerService.clearSelectedFeatures();
     }
 
@@ -85,6 +87,8 @@
      * @param  {Object} Layer object (from layerDefinitionsService)
      */
     function activateDrawingTool(layer) {
+      var drawingLayer = olLayerGroupService.getActiveLayerByKey(layer.key, true);
+
       $log.debug('activate', layer);
 
       angular.forEach(service.drawingLayers, deactivateDrawingTool);
@@ -92,7 +96,7 @@
       layer.active = true;
 
       layer.draw = new ol.interaction.Draw({
-        source: layer.olLayer.getSource(),
+        source: drawingLayer.olLayer.getSource(),
         type: layer.type,
         style: new ol.style.Style({
           fill: new ol.style.Fill({
@@ -112,9 +116,9 @@
       });
 
       mapService.getMap().addInteraction(layer.draw);
-      tooltipMeasurementService.addTooltip(layer.olLayer, layer.draw);
+      tooltipMeasurementService.addTooltip(drawingLayer.olLayer, layer.draw);
 
-      olUserLayerService.focusLayer(layer.olLayer);
+      olUserLayerService.focusLayer(drawingLayer.olLayer);
       olUserLayerService.disableInteractions();
 
       $mdToast.show({
@@ -123,7 +127,7 @@
         position: 'top right'
       });
 
-      layer.olLayer.setVisible(true);
+      drawingLayer.olLayer.setVisible(true);
     }
 
     /**
@@ -131,16 +135,17 @@
      * @param  {Object} Layer object (from layerDefinitionsService)
      */
     function deactivateDrawingTool(layer) {
+      var drawingLayer = olLayerGroupService.getActiveLayerByKey(layer.key, true);
       $log.debug('deactivate', layer);
 
       if (layer.active) {
-        firebaseLayerService.saveDrawingLayers([layer]);
+        firebaseLayerService.saveDrawingLayers([drawingLayer]);
 
         layer.active = false;
         mapService.getMap().removeInteraction(layer.draw);
         delete layer.draw;
 
-        olUserLayerService.unfocusLayer(layer.olLayer);
+        olUserLayerService.unfocusLayer(drawingLayer.olLayer);
         olUserLayerService.enableInteractions();
       }
 

@@ -7,7 +7,7 @@
 
   /** @ngInject */
   function firebaseLayerService(ol, $q,
-      firebaseReferenceService, layerDefinitionsService, messageService) {
+      firebaseReferenceService, messageService, activeProjectService) {
 
     var service = {
       saveDrawingLayers: saveDrawingLayers,
@@ -19,30 +19,36 @@
     //////////////// PUBLIC ////////////////
 
     function saveDrawingLayers(layersList) {
-      return _saveLayer(layersList, firebaseReferenceService.getUserDrawingLayersRef());
+      return _saveLayer(layersList, "drawing");
     }
 
     function saveFarmLayers(layersList) {
-      return _saveLayer(layersList, firebaseReferenceService.getUserFarmLayersRef());
+      return _saveLayer(layersList, "farm");
     }
 
     //////////////// PRIVATE ////////////////
 
-    function _saveLayer(layersList, firebaseRef) {
+    function _saveLayer(layersList, layerGroupName) {
       var deferred = $q.defer();
 
-      var payload = {};
       var format = new ol.format.GeoJSON();
+      var payload = {};
 
-      angular.forEach(layersList, function(layer){
-        payload[layer.key] = angular.copy(format.writeFeaturesObject(layer.olLayer.getSource().getFeatures()));
+      angular.forEach(layersList, function(layer) {
+        payload[layer.key] = angular.copy(
+          format.writeFeaturesObject(layer.olLayer.getSource().getFeatures())
+        );
       });
 
-      firebaseRef.update(payload)
-        .then(function(){
-          deferred.resolve();
-        })
-        .catch(function(error){
+      var promise = firebaseReferenceService.getUserProjectsRef()
+        .child(activeProjectService.getActiveProjectKey())
+        .child("layers")
+        .child(layerGroupName)
+        .update(payload);
+
+      promise
+        .then(deferred.resolve)
+        .catch(function(error) {
           deferred.reject(error);
           messageService.error(error);
         });
