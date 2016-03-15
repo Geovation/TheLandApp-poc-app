@@ -37,12 +37,11 @@
       _initPresenceAndEmail();
       //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       function _initPresenceAndEmail() {
-        // TODO: UID from current loggedin user
+
         firebaseReferenceService.getUserEmailRef().once("value", function(email) {
           vm.mapOwner = email.val();
         });
 
-        // TODO: UID from current loggedin user
         firebaseReferenceService.getUserPresence().on("value", function(presence) {
           $timeout(function() {
             vm.usersAccedingCurrentMap = [];
@@ -54,7 +53,7 @@
               var userWatching = {
                 color: colorsAssigned[key],
                 email: value.email,
-                initials: "AS"
+                initials: value.email.substr(0,2).toUpperCase()
               };
               vm.usersAccedingCurrentMap.push(userWatching);
             });
