@@ -48,7 +48,9 @@
 
             angular.forEach(presence.val(), function(value,key){
               if (!colorsAssigned[key]) {
-                colorsAssigned[key] = COLORS[(colourIndex++)%COLORS.length];
+                // give me the next color from COLORS
+                colorsAssigned[key] = COLORS[colourIndex];
+                colourIndex = (colourIndex + 1) % COLORS.length;
               }
               var userWatching = {
                 color: colorsAssigned[key],
@@ -60,7 +62,7 @@
           });
         });
 
-      } // _initData
+      } // _initPresenceAndEmail
 
       function toggleLayersPanel () {
         $log.debug('toggleLayersPanel');
