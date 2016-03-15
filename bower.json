@@ -20,7 +20,7 @@
   "overrides": {
     "openlayers": {
       "main": [
-        "ol-debug.js",
+        "ol.js",
         "ol.css"
       ]
     }
