@@ -19,7 +19,7 @@
         controller: 'MainController',
         controllerAs: 'main',
         resolve: {
-          uid: function(loginService) {return loginService.getUid();}
+          uid: function(loginService) {return loginService.getRouteUid();}
         }
       })
       .otherwise({

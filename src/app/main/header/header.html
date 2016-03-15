@@ -18,7 +18,7 @@
 
         <div layout-padding style="background: {{user.color}}; border-radius: 50%" ng-repeat="user in vmHeader.usersAccedingCurrentMap">
           {{user.initials}}
-          <md-tooltip>{{user.watcher.email}}</md-tooltip>
+          <md-tooltip>{{user.email}}</md-tooltip>
         </div>
 
         <span flex></span>
@@ -28,7 +28,7 @@
           <md-tooltip>Map owner: {{vmHeader.mapOwner}}</md-tooltip>
         </div>
 
-        <md-button class="md-icon-button" ng-if="indexVm.authData" ng-click="vmHeader.shareDialog()">
+        <md-button class="md-icon-button" ng-if="indexVm.authData && !indexVm.authData.anonymous" ng-click="vmHeader.shareDialog()">
           <md-icon>share</md-icon>
           <md-tooltip>Share</md-tooltip>
         </md-button>
@@ -38,12 +38,12 @@
           <md-tooltip>Layers</md-tooltip>
         </md-button>
 
-        <md-button class="md-icon-button" ng-click="indexVm.logout()" ng-if="indexVm.authData">
+        <md-button class="md-icon-button" ng-click="indexVm.logout()" ng-if="indexVm.authData && !indexVm.authData.anonymous">
           <md-icon>exit_to_app</md-icon>
           <md-tooltip md-direction="left">Log out ({{indexVm.authData.password.email}})</md-tooltip>
         </md-button>
 
-        <md-button class="md-icon-button" ng-click="indexVm.login()" ng-if="!indexVm.authData">
+        <md-button class="md-icon-button" ng-click="indexVm.login()" ng-if="!indexVm.authData || indexVm.authData.anonymous">
           <md-icon>account_box</md-icon>
           <md-tooltip md-direction="left">Log in</md-tooltip>
         </md-button>

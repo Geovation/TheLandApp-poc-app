@@ -30,7 +30,7 @@
     }
 
     function _setGAUserID(authData) {
-      var uid = authData ? authData.uid : null;
+      var uid = (authData  && !authData.anonymous) ? authData.uid : null;
       $log.debug("GA userId : " + uid);
       ga('set', 'userId', uid);
       if (uid) {
