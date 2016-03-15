@@ -16,7 +16,8 @@
       toggleGroupVisibility: toggleGroupVisibility,
       getActiveLayerGroup: getActiveLayerGroup,
       getBaseFarmLayerGroup: getBaseFarmLayerGroup,
-      getActiveLayerByKey: getActiveLayerByKey
+      getActiveLayerByKey: getActiveLayerByKey,
+      getLayerDefintions: function() { return _layerDefinitions; }
     };
 
     var _groupCollection = {};
