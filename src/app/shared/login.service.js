@@ -6,7 +6,7 @@
     .factory('loginService', loginService);
 
   /** @ngInject */
-  function loginService($q, $rootScope, $log, $location, $window, $route, firebaseReferenceService, messageService) {
+  function loginService($q, $log, $location, $window, $route, firebaseReferenceService, messageService) {
     var _authDataDefer = $q.defer();
     var service = {
       registerAuthData: function(authData) {_authDataDefer.resolve(authData);},

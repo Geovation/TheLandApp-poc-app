@@ -18,7 +18,7 @@
 
         <div layout-padding style="background: {{user.color}}; border-radius: 50%" ng-repeat="user in vmHeader.usersAccedingCurrentMap">
           {{user.initials}}
-          <md-tooltip>{{user.email}}</md-tooltip>
+          <md-tooltip>{{user.watcher.email}}</md-tooltip>
         </div>
 
         <span flex></span>
