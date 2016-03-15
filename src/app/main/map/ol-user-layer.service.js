@@ -163,16 +163,16 @@
       loginService.getUid().then(function(uid){
         if (authData || uid) {
           firebaseReferenceService.getUserProjectsRef().once("value", function(projectCollectionSnapshot) {
-            var layersCollection = [];
+            var layerCollection = [];
 
             projectCollectionSnapshot.forEach(function(projectSnapshot) {
-              angular.extend(layersCollection, createLayers(projectSnapshot));
+              layerCollection = layerCollection.concat(createLayers(projectSnapshot));
             });
 
             mapService.fitExtent(getExtent());
 
             // select + modify interactions
-            addControlInteractions(layersCollection);
+            addControlInteractions(layerCollection);
 
             $timeout(function() {
               service.layersCreated = true;
@@ -239,10 +239,11 @@
     function getDrawingFeatures(vectorLayers) {
       var features = new ol.Collection();
 
-      vectorLayers.forEach(function(layer) {
-        angular.forEach(olLayerGroupService.getActiveLayerGroup().drawingLayers, function(drawingLayer) {
-          if (layer === drawingLayer.olLayer) {
-            features.extend(layer.getSource().getFeatures());
+      angular.forEach(olLayerGroupService.getLayerDefintions(), function(layerDefinitions) {
+        angular.forEach(layerDefinitions.drawingLayers, function(drawingLayer) {
+          var index = vectorLayers.indexOf(drawingLayer.olLayer);
+          if (index > -1) {
+            features.extend(vectorLayers[index].getSource().getFeatures());
           }
         });
       });
