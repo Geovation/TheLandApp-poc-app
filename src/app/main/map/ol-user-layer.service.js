@@ -162,7 +162,7 @@
     function loadUserLayersAndEnableEditing(authData) {
 
       loginService.getRouteUid().then(function(uid){
-        if (authData || uid) {
+        if ((authData && !authData.anonymous)|| uid) {
           firebaseReferenceService.getUserProjectsRef().once("value", function(projectCollectionSnapshot) {
             var layersCollection = [];
 
