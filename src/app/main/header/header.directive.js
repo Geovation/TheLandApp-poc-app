@@ -28,14 +28,41 @@
       vm.querySearch = querySearch;
       vm.shareDialog = shareDialog;
       vm.mapOwner = "";
+      vm.usersAccedingCurrentMap = [];
 
-      _initData();
-      /////////
-      function _initData() {
-        firebaseReferenceService.getUserInfoRef().child("email").on("value", function(email) {
+      var colorsAssigned = {};
+      var colourIndex = 0;
+      var COLORS = ['Aqua', 'Green', 'Yellow', 'Magenta', 'Red', 'White', 'Blue' ];
+
+      _initPresenceAndEmail();
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      function _initPresenceAndEmail() {
+
+        firebaseReferenceService.getUserEmailRef().once("value", function(email) {
           vm.mapOwner = email.val();
         });
-      }
+
+        firebaseReferenceService.getUserPresence().on("value", function(presence) {
+          $timeout(function() {
+            vm.usersAccedingCurrentMap = [];
+
+            angular.forEach(presence.val(), function(value,key){
+              if (!colorsAssigned[key]) {
+                // give me the next color from COLORS
+                colorsAssigned[key] = COLORS[colourIndex];
+                colourIndex = (colourIndex + 1) % COLORS.length;
+              }
+              var userWatching = {
+                color: colorsAssigned[key],
+                email: value.email,
+                initials: value.email.substr(0,2).toUpperCase()
+              };
+              vm.usersAccedingCurrentMap.push(userWatching);
+            });
+          });
+        });
+
+      } // _initPresenceAndEmail
 
       function toggleLayersPanel () {
         $log.debug('toggleLayersPanel');
@@ -51,7 +78,7 @@
         $rootScope.$broadcast('address-selected', address);
       }
 
-      // returns a primise as it is async.
+      // returns a promise as it is async.
       function querySearch(query) {
         $log.debug("Query search:" + query);
 

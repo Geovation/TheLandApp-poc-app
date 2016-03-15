@@ -16,11 +16,23 @@
       getUserFarmLayersRef: getUserFarmLayersRef,
       getUserUIDRef: getUserUIDRef,
       setUid: setUid,
-      getUserProjectsRef: getUserProjectsRef
+      getUserProjectsRef: getUserProjectsRef,
+      getUserPresence: getUserPresence,
+      getUserEmailRef: getUserEmailRef
     };
 
     return service;
     ////////// public functions //////////////
+
+    function getUserPresence(uid) {
+      return getUserInfoRef(uid)
+        .child('presence');
+    }
+
+    function getUserEmailRef(uid) {
+      return getUserInfoRef(uid)
+        .child('email');
+    }
 
     function getUserInfoRef(uid) {
       return getUserUIDRef(uid)

@@ -6,16 +6,21 @@
     .factory('loginService', loginService);
 
   /** @ngInject */
-  function loginService($q, $rootScope, $log, $location, $window, $route, firebaseReferenceService, messageService) {
+  function loginService($q, $log, $location, $window, $route, firebaseReferenceService, messageService) {
     var _authDataDefer = $q.defer();
     var service = {
       registerAuthData: function(authData) {_authDataDefer.resolve(authData);},
       onceAuthData: function() {return _authDataDefer.promise;},
-      getUid: getUid,
+      getRouteUid: getRouteUid,
       checkUser: checkUser,
       login: login,
       signup: signup
     };
+
+    // we need a user. If the user is not logged in, use an anonymous one.
+    if (!firebaseReferenceService.ref.getAuth()) {
+      firebaseReferenceService.ref.authAnonymously();
+    }
 
     return service;
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -26,7 +31,7 @@
      */
     function checkUser() {
       service.onceAuthData().then(function(authData){
-        if (authData) {
+        if (authData && !authData.anonymous) {
           $location.path('/main/' + authData.uid);
         } else { // authData == null
           $location.path('/login');
@@ -35,7 +40,7 @@
     }
 
     // the uid in the route must exist
-    function getUid() {
+    function getRouteUid() {
       var deferred = $q.defer();
 
       var uid = $route.current.params.uid;

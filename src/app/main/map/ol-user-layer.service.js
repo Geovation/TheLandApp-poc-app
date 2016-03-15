@@ -160,8 +160,9 @@
      * @param  {Object} Firebase auth data object
      */
     function loadUserLayersAndEnableEditing(authData) {
-      loginService.getUid().then(function(uid){
-        if (authData || uid) {
+
+      loginService.getRouteUid().then(function(uid){
+        if ((authData && !authData.anonymous)|| uid) {
           firebaseReferenceService.getUserProjectsRef().once("value", function(projectCollectionSnapshot) {
             var layersCollection = [];
 

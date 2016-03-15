@@ -13,24 +13,39 @@
                 No addresses matching "{{vmHeader.searchText}}" were found.
             </md-not-found>
         </md-autocomplete>
+
         <span flex></span>
 
-        <span>{{vmHeader.mapOwner}}</span>
+        <div layout-padding style="background: {{user.color}}; border-radius: 50%" ng-repeat="user in vmHeader.usersAccedingCurrentMap">
+          {{user.initials}}
+          <md-tooltip>{{user.email}}</md-tooltip>
+        </div>
 
-        <md-button class="narrow" ng-if="indexVm.authData" ng-click="vmHeader.shareDialog()">
-          <md-icon>group</md-icon>Share
+        <span flex></span>
+
+        <div>
+          <md-icon>person</md-icon>
+          <md-tooltip>Map owner: {{vmHeader.mapOwner}}</md-tooltip>
+        </div>
+
+        <md-button class="md-icon-button" ng-if="indexVm.authData && !indexVm.authData.anonymous" ng-click="vmHeader.shareDialog()">
+          <md-icon>share</md-icon>
+          <md-tooltip>Share</md-tooltip>
         </md-button>
 
-        <md-button class="narrow" ng-click="vmHeader.toggleLayersPanel()">
-          <md-icon>filter_none</md-icon>Layers
+        <md-button class="md-icon-button" ng-click="vmHeader.toggleLayersPanel()">
+          <md-icon>filter_none</md-icon>
+          <md-tooltip>Layers</md-tooltip>
         </md-button>
 
-        <md-button ng-click="indexVm.logout()" ng-if="indexVm.authData">
-          <md-icon>exit_to_app</md-icon>Log out ({{indexVm.authData.password.email}})
+        <md-button class="md-icon-button" ng-click="indexVm.logout()" ng-if="indexVm.authData && !indexVm.authData.anonymous">
+          <md-icon>exit_to_app</md-icon>
+          <md-tooltip md-direction="left">Log out ({{indexVm.authData.password.email}})</md-tooltip>
         </md-button>
 
-        <md-button ng-click="indexVm.login()" ng-if="!indexVm.authData">
-          <md-icon>account_box</md-icon>Log in
+        <md-button class="md-icon-button" ng-click="indexVm.login()" ng-if="!indexVm.authData || indexVm.authData.anonymous">
+          <md-icon>account_box</md-icon>
+          <md-tooltip md-direction="left">Log in</md-tooltip>
         </md-button>
 
     </div>

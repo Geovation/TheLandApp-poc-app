@@ -28,7 +28,7 @@
     function _healUserData(authData) {
       vm.authData = authData;
 
-      if (authData) {
+      if (authData && !authData.anonymous) {
         _saveUserConnectedTime(authData)
           .then(_writeUserEmail)
           .catch(function(error) {
