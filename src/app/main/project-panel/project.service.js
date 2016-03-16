@@ -95,8 +95,7 @@
         deferred.reject("A base farm layer already exists");
       } else {
         var payload = {
-          projectName: projectName,
-          isBaseFarmProject: !!isBaseFarmProject
+          projectName: projectName
         };
 
         var projectListRef = firebaseReferenceService.getUserProjectsRef();
@@ -106,7 +105,6 @@
         var projectRef = isBaseFarmProject ? projectListRef.child("myFarm") : projectListRef.push();
 
         // create layers and group for new project
-
         projectRef.set(payload)
           .then(function() {
             projectRef.once("value", olUserLayerService.createLayers);
