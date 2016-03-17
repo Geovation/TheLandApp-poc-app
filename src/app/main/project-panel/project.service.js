@@ -62,7 +62,6 @@
 
       // show the ol group
       olLayerGroupService.toggleGroupVisibility(toggledProject.key, toggledProject.isActive);
-
     }
 
     /**
