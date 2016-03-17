@@ -93,6 +93,11 @@
         });
 
         _groupCollection[groupName].setVisible(isVisible);
+
+        // hide all of the farm layers (lr/rlr/pif) when toggling
+        angular.forEach(_layerDefinitions.myFarm.farmLayers, function(farmLayer) {
+          farmLayer.olLayer.setVisible(false);
+        });
       }
     }
   }
