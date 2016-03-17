@@ -30,8 +30,6 @@
      * Initializes the service by loading project details from the db.
      */
     function init() {
-      var isInitialized = false;
-
       firebaseReferenceService
         .getUserProjectsRef()
         .on("value", function(projectList) {
@@ -44,13 +42,7 @@
               value.key = key;
             });
 
-            if (!isInitialized && getBaseFarmProject()) {
-              getBaseFarmProject().isActive = true;
-
-              activeProjectService.setActiveProjectKey(getActiveProject().key);
-            }
-
-            isInitialized = true;
+            toggleProject(getActiveProject() || getBaseFarmProject());
           }
         });
     }
@@ -62,16 +54,15 @@
      */
     function toggleProject(toggledProject) {
       angular.forEach(_projectList, function(project) {
-        if (project !== toggledProject) {
-          project.isActive = false;
-        }
+        project.isActive = false;
       });
 
+      toggledProject.isActive = true;
+      activeProjectService.setActiveProjectKey(toggledProject.key);
+
+      // show the ol group
       olLayerGroupService.toggleGroupVisibility(toggledProject.key, toggledProject.isActive);
 
-      var activeProjectKey = toggledProject.isActive ? toggledProject.key : '';
-
-      activeProjectService.setActiveProjectKey(activeProjectKey);
     }
 
     /**
@@ -79,7 +70,7 @@
      * @return {Object} Project object
      */
     function getActiveProject() {
-      return _getProjectByAttribute("isActive", true);
+      return _projectList[activeProjectService.getActiveProjectKey()];
     }
 
     /**
@@ -104,8 +95,7 @@
         deferred.reject("A base farm layer already exists");
       } else {
         var payload = {
-          projectName: projectName,
-          isBaseFarmProject: !!isBaseFarmProject
+          projectName: projectName
         };
 
         var projectListRef = firebaseReferenceService.getUserProjectsRef();
@@ -115,7 +105,6 @@
         var projectRef = isBaseFarmProject ? projectListRef.child("myFarm") : projectListRef.push();
 
         // create layers and group for new project
-
         projectRef.set(payload)
           .then(function() {
             projectRef.once("value", olUserLayerService.createLayers);
@@ -128,27 +117,6 @@
       }
 
       return deferred.promise;
-    }
-
-    /////////////////////////// PRIVATE ///////////////////////////
-
-    /**
-     * Finds a project based on a specific attribute value.
-     *
-     * @param  {String} attributeName  Attribute name (key)
-     * @param  {mixed}  attributeValue Attribute value
-     * @return {Object}                Found project or undefined
-     */
-    function _getProjectByAttribute(attributeName, attributeValue) {
-      var foundProject;
-
-      angular.forEach(_projectList, function(project) {
-        if (project[attributeName] === attributeValue && !foundProject) {
-          foundProject = project;
-        }
-      });
-
-      return foundProject;
     }
   }
 

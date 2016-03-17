@@ -87,11 +87,13 @@
      * @param  {Boolean} isVisible Whether the group is visible
      */
     function toggleGroupVisibility(groupName, isVisible) {
-      angular.forEach(_groupCollection, function(group) {
-        group.setVisible(false);
-      });
+      if (_groupCollection[groupName]) {
+        angular.forEach(_groupCollection, function(group) {
+          group.setVisible(false);
+        });
 
-      _groupCollection[groupName].setVisible(isVisible);
+        _groupCollection[groupName].setVisible(isVisible);
+      }
     }
   }
 })();
