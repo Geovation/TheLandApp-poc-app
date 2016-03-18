@@ -1,4 +1,5 @@
 # The Land App PoC
+* [![Circle CI](https://circleci.com/gh/TheLandApp/poc-app.svg?style=svg)](https://circleci.com/gh/TheLandApp/poc-app)
 
 ## Architecture
 * [Design docs](docs/design.md)
