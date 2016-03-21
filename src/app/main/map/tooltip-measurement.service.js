@@ -41,7 +41,8 @@
       measureTooltip = new ol.Overlay({
         element: measureTooltipNode[0],
         offset: [0, -15],
-        positioning: "bottom-center"
+        positioning: "bottom-center",
+        stopEvent: false
       });
 
       map.addOverlay(measureTooltip);
