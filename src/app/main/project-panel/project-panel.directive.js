@@ -24,7 +24,7 @@
       var vm = this;
 
       vm.getProjectList = projectService.getProjectList;
-      vm.toggleProject = projectService.toggleProject;
+      vm.setProjectVisibility = projectService.setProjectVisibility;
       vm.openMenu = openMenu;
       vm.displayNewProjectModal = displayNewProjectModal;
 
@@ -76,9 +76,10 @@
             projectService
               .createProject(dialogVm.project.name)
               .then(function(project) {
+                project.isActive = true;
                 $mdDialog.hide();
                 dialogVm.showConfirmationDialog();
-                projectService.toggleProject(project);
+                projectService.setProjectVisibility(project);
               });
           }
 

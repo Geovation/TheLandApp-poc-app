@@ -11,7 +11,7 @@
     .factory('drawingToolsService', drawingToolsService);
 
   /** @ngInject */
-  function drawingToolsService($log, $mdToast, $rootScope, $timeout, ol, firebaseReferenceService,
+  function drawingToolsService($log, $mdToast, ol,
       layerDefinitionsService, firebaseLayerService, mapService, tooltipMeasurementService,
       olUserLayerService, olLayerGroupService) {
     var service = {

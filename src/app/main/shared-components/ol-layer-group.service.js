@@ -10,7 +10,7 @@
     .factory('olLayerGroupService', olLayerGroupService);
 
   /** @ngInject */
-  function olLayerGroupService(ol, $rootScope, mapService, activeProjectService) {
+  function olLayerGroupService(ol, mapService, activeProjectService) {
     var service = {
       createLayerGroup: createLayerGroup,
       toggleGroupVisibility: toggleGroupVisibility,

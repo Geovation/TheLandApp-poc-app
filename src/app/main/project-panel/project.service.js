@@ -9,13 +9,13 @@
     .factory('projectService', projectService);
 
   /** @ngInject */
-  function projectService($q, $timeout,
+  function projectService($q,
     firebaseReferenceService, messageService, olLayerGroupService, olUserLayerService, activeProjectService) {
     var service = {
       init: init,
       getProjectList: function() { return _projectList; },
       createProject: createProject,
-      toggleProject: toggleProject,
+      setProjectVisibility: setProjectVisibility,
       getActiveProject: getActiveProject,
       getBaseFarmProject: getBaseFarmProject
     };
@@ -42,7 +42,9 @@
               value.key = key;
             });
 
-            toggleProject(getActiveProject() || getBaseFarmProject());
+            var myFarm = getBaseFarmProject();
+            myFarm.isActive = true;
+            setProjectVisibility(myFarm);
           }
         });
     }
@@ -52,13 +54,25 @@
      *
      * @param {Object} toggledProject Project to toggle
      */
-    function toggleProject(toggledProject) {
-      angular.forEach(_projectList, function(project) {
-        project.isActive = false;
-      });
+    function setProjectVisibility(toggledProject) {
+      if (toggledProject.key !== "myFarm") {
+        // turn other project off
+        angular.forEach(_projectList, function (project) {
+          if (project.key !== "myFarm" && project.key !== toggledProject.key ) {
+            project.isActive = false;
+          }
+        });
+      }
 
-      toggledProject.isActive = true;
-      activeProjectService.setActiveProjectKey(toggledProject.key);
+      // active project is the current one, the farm or none
+      var activeProjectKey = null;
+      if (toggledProject.isActive) {
+        activeProjectKey = toggledProject.key;
+      }
+      else if (_projectList.myFarm.isActive) {
+        activeProjectKey = _projectList.myFarm.key;
+      }
+      activeProjectService.setActiveProjectKey(activeProjectKey);
 
       // show the ol group
       olLayerGroupService.toggleGroupVisibility(toggledProject.key, toggledProject.isActive);
