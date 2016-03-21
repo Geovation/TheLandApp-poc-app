@@ -13,6 +13,7 @@
       ref: firebaseRef,
       getUserInfoRef: getUserInfoRef,
       getUserDrawingLayersRef: getUserDrawingLayersRef,
+      getUserMyFarmRef: getUserMyFarmRef,
       getUserFarmLayersRef: getUserFarmLayersRef,
       getUserUIDRef: getUserUIDRef,
       setUid: setUid,
@@ -50,9 +51,14 @@
         .child("layers/drawing");
     }
 
-    function getUserFarmLayersRef(uid) {
+    function getUserMyFarmRef(uid) {
       return getUserProjectsRef(uid)
-        .child("myFarm/layers/farm");
+        .child("myFarm");
+    }
+
+    function getUserFarmLayersRef(uid) {
+      return getUserMyFarmRef(uid)
+        .child("layers/farm");
     }
 
     function getUserUIDRef(uid) {
