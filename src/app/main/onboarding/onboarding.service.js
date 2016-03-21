@@ -35,7 +35,6 @@
     // PUBLIC //////////////////////////////////////////////////////////////////
     function init() {
       loginService.onceAuthData().then(nextStep);
-      projectService.init();
 
       $rootScope.$on('toggle-national-data-layer', function (e, layer) {
         if (_isOnboardingCompleted && layer.key === "lrVectors" && layer.checked) {

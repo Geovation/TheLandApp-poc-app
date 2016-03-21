@@ -87,7 +87,11 @@
      * @param  {Boolean} isVisible Whether the group is visible
      */
     function setGroupVisibility(groupName, isVisible) {
-      _groupCollection[groupName].setVisible(isVisible);
+      // TODO: remove this if. _groupCollection[groupName] could be undefined as there is some
+      // async initialization done in the wrong place.
+      if (_groupCollection[groupName]) {
+        _groupCollection[groupName].setVisible(isVisible);
+      }
 
       // // hide all of the farm layers (lr/rlr/pif) when toggling
       // angular.forEach(_layerDefinitions.myFarm.farmLayers, function(farmLayer) {
