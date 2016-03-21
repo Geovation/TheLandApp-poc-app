@@ -28,8 +28,6 @@
       vm.openMenu = openMenu;
       vm.displayNewProjectModal = displayNewProjectModal;
 
-      projectService.init();
-
       /**
        * Opens the projects menu panel.
        *

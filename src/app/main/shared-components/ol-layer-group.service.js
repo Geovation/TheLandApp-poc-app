@@ -13,7 +13,7 @@
   function olLayerGroupService(ol, mapService, activeProjectService) {
     var service = {
       createLayerGroup: createLayerGroup,
-      toggleGroupVisibility: toggleGroupVisibility,
+      setGroupVisibility: setGroupVisibility,
       getActiveLayerGroup: getActiveLayerGroup,
       getBaseFarmLayerGroup: getBaseFarmLayerGroup,
       getActiveLayerByKey: getActiveLayerByKey,
@@ -86,19 +86,13 @@
      * @param  {String}  groupName Name/key of the project/group
      * @param  {Boolean} isVisible Whether the group is visible
      */
-    function toggleGroupVisibility(groupName, isVisible) {
-      if (_groupCollection[groupName]) {
-        angular.forEach(_groupCollection, function(group) {
-          group.setVisible(false);
-        });
+    function setGroupVisibility(groupName, isVisible) {
+      _groupCollection[groupName].setVisible(isVisible);
 
-        _groupCollection[groupName].setVisible(isVisible);
-
-        // hide all of the farm layers (lr/rlr/pif) when toggling
-        angular.forEach(_layerDefinitions.myFarm.farmLayers, function(farmLayer) {
-          farmLayer.olLayer.setVisible(false);
-        });
-      }
+      // // hide all of the farm layers (lr/rlr/pif) when toggling
+      // angular.forEach(_layerDefinitions.myFarm.farmLayers, function(farmLayer) {
+      //   farmLayer.olLayer.setVisible(false);
+      // });
     }
   }
 })();

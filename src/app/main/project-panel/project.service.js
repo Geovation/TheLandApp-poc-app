@@ -32,7 +32,7 @@
     function init() {
       firebaseReferenceService
         .getUserProjectsRef()
-        .on("value", function(projectList) {
+        .once("value", function(projectList) {
           _projectList = {};
 
           if (projectList.exists()) {
@@ -60,6 +60,7 @@
         angular.forEach(_projectList, function (project) {
           if (project.key !== "myFarm" && project.key !== toggledProject.key ) {
             project.isActive = false;
+            olLayerGroupService.setGroupVisibility(project.key, project.isActive);
           }
         });
       }
@@ -75,7 +76,7 @@
       activeProjectService.setActiveProjectKey(activeProjectKey);
 
       // show the ol group
-      olLayerGroupService.toggleGroupVisibility(toggledProject.key, toggledProject.isActive);
+      olLayerGroupService.setGroupVisibility(toggledProject.key, toggledProject.isActive);
     }
 
     /**

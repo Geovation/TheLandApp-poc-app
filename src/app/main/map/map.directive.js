@@ -7,7 +7,7 @@
 
   /** @ngInject */
   function laMap($log, ol,
-      drawingToolsService, layerDefinitionsService, mapService, olExternalLayerService, onboardingService, olUserLayerService) {
+      drawingToolsService, layerDefinitionsService, mapService, olExternalLayerService, onboardingService, olUserLayerService, projectService) {
 
     var directive = {
       priority: 2,
@@ -25,7 +25,8 @@
     function linkFunc(scope) {
       mapService.init();
       drawingToolsService.init();
-      olUserLayerService.init();
+      olUserLayerService.init()
+        .then(projectService.init);
 
       // build and cache all layers
       angular.forEach(layerDefinitionsService, function(layerList, layerListName) {
