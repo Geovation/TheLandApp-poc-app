@@ -112,7 +112,7 @@
           break;
 
         case _stepNames.lrFeatures:
-          if (!projectService.getBaseFarmProject()) {
+          if (!projectService.getMyFarmProject()) {
             projectService
               .createProject("My farm", true)
               .then(toggleLrLayers);

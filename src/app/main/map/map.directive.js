@@ -84,7 +84,9 @@
 
       ///////////////////////////////
       function isDrawingEnabled() {
-        return olUserLayerService.layersCreated && onboardingService.isOnboardingCompleted();
+        return olUserLayerService.layersCreated &&
+          onboardingService.isOnboardingCompleted() &&
+          projectService.isThereAnyProjectActive();
       }
 
     }
