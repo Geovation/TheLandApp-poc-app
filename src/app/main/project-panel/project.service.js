@@ -31,6 +31,8 @@
      * Initializes the service by loading project details from the db.
      */
     function init() {
+      var defer = $q.defer();
+
       firebaseReferenceService
         .getUserProjectsRef()
         .on("value", function(projectList) {
@@ -48,11 +50,13 @@
             var myFarm = getMyFarmProject();
             myFarm.isActive = myFarm.isActive === false ? false : true;
             setProjectVisibility(myFarm);
+
+            defer.resolve();
           }
         });
 
       // TODO: manage the case when the current project is deleted by another user.
-
+      return defer.promise;
     }
 
     function isThereAnyProjectActive() {

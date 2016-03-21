@@ -7,7 +7,7 @@
 
   /** @ngInject */
   function laMap($log, ol,
-      drawingToolsService, layerDefinitionsService, mapService, olExternalLayerService, onboardingService, olUserLayerService, projectService) {
+      drawingToolsService, layerDefinitionsService, mapService, messageService, olExternalLayerService, onboardingService, olUserLayerService, projectService) {
 
     var directive = {
       priority: 2,
@@ -23,10 +23,13 @@
 
     /** @ngInject */
     function linkFunc(scope) {
+      messageService.loading();
+
       mapService.init();
       drawingToolsService.init();
       olUserLayerService.init()
-        .then(projectService.init);
+        .then(projectService.init)
+        .then(messageService.hide);
 
       // build and cache all layers
       angular.forEach(layerDefinitionsService, function(layerList, layerListName) {
@@ -72,6 +75,10 @@
           mapService.fitExtent(extent);
         }
       });
+
+      ////////////////////
+
+
 
     }
 
