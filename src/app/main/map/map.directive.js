@@ -78,10 +78,8 @@
     function Controller() {
       var vm = this;
       vm.editToggleDrawingTool = drawingToolsService.editToggleDrawingTool;
-      vm.deactivateAllDrawingTools = drawingToolsService.deactivateAllDrawingTools;
       vm.drawingLayers = drawingToolsService.drawingLayers;
       vm.isDrawingEnabled = isDrawingEnabled;
-      vm.isAnyDrawingToolActive = drawingToolsService.isAnyDrawingToolActive;
       vm.isOnboardingCompleted = onboardingService.isOnboardingCompleted;
 
       ///////////////////////////////
