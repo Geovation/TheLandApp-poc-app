@@ -7,7 +7,7 @@
 
   /** @ngInject */
   function laMap($log, ol,
-      drawingToolsService, layerDefinitionsService, mapService, olExternalLayerService, onboardingService, olUserLayerService) {
+      drawingToolsService, layerDefinitionsService, mapService, olExternalLayerService, onboardingService, olUserLayerService, projectService) {
 
     var directive = {
       priority: 2,
@@ -25,7 +25,8 @@
     function linkFunc(scope) {
       mapService.init();
       drawingToolsService.init();
-      olUserLayerService.init();
+      olUserLayerService.init()
+        .then(projectService.init);
 
       // build and cache all layers
       angular.forEach(layerDefinitionsService, function(layerList, layerListName) {
@@ -77,15 +78,15 @@
     function Controller() {
       var vm = this;
       vm.editToggleDrawingTool = drawingToolsService.editToggleDrawingTool;
-      vm.deactivateAllDrawingTools = drawingToolsService.deactivateAllDrawingTools;
       vm.drawingLayers = drawingToolsService.drawingLayers;
       vm.isDrawingEnabled = isDrawingEnabled;
-      vm.isAnyDrawingToolActive = drawingToolsService.isAnyDrawingToolActive;
       vm.isOnboardingCompleted = onboardingService.isOnboardingCompleted;
 
       ///////////////////////////////
       function isDrawingEnabled() {
-        return olUserLayerService.layersCreated && onboardingService.isOnboardingCompleted();
+        return olUserLayerService.layersCreated &&
+          onboardingService.isOnboardingCompleted() &&
+          projectService.isThereAnyProjectActive();
       }
 
     }

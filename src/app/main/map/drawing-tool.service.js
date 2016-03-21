@@ -11,32 +11,19 @@
     .factory('drawingToolsService', drawingToolsService);
 
   /** @ngInject */
-  function drawingToolsService($log, $mdToast, $rootScope, $timeout, ol, firebaseReferenceService,
+  function drawingToolsService($log, $mdToast, ol,
       layerDefinitionsService, firebaseLayerService, mapService, tooltipMeasurementService,
       olUserLayerService, olLayerGroupService) {
     var service = {
       init: init,
-      deactivateAllDrawingTools: deactivateAllDrawingTools,
       drawingLayers: layerDefinitionsService.drawingLayers,
       editToggleDrawingTool: editToggleDrawingTool,
-      isAnyDrawingToolActive: isAnyDrawingToolActive,
       setVisibleDrawingToolLayer: setVisibleDrawingToolLayer
     };
 
     return service;
 
     //////////////////////////// PUBLIC ////////////////////////////
-
-    /**
-     * Deactivates all active drawing tools
-     */
-    function deactivateAllDrawingTools() {
-      angular.forEach(service.drawingLayers, function(drawingLayer){
-        if (drawingLayer.hasOwnProperty('draw')) {
-          deactivateDrawingTool(drawingLayer);
-        }
-      });
-    }
 
     /**
      * Toggles a specific drawing tool (called by the view when
@@ -53,22 +40,6 @@
 
     function init() {
       tooltipMeasurementService.init();
-    }
-
-    /**
-     * Checks if any drawing tool is currently active
-     * @return {Boolean}
-     */
-    function isAnyDrawingToolActive() {
-      var foundDraw = false;
-
-      angular.forEach(service.drawingLayers, function(drawingLayer) {
-        if (drawingLayer.hasOwnProperty('draw')) {
-          foundDraw = true;
-        }
-      });
-
-      return foundDraw;
     }
 
     /**

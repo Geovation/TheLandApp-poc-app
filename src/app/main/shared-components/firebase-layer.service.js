@@ -39,10 +39,8 @@
           format.writeFeaturesObject(layer.olLayer.getSource().getFeatures())
         );
       });
-
-      var promise = firebaseReferenceService.getUserProjectsRef()
-        .child(activeProjectService.getActiveProjectKey())
-        .child("layers")
+      var projectKey = activeProjectService.getActiveProjectKey();
+      var promise = firebaseReferenceService.getUserLayersRef(projectKey)
         .child(layerGroupName)
         .update(payload);
 

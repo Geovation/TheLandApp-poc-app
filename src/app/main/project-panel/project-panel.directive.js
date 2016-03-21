@@ -9,7 +9,7 @@
     .directive('laProjectPanel', projectPanel);
 
   /** @ngInject */
-  function projectPanel($mdBottomSheet, $mdDialog, $rootScope, projectService) {
+  function projectPanel($mdDialog, projectService) {
     var directive = {
       restrict: 'E',
       templateUrl: 'app/main/project-panel/project-panel.html',
@@ -24,11 +24,9 @@
       var vm = this;
 
       vm.getProjectList = projectService.getProjectList;
-      vm.toggleProject = projectService.toggleProject;
+      vm.setProjectVisibility = projectService.setProjectVisibility;
       vm.openMenu = openMenu;
       vm.displayNewProjectModal = displayNewProjectModal;
-
-      projectService.init();
 
       /**
        * Opens the projects menu panel.
@@ -70,16 +68,16 @@
           }
 
           /**
-           * Creates a new project in the database and toggles it.
+           * Creates a new project in the database and activate it.
            */
           function createProject() {
             projectService
               .createProject(dialogVm.project.name)
-              .then(function(projectKey) {
+              .then(function(project) {
+                project.isActive = true;
                 $mdDialog.hide();
                 dialogVm.showConfirmationDialog();
-                vm.toggleProject(vm.getProjectList()[projectKey]);
-                vm.getProjectList()[projectKey].isActive = true;
+                projectService.setProjectVisibility(project);
               });
           }
 

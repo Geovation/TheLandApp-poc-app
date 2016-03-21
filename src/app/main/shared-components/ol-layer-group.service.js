@@ -10,10 +10,10 @@
     .factory('olLayerGroupService', olLayerGroupService);
 
   /** @ngInject */
-  function olLayerGroupService(ol, $rootScope, mapService, activeProjectService) {
+  function olLayerGroupService(ol, mapService, activeProjectService) {
     var service = {
       createLayerGroup: createLayerGroup,
-      toggleGroupVisibility: toggleGroupVisibility,
+      setGroupVisibility: setGroupVisibility,
       getActiveLayerGroup: getActiveLayerGroup,
       getBaseFarmLayerGroup: getBaseFarmLayerGroup,
       getActiveLayerByKey: getActiveLayerByKey,
@@ -86,19 +86,17 @@
      * @param  {String}  groupName Name/key of the project/group
      * @param  {Boolean} isVisible Whether the group is visible
      */
-    function toggleGroupVisibility(groupName, isVisible) {
+    function setGroupVisibility(groupName, isVisible) {
+      // TODO: remove this if. _groupCollection[groupName] could be undefined as there is some
+      // async initialization done in the wrong place.
       if (_groupCollection[groupName]) {
-        angular.forEach(_groupCollection, function(group) {
-          group.setVisible(false);
-        });
-
         _groupCollection[groupName].setVisible(isVisible);
-
-        // hide all of the farm layers (lr/rlr/pif) when toggling
-        angular.forEach(_layerDefinitions.myFarm.farmLayers, function(farmLayer) {
-          farmLayer.olLayer.setVisible(false);
-        });
       }
+
+      // // hide all of the farm layers (lr/rlr/pif) when toggling
+      // angular.forEach(_layerDefinitions.myFarm.farmLayers, function(farmLayer) {
+      //   farmLayer.olLayer.setVisible(false);
+      // });
     }
   }
 })();

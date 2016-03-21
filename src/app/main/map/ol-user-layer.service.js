@@ -10,7 +10,7 @@
     .factory('olUserLayerService', olUserLayerService);
 
   /** @ngInject */
-  function olUserLayerService(ol, $rootScope, $timeout,
+  function olUserLayerService(ol, $q, $rootScope, $timeout,
     firebaseReferenceService, firebaseLayerService, layerDefinitionsService, loginService, mapService, olLayerGroupService) {
     var service = {
       init: init,
@@ -35,7 +35,7 @@
     ////////////////////////////// PUBLIC //////////////////////////////
 
     function init() {
-      loginService.onceAuthData().then(loadUserLayersAndEnableEditing);
+      return loginService.onceAuthData().then(loadUserLayersAndEnableEditing);
     }
 
     /**
@@ -160,6 +160,7 @@
      * @param  {Object} Firebase auth data object
      */
     function loadUserLayersAndEnableEditing(authData) {
+      var defer = $q.defer();
 
       loginService.getRouteUid().then(function(uid){
         if ((authData && !authData.anonymous)|| uid) {
@@ -177,10 +178,13 @@
 
             $timeout(function() {
               service.layersCreated = true;
+              defer.resolve();
             });
           });
         }
       });
+
+      return defer.promise;
     }
 
     /**
@@ -224,7 +228,7 @@
 
       // by default enable the myFarm project
       if (projectSnapshot.key() === "myFarm") {
-        olLayerGroupService.toggleGroupVisibility(projectSnapshot.key(), true);
+        olLayerGroupService.setGroupVisibility(projectSnapshot.key(), true);
       }
 
       return vectorLayers;
