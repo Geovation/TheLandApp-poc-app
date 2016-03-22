@@ -11,11 +11,25 @@
 
     var service = {
       error: errorFn,
-      message: messageFn
+      message: messageFn,
+      loading: loadingFn,
+      hide: hideFn
     };
 
     return service;
     ////////// public functions //////////////
+
+    function hideFn() {
+      $mdDialog.hide();
+    }
+
+    function loadingFn() {
+      var modalConfig = {
+        templateUrl: "app/shared/loading.html",
+        clickOutsideToClose:false
+      };
+      $mdDialog.show(modalConfig);
+    }
 
     function errorFn(error) {
       $mdDialog.hide(modalConfig);
@@ -27,7 +41,7 @@
     }
 
     function messageFn(message) {
-      $mdDialog.show({
+      modalConfig = {
         parent: angular.element($document.body),
         template:
           '<md-dialog>' +
@@ -40,7 +54,9 @@
           '  <md-dialog-actions>' +
           '  </md-dialog-actions>' +
           '</md-dialog>'
-      });
+      };
+
+      $mdDialog.show(modalConfig);
     }
 
 
