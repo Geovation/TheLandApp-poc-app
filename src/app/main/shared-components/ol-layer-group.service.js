@@ -17,7 +17,8 @@
       getActiveLayerGroup: getActiveLayerGroup,
       getBaseFarmLayerGroup: getBaseFarmLayerGroup,
       getActiveLayerByKey: getActiveLayerByKey,
-      getLayerDefintions: function() { return _layerDefinitions; }
+      getLayerDefintions: function() { return _layerDefinitions; },
+      isBaseFarmLayerVisible: isBaseFarmLayerVisible
     };
 
     var _groupCollection = {};
@@ -41,8 +42,6 @@
         layers: layerList,
         visible: false
       });
-
-      // TODO: update openlayers?
 
       mapService.getMap().addLayer(group);
       _groupCollection[groupName] = group;
@@ -78,6 +77,14 @@
       var subKey = isDrawingLayer ? "drawingLayers" : "farmLayers";
 
       return _layerDefinitions[activeProjectService.getActiveProjectKey()][subKey][layerKey];
+    }
+
+    /**
+     * Returns true if the base farm layer group is visible, false otherwise.
+     * @return {Boolean}  Layer visibility
+     */
+    function isBaseFarmLayerVisible() {
+      return _groupCollection.myFarm.getVisible();
     }
 
     /**

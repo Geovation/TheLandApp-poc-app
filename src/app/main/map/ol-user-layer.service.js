@@ -76,9 +76,9 @@
         layerDetails.olLayer.getSource().removeFeature(feature);
 
         if (layerDetails.key === 'ownedLr') {
-          saveAction = firebaseLayerService.saveFarmLayers([layerDetails]);
+          saveAction = firebaseLayerService.saveFarmLayers([layerDetails], layerDetails.isBaseFarmLayer);
         } else {
-          saveAction = firebaseLayerService.saveDrawingLayers([layerDetails]);
+          saveAction = firebaseLayerService.saveDrawingLayers([layerDetails], layerDetails.isBaseFarmLayer);
         }
 
         saveAction.then(function() {
@@ -95,15 +95,24 @@
     function getLayerDetailsByFeature(feature) {
       var layerDetails = null;
 
-      angular.forEach(olLayerGroupService.getActiveLayerGroup(), function(layerGroup) {
-        angular.forEach(layerGroup, function(layer) {
-          if (!layerDetails &&
-              layer.olLayer.getSource().getFeatures &&
-              layer.olLayer.getSource().getFeatures().indexOf(feature) > -1) {
-            layerDetails = layer;
-          }
+      var groups = [
+        olLayerGroupService.getActiveLayerGroup(),
+        olLayerGroupService.getBaseFarmLayerGroup()
+      ];
+
+      groups.forEach(function(group) {
+        angular.forEach(group, function(layerGroup) {
+          angular.forEach(layerGroup, function(layer) {
+            if (!layerDetails &&
+                layer.olLayer.getSource().getFeatures &&
+                layer.olLayer.getSource().getFeatures().indexOf(feature) > -1) {
+              layerDetails = layer;
+              layerDetails.isBaseFarmLayer = group === olLayerGroupService.getBaseFarmLayerGroup();
+            }
+          });
         });
       });
+
 
       return layerDetails;
     }
@@ -246,14 +255,27 @@
       // empty the collection to avoid duplicates
       _drawingFeatures.clear();
 
-      angular.forEach(olLayerGroupService.getLayerDefintions(), function(layerDefinitions) {
-        angular.forEach(layerDefinitions.drawingLayers, function(drawingLayer) {
-          var index = _vectorLayers.indexOf(drawingLayer.olLayer);
-          if (index > -1) {
-            _drawingFeatures.extend(_vectorLayers[index].getSource().getFeatures());
-          }
+      var groups = [];
+
+      if (olLayerGroupService.getActiveLayerGroup()) {
+        groups.push(olLayerGroupService.getActiveLayerGroup());
+      }
+
+      if (olLayerGroupService.isBaseFarmLayerVisible() &&
+          olLayerGroupService.getActiveLayerGroup() !== olLayerGroupService.getBaseFarmLayerGroup()) {
+        groups.push(olLayerGroupService.getBaseFarmLayerGroup());
+      }
+
+      if (groups.length) {
+        groups.forEach(function(group) {
+          angular.forEach(group.drawingLayers, function(drawingLayer) {
+            var index = _vectorLayers.indexOf(drawingLayer.olLayer);
+            if (index > -1) {
+              _drawingFeatures.extend(_vectorLayers[index].getSource().getFeatures());
+            }
+          });
         });
-      });
+      }
     }
 
     /**
@@ -278,7 +300,11 @@
       });
 
       _mapInteractions.modify.on('modifyend', function() {
-        firebaseLayerService.saveDrawingLayers(olLayerGroupService.getActiveLayerGroup().drawingLayers);
+        firebaseLayerService.saveDrawingLayers(olLayerGroupService.getActiveLayerGroup().drawingLayers, false);
+
+        if (olLayerGroupService.isBaseFarmLayerVisible()) {
+          firebaseLayerService.saveDrawingLayers(olLayerGroupService.getBaseFarmLayerGroup().drawingLayers, true);
+        }
       });
 
       mapService.getMap().addInteraction(_mapInteractions.modify);
