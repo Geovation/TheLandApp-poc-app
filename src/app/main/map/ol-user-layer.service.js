@@ -24,11 +24,14 @@
       disableInteractions: disableInteractions,
       enableInteractions: enableInteractions,
       interactionsEnabled: function() { return _interactionsEnabled; },
-      createLayers: createLayers
+      createLayers: createLayers,
+      readDrawingFeatures: readDrawingFeatures
     };
 
     var _mapInteractions = {};
     var _interactionsEnabled = true;
+    var _drawingFeatures = new ol.Collection();
+    var _vectorLayers = [];
 
     return service;
 
@@ -165,16 +168,16 @@
       loginService.getRouteUid().then(function(uid){
         if ((authData && !authData.anonymous)|| uid) {
           firebaseReferenceService.getUserProjectsRef().once("value", function(projectCollectionSnapshot) {
-            var layerCollection = [];
-
             projectCollectionSnapshot.forEach(function(projectSnapshot) {
-              layerCollection = layerCollection.concat(createLayers(projectSnapshot));
+              _vectorLayers = _vectorLayers.concat(createLayers(projectSnapshot));
             });
 
             mapService.fitExtent(getExtent());
 
+            readDrawingFeatures();
+
             // select + modify interactions
-            addControlInteractions(layerCollection);
+            addControlInteractions();
 
             $timeout(function() {
               service.layersCreated = true;
@@ -235,43 +238,39 @@
     }
 
     /**
-     * Returns a collection of all drawing features that belong
-     * to the given set of vector layers.
-     *
-     * @param  {ol.layer.Vector[]} Set of vector layers
-     * @return {ol.Collection<ol.Feature>}
+     * Reads and caches all of the drawing features that belong to the current map.
+     * This is necessary because ol.interaction.Modify does not provide a
+     * filter function, it instead takes an ol.Collection object reference.
      */
-    function getDrawingFeatures(vectorLayers) {
-      var features = new ol.Collection();
+    function readDrawingFeatures() {
+      // empty the collection to avoid duplicates
+      _drawingFeatures.clear();
 
       angular.forEach(olLayerGroupService.getLayerDefintions(), function(layerDefinitions) {
         angular.forEach(layerDefinitions.drawingLayers, function(drawingLayer) {
-          var index = vectorLayers.indexOf(drawingLayer.olLayer);
+          var index = _vectorLayers.indexOf(drawingLayer.olLayer);
           if (index > -1) {
-            features.extend(vectorLayers[index].getSource().getFeatures());
+            _drawingFeatures.extend(_vectorLayers[index].getSource().getFeatures());
           }
         });
       });
-
-      return features;
     }
 
     /**
-     * Adds the select and modify interactions to the provided vector layers.
-     * @param  {ol.layer.Vector[]} Set of vector layers
+     * Adds the select and modify interactions to the existing vector layers.
      */
-    function addControlInteractions(vectorLayers) {
+    function addControlInteractions() {
       _mapInteractions.select = new ol.interaction.Select({
         condition: ol.events.condition.singleClick,
         toggleCondition: ol.events.condition.never,
-        layers: vectorLayers,
+        layers: _vectorLayers,
         filter: function() {
           return _interactionsEnabled;
         }
       });
 
       _mapInteractions.modify = new ol.interaction.Modify({
-        features: getDrawingFeatures(vectorLayers)
+        features: _drawingFeatures
       });
 
       _mapInteractions.select.on('select', function(e) {

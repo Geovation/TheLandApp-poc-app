@@ -118,6 +118,7 @@
 
         olUserLayerService.unfocusLayer(drawingLayer.olLayer);
         olUserLayerService.enableInteractions();
+        olUserLayerService.readDrawingFeatures();
       }
 
       setVisibleDrawingToolLayer(layer);
