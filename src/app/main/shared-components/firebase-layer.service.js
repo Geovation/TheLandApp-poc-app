@@ -18,17 +18,17 @@
 
     //////////////// PUBLIC ////////////////
 
-    function saveDrawingLayers(layersList) {
-      return _saveLayer(layersList, "drawing");
+    function saveDrawingLayers(layersList, isBaseFarmLayer) {
+      return _saveLayer(layersList, "drawing", isBaseFarmLayer);
     }
 
-    function saveFarmLayers(layersList) {
-      return _saveLayer(layersList, "farm");
+    function saveFarmLayers(layersList, isBaseFarmLayer) {
+      return _saveLayer(layersList, "farm", isBaseFarmLayer);
     }
 
     //////////////// PRIVATE ////////////////
 
-    function _saveLayer(layersList, layerGroupName) {
+    function _saveLayer(layersList, layerGroupName, isBaseFarmLayer) {
       var deferred = $q.defer();
 
       var format = new ol.format.GeoJSON();
@@ -39,7 +39,9 @@
           format.writeFeaturesObject(layer.olLayer.getSource().getFeatures())
         );
       });
-      var projectKey = activeProjectService.getActiveProjectKey();
+
+      var projectKey = isBaseFarmLayer ? "myFarm" : activeProjectService.getActiveProjectKey();
+
       var promise = firebaseReferenceService.getUserLayersRef(projectKey)
         .child(layerGroupName)
         .update(payload);

@@ -24,11 +24,14 @@
       disableInteractions: disableInteractions,
       enableInteractions: enableInteractions,
       interactionsEnabled: function() { return _interactionsEnabled; },
-      createLayers: createLayers
+      createLayers: createLayers,
+      readDrawingFeatures: readDrawingFeatures
     };
 
     var _mapInteractions = {};
     var _interactionsEnabled = true;
+    var _drawingFeatures = new ol.Collection();
+    var _vectorLayers = [];
 
     return service;
 
@@ -73,9 +76,9 @@
         layerDetails.olLayer.getSource().removeFeature(feature);
 
         if (layerDetails.key === 'ownedLr') {
-          saveAction = firebaseLayerService.saveFarmLayers([layerDetails]);
+          saveAction = firebaseLayerService.saveFarmLayers([layerDetails], layerDetails.isBaseFarmLayer);
         } else {
-          saveAction = firebaseLayerService.saveDrawingLayers([layerDetails]);
+          saveAction = firebaseLayerService.saveDrawingLayers([layerDetails], layerDetails.isBaseFarmLayer);
         }
 
         saveAction.then(function() {
@@ -92,15 +95,24 @@
     function getLayerDetailsByFeature(feature) {
       var layerDetails = null;
 
-      angular.forEach(olLayerGroupService.getActiveLayerGroup(), function(layerGroup) {
-        angular.forEach(layerGroup, function(layer) {
-          if (!layerDetails &&
-              layer.olLayer.getSource().getFeatures &&
-              layer.olLayer.getSource().getFeatures().indexOf(feature) > -1) {
-            layerDetails = layer;
-          }
+      var groups = [
+        olLayerGroupService.getActiveLayerGroup(),
+        olLayerGroupService.getBaseFarmLayerGroup()
+      ];
+
+      groups.forEach(function(group) {
+        angular.forEach(group, function(layerGroup) {
+          angular.forEach(layerGroup, function(layer) {
+            if (!layerDetails &&
+                layer.olLayer.getSource().getFeatures &&
+                layer.olLayer.getSource().getFeatures().indexOf(feature) > -1) {
+              layerDetails = layer;
+              layerDetails.isBaseFarmLayer = group === olLayerGroupService.getBaseFarmLayerGroup();
+            }
+          });
         });
       });
+
 
       return layerDetails;
     }
@@ -165,16 +177,16 @@
       loginService.getRouteUid().then(function(uid){
         if ((authData && !authData.anonymous)|| uid) {
           firebaseReferenceService.getUserProjectsRef().once("value", function(projectCollectionSnapshot) {
-            var layerCollection = [];
-
             projectCollectionSnapshot.forEach(function(projectSnapshot) {
-              layerCollection = layerCollection.concat(createLayers(projectSnapshot));
+              _vectorLayers = _vectorLayers.concat(createLayers(projectSnapshot));
             });
 
             mapService.fitExtent(getExtent());
 
+            readDrawingFeatures();
+
             // select + modify interactions
-            addControlInteractions(layerCollection);
+            addControlInteractions();
 
             $timeout(function() {
               service.layersCreated = true;
@@ -235,43 +247,52 @@
     }
 
     /**
-     * Returns a collection of all drawing features that belong
-     * to the given set of vector layers.
-     *
-     * @param  {ol.layer.Vector[]} Set of vector layers
-     * @return {ol.Collection<ol.Feature>}
+     * Reads and caches all of the drawing features that belong to the current map.
+     * This is necessary because ol.interaction.Modify does not provide a
+     * filter function, it instead takes an ol.Collection object reference.
      */
-    function getDrawingFeatures(vectorLayers) {
-      var features = new ol.Collection();
+    function readDrawingFeatures() {
+      // empty the collection to avoid duplicates
+      _drawingFeatures.clear();
 
-      angular.forEach(olLayerGroupService.getLayerDefintions(), function(layerDefinitions) {
-        angular.forEach(layerDefinitions.drawingLayers, function(drawingLayer) {
-          var index = vectorLayers.indexOf(drawingLayer.olLayer);
-          if (index > -1) {
-            features.extend(vectorLayers[index].getSource().getFeatures());
-          }
+      var groups = [];
+
+      if (olLayerGroupService.getActiveLayerGroup()) {
+        groups.push(olLayerGroupService.getActiveLayerGroup());
+      }
+
+      if (olLayerGroupService.isBaseFarmLayerVisible() &&
+          olLayerGroupService.getActiveLayerGroup() !== olLayerGroupService.getBaseFarmLayerGroup()) {
+        groups.push(olLayerGroupService.getBaseFarmLayerGroup());
+      }
+
+      if (groups.length) {
+        groups.forEach(function(group) {
+          angular.forEach(group.drawingLayers, function(drawingLayer) {
+            var index = _vectorLayers.indexOf(drawingLayer.olLayer);
+            if (index > -1) {
+              _drawingFeatures.extend(_vectorLayers[index].getSource().getFeatures());
+            }
+          });
         });
-      });
-
-      return features;
+      }
     }
 
     /**
-     * Adds the select and modify interactions to the provided vector layers.
-     * @param  {ol.layer.Vector[]} Set of vector layers
+     * Adds the select and modify interactions to the existing vector layers.
      */
-    function addControlInteractions(vectorLayers) {
+    function addControlInteractions() {
       _mapInteractions.select = new ol.interaction.Select({
         condition: ol.events.condition.singleClick,
         toggleCondition: ol.events.condition.never,
-        layers: vectorLayers,
+        layers: _vectorLayers,
         filter: function() {
           return _interactionsEnabled;
         }
       });
 
       _mapInteractions.modify = new ol.interaction.Modify({
-        features: getDrawingFeatures(vectorLayers)
+        features: _drawingFeatures
       });
 
       _mapInteractions.select.on('select', function(e) {
@@ -279,7 +300,11 @@
       });
 
       _mapInteractions.modify.on('modifyend', function() {
-        firebaseLayerService.saveDrawingLayers(olLayerGroupService.getActiveLayerGroup().drawingLayers);
+        firebaseLayerService.saveDrawingLayers(olLayerGroupService.getActiveLayerGroup().drawingLayers, false);
+
+        if (olLayerGroupService.isBaseFarmLayerVisible()) {
+          firebaseLayerService.saveDrawingLayers(olLayerGroupService.getBaseFarmLayerGroup().drawingLayers, true);
+        }
       });
 
       mapService.getMap().addInteraction(_mapInteractions.modify);

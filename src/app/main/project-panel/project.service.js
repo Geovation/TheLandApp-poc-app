@@ -82,16 +82,23 @@
 
       // active project is the current one, the farm or none
       var activeProjectKey = null;
-      if (toggledProject.isActive) {
+
+      if (toggledProject !== getMyFarmProject() && toggledProject.isActive) {
         activeProjectKey = toggledProject.key;
+      }
+      else if (toggledProject === getMyFarmProject() && getActiveProject() && getActiveProject() !== getMyFarmProject()) {
+        activeProjectKey = getActiveProject().key;
       }
       else if (_projectList.myFarm.isActive) {
         activeProjectKey = _projectList.myFarm.key;
       }
+
       activeProjectService.setActiveProjectKey(activeProjectKey);
 
       // show the ol group
       olLayerGroupService.setGroupVisibility(toggledProject.key, toggledProject.isActive);
+
+      olUserLayerService.readDrawingFeatures();
     }
 
     /**

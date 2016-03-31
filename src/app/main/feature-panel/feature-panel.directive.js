@@ -57,9 +57,9 @@
         activeFeature.set("featureData", vm.featureData);
 
         if (activeFeatureParentLayer.key === "ownedLr") {
-          firebaseLayerService.saveFarmLayers([activeFeatureParentLayer]);
+          firebaseLayerService.saveFarmLayers([activeFeatureParentLayer], activeFeatureParentLayer.isBaseFarmLayer);
         } else {
-          firebaseLayerService.saveDrawingLayers([activeFeatureParentLayer]);
+          firebaseLayerService.saveDrawingLayers([activeFeatureParentLayer], activeFeatureParentLayer.isBaseFarmLayer);
         }
 
         vm.lastSaveTime = Date.now();
