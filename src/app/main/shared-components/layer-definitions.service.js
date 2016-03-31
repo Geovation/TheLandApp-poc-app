@@ -99,25 +99,29 @@
           name: 'RLR Parcel',
           fillColor: "rgba(255, 165, 0, 0.5)",
           strokeColor: "rgba(255, 165, 0, 1)",
-          strokeWidth: 3
+          strokeWidth: 3,
+          checked: true
         },
         rlrPif: {
           name: 'RLR PIF',
           fillColor: "rgba(176, 23, 21, 0.5)",
           strokeColor: "rgba(176, 23, 21, 1)",
-          strokeWidth: 3
+          strokeWidth: 3,
+          checked: true
         },
         ordnanceSurveyMasterMap: {
           name: 'Ordnance Survey MasterMap',
           fillColor: "rgba(140, 70, 00, 0.5)",
           strokeColor: "rgba(176, 23, 21, 1)",
-          strokeWidth: 3
+          strokeWidth: 3,
+          checked: true
         },
         ownedLr: {
           name: 'Owned LR',
           fillColor: "rgba(176, 23, 21, 0.5)",
           strokeColor: "rgba(176, 23, 21, 1)",
-          strokeWidth: 3
+          strokeWidth: 3,
+          checked: true
         }
       };
     }
@@ -156,7 +160,7 @@
           type: 'Point',
           icon: 'fa-tree',
           strokeColor: "rgba(46, 139, 87, 0.9)",
-          fillColor: "rgba(46, 139, 87, 0.15)",
+          fillColor: "rgba(46, 139, 87, 0.9)",
           strokeWidth: 3,
           checked: true
         },
