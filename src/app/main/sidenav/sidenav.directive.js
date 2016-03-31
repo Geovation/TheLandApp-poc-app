@@ -29,13 +29,11 @@
 
       $rootScope.$watch(olLayerGroupService.getActiveLayerGroup, function() {
         if (olLayerGroupService.getActiveLayerGroup()) {
-          vm.farmLayers = olLayerGroupService.getActiveLayerGroup().farmLayers;
           vm.drawingLayers = olLayerGroupService.getActiveLayerGroup().drawingLayers;
+        }
 
-          // TODO: move this somewhere more appropriate
-          angular.forEach(vm.farmLayers, function(farmLayer) {
-            farmLayer.checked = false;
-          });
+        if (olLayerGroupService.getBaseFarmLayerGroup()) {
+          vm.farmLayers = olLayerGroupService.getBaseFarmLayerGroup().farmLayers;
         }
       });
 
