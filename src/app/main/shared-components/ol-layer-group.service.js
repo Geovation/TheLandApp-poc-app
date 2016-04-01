@@ -84,7 +84,7 @@
      * @return {Boolean}  Layer visibility
      */
     function isBaseFarmLayerVisible() {
-      return _groupCollection.myFarm.getVisible();
+      return _groupCollection.myFarm && _groupCollection.myFarm.getVisible();
     }
 
     /**
