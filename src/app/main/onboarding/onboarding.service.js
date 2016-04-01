@@ -20,6 +20,7 @@
       canCopyLrFeatures: function() { return _canCopyLrFeatures; }
     };
 
+    var _lrFeaturesChecked = false;
     var _isOnboardingCompleted = false;
     var _selectedLrFeatures = [];
     var _currentStepName;
@@ -66,15 +67,21 @@
      * into the owned LR farm layer.
      */
     function copyLrFeaturesToFarm() {
-      var layer = olLayerGroupService.getBaseFarmLayerGroup().farmLayers.ownedLr;
-      layer.olLayer.getSource().addFeatures(_selectedLrFeatures.getArray());
-      firebaseLayerService.saveFarmLayers([layer])
-        .then(function() {
-          $log.debug("Added feature to owned LR");
-          toggleLrLayers();
-          _selectedLrFeatures.clear();
-          nextStep();
-        });
+      if (_selectedLrFeatures.length) {
+        var layer = olLayerGroupService.getBaseFarmLayerGroup().farmLayers.ownedLr;
+        layer.olLayer.getSource().addFeatures(_selectedLrFeatures.getArray());
+        firebaseLayerService.saveFarmLayers([layer])
+          .then(function() {
+            $log.debug("Added feature to owned LR");
+            toggleLrLayers();
+            _selectedLrFeatures.clear();
+            nextStep();
+          });
+      }
+      else {
+        toggleLrLayers();
+        nextStep();
+      }
     }
 
     // PRIVATE /////////////////////////////////////////////////////////////////
@@ -89,7 +96,9 @@
             $timeout(function(){
               if (!userInfo.val().homeBoundingBox) {
                 handleStep(_stepNames.homeLocation);
-              } else if (!farmLayers.val()) {
+              } else if (!_lrFeaturesChecked && !farmLayers.val()) {
+                // check it only once everytime the user logins.
+                _lrFeaturesChecked = true;
                 handleStep(_stepNames.lrFeatures);
               } else if (!userInfo.val().onboardingCompletedAt){
                 handleStep(_stepNames.end);
