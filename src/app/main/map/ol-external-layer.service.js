@@ -10,7 +10,8 @@
    * Interactions and add them to the  "Land App" layer.
    */
   /** @ngInject */
-  function olExternalLayerService(ol, $http, $log, $rootScope, $timeout, LAYERS_Z_INDEXES, olUserLayerService) {
+  function olExternalLayerService(ol, $http, $log, $rootScope, $timeout, LAYERS_Z_INDEXES,
+    olUserLayerService, onboardingService) {
     /* Each layer bust have a counter function called _addXXXLayer where XXX is
     /* the layer.type */
     var _addLayer = _buildAddLayerFunctions();
@@ -163,13 +164,27 @@
         condition: function (e) {
           return ol.events.condition.click(e) && olUserLayerService.interactionsEnabled();
         },
+        // overrides the default multi click condition (shift + click) with a click only
+        // by removing the need for pressing the shift key, i.e.:
+        //  when clicking on a feature that is not selected, it will select it
+        //  when clicking on a feature that is selected, it will deselect all others
+        toggleCondition: function(event) {
+          var canToggle = false;
+
+          event.map.forEachFeatureAtPixel(event.pixel, function(foundFeature, foundLayer) {
+            if (foundLayer === layer.olLayer &&
+                click.getFeatures().getArray().indexOf(foundFeature) === -1) {
+              canToggle = true;
+            }
+          });
+
+          return canToggle;
+        },
         layers: [layer.olLayer]
       });
 
       click.on('select', function() {
-        $timeout(function() {
-          $rootScope.$broadcast('land-registry-features-selected', click.getFeatures());
-        });
+        onboardingService.setSelectedLrFeatures(click.getFeatures());
       });
 
       return [click];
