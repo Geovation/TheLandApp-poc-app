@@ -100,7 +100,9 @@
         _groupCollection[groupName].setVisible(isVisible);
       }
 
-      // when the myFarm project is toggled, hide all of its farm layers
+      // because we are overriding the control for farm layers
+      // by manually toggling them, they need to be explicitly hidden
+      // (group visibility doesn't override layer visibility)
       if (groupName === "myFarm") {
         angular.forEach(_layerDefinitions.myFarm.farmLayers, function(layer) {
           layer.olLayer.setVisible(false);
