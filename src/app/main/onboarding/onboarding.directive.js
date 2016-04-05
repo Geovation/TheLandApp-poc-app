@@ -13,19 +13,11 @@
       restrict: 'E',
       templateUrl: 'app/main/onboarding/onboarding.html',
       controller: Controller,
-      link: linkFunc,
       controllerAs: 'vmOnboarding',
       bindToController: true
     };
 
     return directive;
-
-    /** @ngInject */
-    function linkFunc(scope) {
-      scope.$on('land-registry-features-selected', function(event, features) {
-        onboardingService.setSelectedLrFeatures(features);
-      });
-    }
 
     /** @ngInject */
     function Controller() {

@@ -10,7 +10,8 @@
    * Interactions and add them to the  "Land App" layer.
    */
   /** @ngInject */
-  function olExternalLayerService(ol, $http, $log, $rootScope, $timeout, LAYERS_Z_INDEXES, olUserLayerService) {
+  function olExternalLayerService(ol, $http, $log, $rootScope, $timeout, LAYERS_Z_INDEXES,
+    olUserLayerService, onboardingService) {
     /* Each layer bust have a counter function called _addXXXLayer where XXX is
     /* the layer.type */
     var _addLayer = _buildAddLayerFunctions();
@@ -183,9 +184,7 @@
       });
 
       click.on('select', function() {
-        $timeout(function() {
-          $rootScope.$broadcast('land-registry-features-selected', click.getFeatures());
-        });
+        onboardingService.setSelectedLrFeatures(click.getFeatures());
       });
 
       return [click];
