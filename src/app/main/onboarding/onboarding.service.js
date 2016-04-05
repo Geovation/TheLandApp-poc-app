@@ -22,7 +22,7 @@
 
     var _lrFeaturesChecked = false;
     var _isOnboardingCompleted = false;
-    var _selectedLrFeatures = [];
+    var _selectedLrFeatures = new ol.Collection();
     var _currentStepName;
     var _canCopyLrFeatures = false;
     var _stepNames = {
@@ -67,7 +67,7 @@
      * into the owned LR farm layer.
      */
     function copyLrFeaturesToFarm() {
-      if (_selectedLrFeatures.length) {
+      if (_selectedLrFeatures.getLength()) {
         var layer = olLayerGroupService.getBaseFarmLayerGroup().farmLayers.ownedLr;
         layer.olLayer.getSource().addFeatures(_selectedLrFeatures.getArray());
         firebaseLayerService.saveFarmLayers([layer])
