@@ -100,28 +100,28 @@
           fillColor: "rgba(255, 165, 0, 0.5)",
           strokeColor: "rgba(255, 165, 0, 1)",
           strokeWidth: 3,
-          checked: true
+          checked: false
         },
         rlrPif: {
           name: 'RLR PIF',
           fillColor: "rgba(176, 23, 21, 0.5)",
           strokeColor: "rgba(176, 23, 21, 1)",
           strokeWidth: 3,
-          checked: true
+          checked: false
         },
         ordnanceSurveyMasterMap: {
           name: 'Ordnance Survey MasterMap',
           fillColor: "rgba(140, 70, 00, 0.5)",
           strokeColor: "rgba(176, 23, 21, 1)",
           strokeWidth: 3,
-          checked: true
+          checked: false
         },
         ownedLr: {
           name: 'Owned LR',
           fillColor: "rgba(176, 23, 21, 0.5)",
           strokeColor: "rgba(176, 23, 21, 1)",
           strokeWidth: 3,
-          checked: true
+          checked: false
         }
       };
     }

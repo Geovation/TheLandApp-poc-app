@@ -18,7 +18,7 @@
     return directive;
 
     /** @ngInject */
-    function HeaderController($rootScope, $log, $q, $http, $mdDialog, $timeout, firebaseReferenceService) {
+    function HeaderController($rootScope, $log, $q, $http, $mdDialog, $timeout, firebaseReferenceService, projectService) {
       var vm = this;
       vm.selectedItem = null;
       vm.searchText = "";
@@ -29,6 +29,7 @@
       vm.shareDialog = shareDialog;
       vm.mapOwner = "";
       vm.usersAccedingCurrentMap = [];
+      vm.isThereAnyProjectActive = projectService.isThereAnyProjectActive;
 
       var colorsAssigned = {};
       var colourIndex = 0;

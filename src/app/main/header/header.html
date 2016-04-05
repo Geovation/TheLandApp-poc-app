@@ -33,7 +33,7 @@
           <md-tooltip>Share</md-tooltip>
         </md-button>
 
-        <md-button class="md-icon-button" ng-click="vmHeader.toggleLayersPanel()">
+        <md-button class="md-icon-button" ng-click="vmHeader.toggleLayersPanel()" ng-show="vmHeader.isThereAnyProjectActive()">
           <md-icon>filter_none</md-icon>
           <md-tooltip>Layers</md-tooltip>
         </md-button>

@@ -70,6 +70,8 @@
      * @param {Object} toggledProject Project to toggle
      */
     function setProjectVisibility(toggledProject) {
+      olUserLayerService.clearSelectedFeatures();
+
       if (toggledProject.key !== "myFarm") {
         // turn other project off
         angular.forEach(_projectList, function (project) {
@@ -77,6 +79,12 @@
             project.isActive = false;
             olLayerGroupService.setGroupVisibility(project.key, project.isActive);
           }
+        });
+      }
+
+      if (toggledProject === getMyFarmProject()) {
+        angular.forEach(olLayerGroupService.getBaseFarmLayerGroup().farmLayers, function(layer) {
+          layer.checked = false;
         });
       }
 
@@ -89,8 +97,8 @@
       else if (toggledProject === getMyFarmProject() && getActiveProject() && getActiveProject() !== getMyFarmProject()) {
         activeProjectKey = getActiveProject().key;
       }
-      else if (_projectList.myFarm.isActive) {
-        activeProjectKey = _projectList.myFarm.key;
+      else if (getMyFarmProject().isActive) {
+        activeProjectKey = getMyFarmProject().key;
       }
 
       activeProjectService.setActiveProjectKey(activeProjectKey);
