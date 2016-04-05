@@ -32,6 +32,7 @@
      */
     function init() {
       var defer = $q.defer();
+      var isInitialized = false;
 
       firebaseReferenceService
         .getUserProjectsRef()
@@ -41,15 +42,19 @@
           if (projectList.exists()) {
             _projectList = projectList.val();
 
-            angular.forEach(_projectList, function(value, key) {
-              value.key = key;
-              value.isActive = oldProjectList && oldProjectList[key] && oldProjectList[key].isActive;
-              olLayerGroupService.setGroupVisibility(key, value.isActive);
-            });
+            if (!isInitialized) {
+              angular.forEach(_projectList, function(value, key) {
+                value.key = key;
+                value.isActive = oldProjectList && oldProjectList[key] && oldProjectList[key].isActive;
+                olLayerGroupService.setGroupVisibility(key, value.isActive);
+              });
 
-            var myFarm = getMyFarmProject();
-            myFarm.isActive = myFarm.isActive === false ? false : true;
-            setProjectVisibility(myFarm);
+              var myFarm = getMyFarmProject();
+              myFarm.isActive = myFarm.isActive === false ? false : true;
+              setProjectVisibility(myFarm);
+
+              isInitialized = true;
+            }
 
             defer.resolve();
           }
