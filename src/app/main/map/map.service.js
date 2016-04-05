@@ -22,7 +22,7 @@
       init: init,
       setBaseMap: setBaseMap,
       setZoom: setZoom,
-      toggleLayerFromCheckProperty: toggleLayerFromCheckProperty,
+      toggleLayerFromCheckProperty: toggleLayerFromCheckProperty
     };
 
     return service;
@@ -88,13 +88,14 @@
     function addLayer(layer) {
       // prevent adding duplicate layers to the map
       if (map.getLayers().getArray().indexOf(layer.olLayer) === -1) {
-        layer.olLayer.setVisible(true);
         map.addLayer(layer.olLayer);
 
         angular.forEach(layer.olMapInteractions, function(mapInteraction) {
           map.addInteraction(mapInteraction);
         });
       }
+
+      layer.olLayer.setVisible(true);
     }
 
     function removeLayer(layer) {

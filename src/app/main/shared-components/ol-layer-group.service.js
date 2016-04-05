@@ -99,6 +99,13 @@
       if (_groupCollection[groupName]) {
         _groupCollection[groupName].setVisible(isVisible);
       }
+
+      // when the myFarm project is toggled, hide all of its farm layers
+      if (groupName === "myFarm") {
+        angular.forEach(_layerDefinitions.myFarm.farmLayers, function(layer) {
+          layer.olLayer.setVisible(false);
+        });
+      }
     }
   }
 })();
