@@ -24,6 +24,7 @@
       var vm = this;
 
       vm.getProjectList = projectService.getProjectList;
+      vm.getMyFarmProject = projectService.getMyFarmProject;
       vm.setProjectVisibility = projectService.setProjectVisibility;
       vm.openMenu = openMenu;
       vm.displayNewProjectModal = displayNewProjectModal;

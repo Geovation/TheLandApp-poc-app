@@ -5,11 +5,23 @@
     </md-button>
 
     <md-menu-content width="4">
-      <md-menu-item ng-repeat="project in vmProjectPanel.getProjectList()">
+      <md-menu-item ng-repeat="project in vmProjectPanel.getProjectList()" ng-if="project.key !== 'myFarm'">
         <md-button>
           <md-switch
             ng-model="project.isActive"
             ng-change="vmProjectPanel.setProjectVisibility(project)">{{ project.projectName }}</md-switch>
+        </md-button>
+      </md-menu-item>
+
+      <md-menu-divider></md-menu-divider>
+
+      <md-menu-item>
+        <md-button>
+          <md-switch
+            ng-model="vmProjectPanel.getMyFarmProject().isActive"
+            ng-change="vmProjectPanel.setProjectVisibility(vmProjectPanel.getMyFarmProject())">
+            {{ vmProjectPanel.getMyFarmProject().projectName }}
+          </md-switch>
         </md-button>
       </md-menu-item>
 
