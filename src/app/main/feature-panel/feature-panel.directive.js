@@ -56,10 +56,16 @@
 
         activeFeature.set("featureData", vm.featureData);
 
-        if (activeFeatureParentLayer.key === "ownedLr") {
-          firebaseLayerService.saveFarmLayers([activeFeatureParentLayer], activeFeatureParentLayer.isBaseFarmLayer);
+        if (activeFeatureParentLayer.isFarmLayer) {
+          firebaseLayerService.saveFarmLayers(
+            [activeFeatureParentLayer],
+            activeFeatureParentLayer.isInBaseFarmGroup
+          );
         } else {
-          firebaseLayerService.saveDrawingLayers([activeFeatureParentLayer], activeFeatureParentLayer.isBaseFarmLayer);
+          firebaseLayerService.saveDrawingLayers(
+            [activeFeatureParentLayer],
+            activeFeatureParentLayer.isInBaseFarmGroup
+          );
         }
 
         vm.lastSaveTime = Date.now();
