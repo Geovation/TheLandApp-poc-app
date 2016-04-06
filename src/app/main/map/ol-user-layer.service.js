@@ -76,9 +76,15 @@
         layerDetails.olLayer.getSource().removeFeature(feature);
 
         if (layerDetails.key === 'ownedLr') {
-          saveAction = firebaseLayerService.saveFarmLayers([layerDetails], layerDetails.isBaseFarmLayer);
+          saveAction = firebaseLayerService.saveFarmLayers(
+            [layerDetails],
+            layerDetails.isInBaseFarmGroup
+          );
         } else {
-          saveAction = firebaseLayerService.saveDrawingLayers([layerDetails], layerDetails.isBaseFarmLayer);
+          saveAction = firebaseLayerService.saveDrawingLayers(
+            [layerDetails],
+            layerDetails.isInBaseFarmGroup
+          );
         }
 
         saveAction.then(function() {
@@ -107,7 +113,8 @@
                 layer.olLayer.getSource().getFeatures &&
                 layer.olLayer.getSource().getFeatures().indexOf(feature) > -1) {
               layerDetails = layer;
-              layerDetails.isBaseFarmLayer = group === olLayerGroupService.getBaseFarmLayerGroup();
+              layerDetails.isInBaseFarmGroup = (olLayerGroupService.getBaseFarmLayerGroup() === group);
+              layerDetails.isFarmLayer = !!layerDefinitionsService.farmLayers[layer.key];
             }
           });
         });
