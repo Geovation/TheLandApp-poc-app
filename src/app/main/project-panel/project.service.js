@@ -80,14 +80,15 @@
     function setProjectVisibility(toggledProject) {
       olUserLayerService.clearSelectedFeatures();
 
-      // when toggling the myFarm project on or off, hide all of its farm layers
-      // because they are manually toggled in different parts of the app
-      // and calling ol.layer.Group.setVisible doesn't override their visibility
       if (toggledProject === getMyFarmProject()) {
+        // when toggling the myFarm project on or off, hide all of its farm layers because they
+        // are manually toggled in different parts of the app (via ol.layer.Vector.setVisible)
+        // and calling ol.layer.Group.setVisible doesn't override their visibility
         olLayerGroupService.hideFarmDataLayers();
       } else {
+        // hide every project except for myFarm and the one currently being toggled
         angular.forEach(_projectList, function (project) {
-          if (project.key !== "myFarm" && project.key !== toggledProject.key ) {
+          if (project.key !== "myFarm" && project.key !== toggledProject.key) {
             project.isActive = false;
             olLayerGroupService.setGroupVisibility(project.key, project.isActive);
           }
