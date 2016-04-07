@@ -84,11 +84,7 @@
       // because they are manually toggled in different parts of the app
       // and calling ol.layer.Group.setVisible doesn't override their visibility
       if (toggledProject === getMyFarmProject()) {
-        olLayerGroupService.hideMyFarmLayers();
-
-        angular.forEach(olLayerGroupService.getBaseFarmLayerGroup().farmLayers, function(layer) {
-          layer.checked = false;
-        });
+        olLayerGroupService.hideFarmDataLayers();
       } else {
         angular.forEach(_projectList, function (project) {
           if (project.key !== "myFarm" && project.key !== toggledProject.key ) {

@@ -19,7 +19,7 @@
       getActiveLayerByKey: getActiveLayerByKey,
       getLayerDefintions: function() { return _layerDefinitions; },
       isBaseFarmLayerVisible: isBaseFarmLayerVisible,
-      hideMyFarmLayers: hideMyFarmLayers
+      hideFarmDataLayers: hideFarmDataLayers
     };
 
     var _groupCollection = {};
@@ -89,11 +89,12 @@
     }
 
     /**
-     * Hides all of the layers which belong to the myFarm project group.
+     * Hides all of the farm layers which belong to the myFarm project group.
      */
-    function hideMyFarmLayers() {
+    function hideFarmDataLayers() {
       angular.forEach(_layerDefinitions.myFarm.farmLayers, function(layer) {
         layer.olLayer.setVisible(false);
+        layer.checked = false;
       });
     }
 
