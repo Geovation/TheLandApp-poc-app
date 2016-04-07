@@ -69,7 +69,7 @@
      * @return {Boolean}
      */
     function isThereAnyProjectActive() {
-      return getActiveProject() || (getMyFarmProject() && getMyFarmProject().isActive);
+      return angular.isDefined(getActiveProject()) || (getMyFarmProject() && getMyFarmProject().isActive);
     }
 
     /**
