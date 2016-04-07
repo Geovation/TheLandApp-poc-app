@@ -42,15 +42,15 @@
           if (projectList.exists()) {
             _projectList = projectList.val();
 
-            if (!isInitialized) {
-              angular.forEach(_projectList, function(value, key) {
-                value.key = key;
-                value.isActive = oldProjectList && oldProjectList[key] && oldProjectList[key].isActive;
-                olLayerGroupService.setGroupVisibility(key, value.isActive);
-              });
+            angular.forEach(_projectList, function(value, key) {
+              value.key = key;
+              value.isActive = oldProjectList && oldProjectList[key] && oldProjectList[key].isActive;
+              olLayerGroupService.setGroupVisibility(key, value.isActive);
+            });
 
+            if (!isInitialized) {
               var myFarm = getMyFarmProject();
-              myFarm.isActive = myFarm.isActive === false ? false : true;
+              myFarm.isActive = true;
               setProjectVisibility(myFarm);
 
               isInitialized = true;
