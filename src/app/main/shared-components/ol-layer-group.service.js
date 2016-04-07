@@ -18,7 +18,8 @@
       getBaseFarmLayerGroup: getBaseFarmLayerGroup,
       getActiveLayerByKey: getActiveLayerByKey,
       getLayerDefintions: function() { return _layerDefinitions; },
-      isBaseFarmLayerVisible: isBaseFarmLayerVisible
+      isBaseFarmLayerVisible: isBaseFarmLayerVisible,
+      hideMyFarmLayers: hideMyFarmLayers
     };
 
     var _groupCollection = {};
@@ -88,6 +89,15 @@
     }
 
     /**
+     * Hides all of the layers which belong to the myFarm project group.
+     */
+    function hideMyFarmLayers() {
+      angular.forEach(_layerDefinitions.myFarm.farmLayers, function(layer) {
+        layer.olLayer.setVisible(false);
+      });
+    }
+
+    /**
      * Toggles the visiblity of a named layer group.
      *
      * @param  {String}  groupName Name/key of the project/group
@@ -98,15 +108,6 @@
       // async initialization done in the wrong place.
       if (_groupCollection[groupName]) {
         _groupCollection[groupName].setVisible(isVisible);
-      }
-
-      // because we are overriding the control for farm layers
-      // by manually toggling them, they need to be explicitly hidden
-      // (group visibility doesn't override layer visibility)
-      if (groupName === "myFarm") {
-        angular.forEach(_layerDefinitions.myFarm.farmLayers, function(layer) {
-          layer.olLayer.setVisible(false);
-        });
       }
     }
   }
