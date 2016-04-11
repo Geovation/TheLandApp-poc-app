@@ -42,15 +42,15 @@
           if (projectList.exists()) {
             _projectList = projectList.val();
 
-            if (!isInitialized) {
-              angular.forEach(_projectList, function(value, key) {
-                value.key = key;
-                value.isActive = oldProjectList && oldProjectList[key] && oldProjectList[key].isActive;
-                olLayerGroupService.setGroupVisibility(key, value.isActive);
-              });
+            angular.forEach(_projectList, function(value, key) {
+              value.key = key;
+              value.isActive = oldProjectList && oldProjectList[key] && oldProjectList[key].isActive;
+              olLayerGroupService.setGroupVisibility(key, value.isActive);
+            });
 
+            if (!isInitialized) {
               var myFarm = getMyFarmProject();
-              myFarm.isActive = myFarm.isActive === false ? false : true;
+              myFarm.isActive = true;
               setProjectVisibility(myFarm);
 
               isInitialized = true;
@@ -64,9 +64,12 @@
       return defer.promise;
     }
 
+    /**
+     * Returns true if there is at least one active project, false otherwise.
+     * @return {Boolean}
+     */
     function isThereAnyProjectActive() {
-      return  getActiveProject() ||
-        (getMyFarmProject() && getMyFarmProject().isActive );
+      return angular.isDefined(getActiveProject()) || (getMyFarmProject() && getMyFarmProject().isActive);
     }
 
     /**
@@ -77,19 +80,18 @@
     function setProjectVisibility(toggledProject) {
       olUserLayerService.clearSelectedFeatures();
 
-      if (toggledProject.key !== "myFarm") {
-        // turn other project off
+      if (toggledProject === getMyFarmProject()) {
+        // when toggling the myFarm project on or off, hide all of its farm layers because they
+        // are manually toggled in different parts of the app (via ol.layer.Vector.setVisible)
+        // and calling ol.layer.Group.setVisible doesn't override their visibility
+        olLayerGroupService.hideFarmDataLayers();
+      } else {
+        // hide every project except for myFarm and the one currently being toggled
         angular.forEach(_projectList, function (project) {
-          if (project.key !== "myFarm" && project.key !== toggledProject.key ) {
+          if (project.key !== "myFarm" && project.key !== toggledProject.key) {
             project.isActive = false;
             olLayerGroupService.setGroupVisibility(project.key, project.isActive);
           }
-        });
-      }
-
-      if (toggledProject === getMyFarmProject()) {
-        angular.forEach(olLayerGroupService.getBaseFarmLayerGroup().farmLayers, function(layer) {
-          layer.checked = false;
         });
       }
 
