@@ -26,8 +26,23 @@
       vm.getProjectList = projectService.getProjectList;
       vm.getMyFarmProject = projectService.getMyFarmProject;
       vm.setProjectVisibility = projectService.setProjectVisibility;
-      vm.deleteProject = projectService.deleteProject;
+      vm.deleteProject = deleteProject;
       vm.displayNewProjectModal = displayNewProjectModal;
+
+      /**
+       * Asks the user to confirm that he/she wants to delete thr
+       */
+      function deleteProject(project) {
+        var dialog = $mdDialog.confirm()
+          .title('Delete project')
+          .textContent('Are you sure you want to permanently delete this project?')
+          .ok('Yes, delete it')
+          .cancel('Cancel');
+
+        $mdDialog.show(dialog).then(function() {
+          projectService.deleteProject(project);
+        });
+      }
 
       /**
        * Displays the dialog used to create a new project.
