@@ -193,20 +193,19 @@
 
       if (!_projectList[project.key]) {
         deferred.reject("Attempting to delete undefined project");
-        return deferred;
+      } else {
+        olLayerGroupService.removeLayerGroup(project.key);
+
+        delete _projectList[project.key];
+
+        projectListRef
+          .set(_projectList)
+          .then(deferred.resolve)
+          .catch(function(error) {
+            deferred.reject(error);
+            messageService.error(error);
+          });
       }
-
-      olLayerGroupService.removeLayerGroup(project.key);
-
-      delete _projectList[project.key];
-
-      projectListRef
-        .set(_projectList)
-        .then(deferred.resolve)
-        .catch(function(error) {
-          deferred.reject(error);
-          messageService.error(error);
-        });
 
       return deferred.promise;
     }
