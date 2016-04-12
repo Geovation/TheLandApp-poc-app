@@ -26,6 +26,7 @@
       vm.getProjectList = projectService.getProjectList;
       vm.getMyFarmProject = projectService.getMyFarmProject;
       vm.setProjectVisibility = projectService.setProjectVisibility;
+      vm.deleteProject = projectService.deleteProject;
       vm.openMenu = openMenu;
       vm.displayNewProjectModal = displayNewProjectModal;
 
