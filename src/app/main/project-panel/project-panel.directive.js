@@ -24,18 +24,24 @@
       var vm = this;
 
       vm.getProjectList = projectService.getProjectList;
+      vm.getMyFarmProject = projectService.getMyFarmProject;
       vm.setProjectVisibility = projectService.setProjectVisibility;
-      vm.openMenu = openMenu;
+      vm.confirmProjectDelete = confirmProjectDelete;
       vm.displayNewProjectModal = displayNewProjectModal;
 
       /**
-       * Opens the projects menu panel.
-       *
-       * @param  {Function}   $mdOpenMenu Angular mdMenu directive
-       * @param  {MouseEvent} ev          Browser event object
+       * Deletes the project after confirming with the user.
        */
-      function openMenu($mdOpenMenu, ev) {
-        $mdOpenMenu(ev);
+      function confirmProjectDelete(project) {
+        var dialog = $mdDialog.confirm()
+          .title('Delete project')
+          .textContent('Are you sure you want to permanently delete this project?')
+          .ok('Yes, delete it')
+          .cancel('Cancel');
+
+        $mdDialog.show(dialog).then(function() {
+          projectService.deleteProject(project);
+        });
       }
 
       /**
@@ -74,10 +80,8 @@
             projectService
               .createProject(dialogVm.project.name)
               .then(function(project) {
-                project.isActive = true;
                 $mdDialog.hide();
                 dialogVm.showConfirmationDialog();
-                projectService.setProjectVisibility(project);
               });
           }
 

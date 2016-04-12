@@ -10,9 +10,10 @@
     .factory('olLayerGroupService', olLayerGroupService);
 
   /** @ngInject */
-  function olLayerGroupService(ol, mapService, activeProjectService) {
+  function olLayerGroupService(ol, $log, mapService, activeProjectService) {
     var service = {
       createLayerGroup: createLayerGroup,
+      removeLayerGroup: removeLayerGroup,
       setGroupVisibility: setGroupVisibility,
       getActiveLayerGroup: getActiveLayerGroup,
       getBaseFarmLayerGroup: getBaseFarmLayerGroup,
@@ -49,6 +50,26 @@
       _layerDefinitions[groupName] = layerDefinitions;
 
       return group;
+    }
+
+    /**
+     * Removes a group/project and all of its child layers from the map.
+     *
+     * @param  {String} groupName Name of the project/group
+     * @return {Bool}             True if the project was deleted, false otherwise
+     */
+    function removeLayerGroup(groupName) {
+      if (!_groupCollection[groupName]) {
+        $log.error(groupName + " is undefined");
+        return false;
+      }
+
+      mapService.getMap().removeLayer(_groupCollection[groupName]);
+
+      delete _groupCollection[groupName];
+      delete _layerDefinitions[groupName];
+
+      return true;
     }
 
     /**
