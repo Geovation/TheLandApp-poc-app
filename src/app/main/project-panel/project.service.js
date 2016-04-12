@@ -164,6 +164,7 @@
             projectRef.once("value")
               .then(function(projectSnapshot) {
                 olUserLayerService.createLayers(projectSnapshot);
+                setProjectVisibility(project);
                 deferred.resolve(project);
               })
               .catch(function(error){
