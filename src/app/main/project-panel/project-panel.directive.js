@@ -27,18 +27,7 @@
       vm.getMyFarmProject = projectService.getMyFarmProject;
       vm.setProjectVisibility = projectService.setProjectVisibility;
       vm.deleteProject = projectService.deleteProject;
-      vm.openMenu = openMenu;
       vm.displayNewProjectModal = displayNewProjectModal;
-
-      /**
-       * Opens the projects menu panel.
-       *
-       * @param  {Function}   $mdOpenMenu Angular mdMenu directive
-       * @param  {MouseEvent} ev          Browser event object
-       */
-      function openMenu($mdOpenMenu, ev) {
-        $mdOpenMenu(ev);
-      }
 
       /**
        * Displays the dialog used to create a new project.
