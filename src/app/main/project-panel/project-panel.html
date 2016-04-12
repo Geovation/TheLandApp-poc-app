@@ -1,7 +1,7 @@
 <section class="my-projects">
   <md-menu-bar>
     <md-menu>
-      <button class="md-warn md-raised md-hue-2" ng-click="vmProjectPanel.openMenu($mdOpenMenu, $event)">
+      <button class="md-warn md-raised md-hue-2" ng-click="$mdOpenMenu()">
         My projects
       </button>
 
@@ -36,7 +36,9 @@
               <md-menu-item
                 ng-click="vmProjectPanel.setProjectVisibility(vmProjectPanel.getMyFarmProject())">
                 <md-button>
-                  <md-icon>{{ vmProjectPanel.getMyFarmProject().isActive ? 'check_box' : 'check_box_outline_blank' }}</md-icon>
+                  <md-icon>
+                    {{ vmProjectPanel.getMyFarmProject().isActive ? 'check_box' : 'check_box_outline_blank' }}
+                  </md-icon>
                   {{ vmProjectPanel.getMyFarmProject().isActive ? 'Hide' : 'Show' }}
                 </md-button>
               </md-menu-item>
