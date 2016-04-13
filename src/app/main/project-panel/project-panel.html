@@ -1,26 +1,60 @@
 <section class="my-projects">
-  <md-menu>
-    <md-button class="md-warn md-raised md-hue-2" ng-click="vmProjectPanel.openMenu($mdOpenMenu, $event)">
-      My projects
-    </md-button>
+  <md-menu-bar>
+    <md-menu>
+      <button md-button class="md-warn md-raised md-hue-2" ng-click="$mdOpenMenu()">
+        My projects
+      </button>
 
-    <md-menu-content width="4">
-      <md-menu-item ng-repeat="project in vmProjectPanel.getProjectList()">
-        <md-button>
-          <md-switch
-            ng-model="project.isActive"
-            ng-change="vmProjectPanel.setProjectVisibility(project)">{{ project.projectName }}</md-switch>
-        </md-button>
-      </md-menu-item>
+      <md-menu-content>
+        <md-menu-item ng-repeat="project in vmProjectPanel.getProjectList()" ng-if="project !== vmProjectPanel.getMyFarmProject()">
+          <md-menu>
+            <md-button ng-click="$mdOpenMenu()">{{ project.projectName }}</md-button>
+            <md-menu-content>
+              <md-menu-item
+                ng-click="vmProjectPanel.setProjectVisibility(project)">
+                <md-button>
+                  <md-icon>{{ project.isActive ? 'check_box' : 'check_box_outline_blank' }}</md-icon>
+                  {{ project.isActive ? 'Hide' : 'Show' }}
+                </md-button>
+              </md-menu-item>
+              <md-menu-item>
+                <md-button ng-click="vmProjectPanel.confirmProjectDelete(project)">
+                  <md-icon>delete_forever</md-icon>
+                  Delete
+                </md-button>
+              </md-menu-item>
+            </md-menu-content>
+          </md-menu>
+        </md-menu-item>
 
-      <md-menu-divider></md-menu-divider>
+        <md-menu-divider></md-menu-divider>
 
-      <md-menu-item>
-        <md-button ng-click="vmProjectPanel.displayNewProjectModal()">
-          <md-icon>add_box</md-icon>
-          New project
-        </md-button>
-      </md-menu-item>
-    </md-menu-content>
-  </md-menu>
+        <md-menu-item>
+          <md-menu>
+            <md-button ng-click="$mdOpenMenu()">{{ vmProjectPanel.getMyFarmProject().projectName }}</md-button>
+            <md-menu-content>
+              <md-menu-item
+                ng-click="vmProjectPanel.setProjectVisibility(vmProjectPanel.getMyFarmProject())">
+                <md-button>
+                  <md-icon>
+                    {{ vmProjectPanel.getMyFarmProject().isActive ? 'check_box' : 'check_box_outline_blank' }}
+                  </md-icon>
+                  {{ vmProjectPanel.getMyFarmProject().isActive ? 'Hide' : 'Show' }}
+                </md-button>
+              </md-menu-item>
+            </md-menu-content>
+          </md-menu>
+        </md-menu-item>
+
+        <md-menu-divider></md-menu-divider>
+
+        <md-menu-item>
+          <md-button ng-click="vmProjectPanel.displayNewProjectModal()">
+            <md-icon>add_box</md-icon>
+            New project
+          </md-button>
+        </md-menu-item>
+      </md-menu-content>
+    </md-menu>
+  </md-menu-bar>
 </section>

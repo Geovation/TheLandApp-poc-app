@@ -18,6 +18,7 @@
       setProjectVisibility: setProjectVisibility,
       getActiveProject: getActiveProject,
       getMyFarmProject: getMyFarmProject,
+      deleteProject: deleteProject,
       isThereAnyProjectActive: isThereAnyProjectActive
     };
 
@@ -44,14 +45,12 @@
 
             angular.forEach(_projectList, function(value, key) {
               value.key = key;
-              value.isActive = oldProjectList && oldProjectList[key] && oldProjectList[key].isActive;
+              value.isActive = !!(oldProjectList && oldProjectList[key] && oldProjectList[key].isActive);
               olLayerGroupService.setGroupVisibility(key, value.isActive);
             });
 
             if (!isInitialized) {
-              var myFarm = getMyFarmProject();
-              myFarm.isActive = true;
-              setProjectVisibility(myFarm);
+              setProjectVisibility(getMyFarmProject());
 
               isInitialized = true;
             }
@@ -79,6 +78,8 @@
      */
     function setProjectVisibility(toggledProject) {
       olUserLayerService.clearSelectedFeatures();
+
+      toggledProject.isActive = !toggledProject.isActive;
 
       if (toggledProject === getMyFarmProject()) {
         // when toggling the myFarm project on or off, hide all of its farm layers because they
@@ -163,6 +164,7 @@
             projectRef.once("value")
               .then(function(projectSnapshot) {
                 olUserLayerService.createLayers(projectSnapshot);
+                setProjectVisibility(project);
                 deferred.resolve(project);
               })
               .catch(function(error){
@@ -170,6 +172,35 @@
                 messageService.error(error);
               });
           })
+          .catch(function(error) {
+            deferred.reject(error);
+            messageService.error(error);
+          });
+      }
+
+      return deferred.promise;
+    }
+
+    /**
+     * Deletes a given project from the db and removes it from the map.
+     *
+     * @param  {Object}  project Project object
+     * @return {Promise}         Promise
+     */
+    function deleteProject(project) {
+      var deferred = $q.defer();
+      var projectListRef = firebaseReferenceService.getUserProjectsRef();
+
+      if (!_projectList[project.key]) {
+        deferred.reject("Attempting to delete undefined project");
+      } else {
+        olLayerGroupService.removeLayerGroup(project.key);
+
+        delete _projectList[project.key];
+
+        projectListRef
+          .set(_projectList)
+          .then(deferred.resolve)
           .catch(function(error) {
             deferred.reject(error);
             messageService.error(error);
