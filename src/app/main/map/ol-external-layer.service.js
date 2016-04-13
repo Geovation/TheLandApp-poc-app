@@ -13,7 +13,7 @@
   /** @ngInject */
   function olExternalLayerService(ol, $http, $log, $rootScope, $timeout, LAYERS_Z_INDEXES,
     olUserLayerService, onboardingService) {
-    // each layer type must have a function called _addXXXLayer,
+    // each layer type must have a function called addXXXLayer,
     // where XXX === layer.type
     var _layerGenerators = _buildAddLayerFunctions();
     var service = {
