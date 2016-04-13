@@ -37,6 +37,9 @@
 
     ////////////////////////////// PUBLIC //////////////////////////////
 
+    /**
+     * Initializes the service.
+     */
     function init() {
       return loginService.onceAuthData().then(loadUserLayersAndEnableEditing);
     }
@@ -120,7 +123,6 @@
         });
       });
 
-
       return layerDetails;
     }
 
@@ -176,7 +178,8 @@
 
     /**
      * Callback method used to initialize the database layers.
-     * @param  {Object} Firebase auth data object
+     * @param  {Object}  Firebase auth data object
+     * @return {Promise} Promise object
      */
     function loadUserLayersAndEnableEditing(authData) {
       var defer = $q.defer();

@@ -1,3 +1,6 @@
+/**
+ * Manages user authentication and account creation.
+ */
 (function() {
   'use strict';
 
@@ -17,29 +20,35 @@
       signup: signup
     };
 
-    // we need a user. If the user is not logged in, use an anonymous one.
+    // if the user is not logged in then treat him/her as anonymous
     if (!firebaseReferenceService.ref.getAuth()) {
       firebaseReferenceService.ref.authAnonymously();
     }
 
     return service;
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    //////////////////// PUBLIC ////////////////////
 
     /**
-     * if the user is logged in, then get his UID and redirect to the right URL, if not redirect to the login page.
+     * Checks if the user is logged and then redirects him/her to /#/main/UID.
+     * Otherwise redirects to the login page.
      */
     function checkUser() {
       service.onceAuthData().then(function(authData){
         if (authData && !authData.anonymous) {
           $location.path('/main/' + authData.uid);
-        } else { // authData == null
+        } else {
           $location.path('/login');
         }
       });
     }
 
-    // the uid in the route must exist
+    /**
+     * Ensures that there is a valid UID param in the URL.
+     * If there isn't it redirects to the login page.
+     *
+     * @return {Promise} Promise object
+     */
     function getRouteUid() {
       var deferred = $q.defer();
 
@@ -56,6 +65,12 @@
       return deferred.promise;
     }
 
+    /**
+     * Logs the user in based on the provided authentication credentials.
+     *
+     * @param  {String} email    User's email
+     * @param  {String} password User's password
+     */
     function login(email, password) {
       messageService.message("Logging you in...");
 
@@ -64,11 +79,17 @@
           $log.debug("Logged in as:", authData.uid);
           $window.location.href = "/";
         }).catch(function(error) {
-        $log.error("Error: ", error);
-        messageService.error(error.message);
-      });
+          $log.error("Error: ", error);
+          messageService.error(error.message);
+        });
     }
 
+    /**
+     * Creates a new account for the user and logs him/her in.
+     *
+     * @param  {String} email    User's email
+     * @param  {String} password User's password
+     */
     function signup(email, password) {
       messageService.message("Signing up");
 
@@ -81,7 +102,5 @@
         messageService.error(error.message);
       });
     }
-
   }
-
 })();

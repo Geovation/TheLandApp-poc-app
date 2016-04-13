@@ -68,7 +68,7 @@
      * @return {Boolean}
      */
     function isThereAnyProjectActive() {
-      return angular.isDefined(getActiveProject()) || (getMyFarmProject() && getMyFarmProject().isActive);
+      return !!(getActiveProject() || (getMyFarmProject() && getMyFarmProject().isActive));
     }
 
     /**
@@ -136,9 +136,9 @@
     /**
      * Creates a new named project.
      *
-     * @param  {String}   projectName       Name of the new project
-     * @param  {Bool}     isMyFarm Whether this is a base farm project
-     * @return {Promise}                    Promise object
+     * @param  {String}   projectName Name of the new project
+     * @param  {Bool}     isMyFarm    True if this is a base farm project
+     * @return {Promise}              Promise object
      */
     function createProject(projectName, isMyFarm) {
       var deferred = $q.defer();

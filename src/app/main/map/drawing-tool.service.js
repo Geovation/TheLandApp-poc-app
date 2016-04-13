@@ -15,7 +15,6 @@
       layerDefinitionsService, firebaseLayerService, mapService, tooltipMeasurementService,
       olUserLayerService, olLayerGroupService) {
     var service = {
-      init: init,
       drawingLayers: layerDefinitionsService.drawingLayers,
       editToggleDrawingTool: editToggleDrawingTool,
       setVisibleDrawingToolLayer: setVisibleDrawingToolLayer
@@ -38,10 +37,6 @@
       }
     }
 
-    function init() {
-      tooltipMeasurementService.init();
-    }
-
     /**
      * Toggles drawing tool based on user selection.
      * @param {Object}  Layer object (from layerDefinitionsService)
@@ -53,6 +48,7 @@
     }
 
     //////////////////////////// PRIVATE ////////////////////////////
+
     /**
      * Activates drawing functions for a given drawing layer.
      * @param  {Object} Layer object (from layerDefinitionsService)
@@ -87,7 +83,7 @@
       });
 
       mapService.getMap().addInteraction(layer.draw);
-      tooltipMeasurementService.addTooltip(drawingLayer.olLayer, layer.draw);
+      tooltipMeasurementService.addTooltip(layer.draw);
 
       olUserLayerService.focusLayer(drawingLayer.olLayer);
       olUserLayerService.disableInteractions();

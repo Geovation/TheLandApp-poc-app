@@ -1,3 +1,6 @@
+/**
+ * Manages the saving of farm and drawing layers to the database.
+ */
 (function() {
   'use strict';
 
@@ -18,19 +21,40 @@
 
     //////////////// PUBLIC ////////////////
 
+    /**
+     * Saves a set of drawing layers to the database.
+     *
+     * @param  {Object[]}  layersList      List of drawing layer definition objects
+     * @param  {Boolean}   isBaseFarmLayer True if these layers belong to the base farm project
+     * @return {Promise}                   Promise object
+     */
     function saveDrawingLayers(layersList, isBaseFarmLayer) {
       return _saveLayer(layersList, "drawing", isBaseFarmLayer);
     }
 
+    /**
+     * Saves a set of farm layers to the database.
+     *
+     * @param  {Object[]}  layersList      List of farm layer definition objects
+     * @param  {Boolean}   isBaseFarmLayer True if these layers belong to the base farm project
+     * @return {Promise}                   Promise object
+     */
     function saveFarmLayers(layersList, isBaseFarmLayer) {
       return _saveLayer(layersList, "farm", isBaseFarmLayer);
     }
 
     //////////////// PRIVATE ////////////////
 
+    /**
+     * Saves a set of layers to the database.
+     *
+     * @param  {Object[]} layersList      List of layer definition objects
+     * @param  {String}   layerGroupName  Layer group name (farm/drawing)
+     * @param  {Boolean}  isBaseFarmLayer True if these layers belong to the base farm project
+     * @return {Promise}                  Promise object
+     */
     function _saveLayer(layersList, layerGroupName, isBaseFarmLayer) {
       var deferred = $q.defer();
-
       var format = new ol.format.GeoJSON();
       var payload = {};
 

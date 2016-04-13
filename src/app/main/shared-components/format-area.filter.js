@@ -1,3 +1,7 @@
+/**
+ * Formats an area given as a simple number in square meters
+ * to HTML styled square m/km.
+ */
 (function() {
   'use strict';
 

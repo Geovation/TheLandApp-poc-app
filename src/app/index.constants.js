@@ -3,9 +3,7 @@
   'use strict';
 
   // mocking ga for the tests
-  if (!window.ga) {
-    window.ga = {};
-  }
+  window.ga = window.ga || {};
 
   angular
     .module('LandApp')

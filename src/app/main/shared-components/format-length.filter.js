@@ -1,3 +1,7 @@
+/**
+ * Formats a length given as a simple number in meters
+ * to HTML styled m/km.
+ */
 (function() {
   'use strict';
 
