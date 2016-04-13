@@ -89,7 +89,7 @@
 
     /**
      * Changes the base layer of the map.
-     * @param {Object} baseMap Layer object
+     * @param {Object} baseMap Layer definition object
      */
     function setBaseMap(baseMap) {
       if (currentBaseMap.olLayer) {
@@ -103,7 +103,7 @@
     /**
      * Toggles the layer on/off based on its layer.checked property.
      *
-     * @param  {Object} layer Layer object
+     * @param  {Object} layer Layer definition object
      */
     function toggleLayerFromCheckProperty(layer) {
       if (layer.checked) {
@@ -118,7 +118,7 @@
      * Adds a layer to the map. If the layer has already been added,
      * it will only display it.
      *
-     * @param {Object} layer Layer object
+     * @param {Object} layer Layer definition object
      */
     function addLayer(layer) {
       // prevent adding duplicate layers to the map
@@ -136,7 +136,7 @@
     /**
      * Removes a layer from the map.
      *
-     * @param  {Object} layer Layer object
+     * @param  {Object} layer Layer definition object
      */
     function removeLayer(layer) {
       layer.olLayer.setVisible(false);

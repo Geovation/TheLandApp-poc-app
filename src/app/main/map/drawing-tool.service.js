@@ -27,7 +27,7 @@
     /**
      * Toggles a specific drawing tool (called by the view when
      * a drawing tool is clicked).
-     * @param  {Object} Layer object (from layerDefinitionsService)
+     * @param  {Object} Layer definition object (from layerDefinitionsService)
      */
     function editToggleDrawingTool(layer) {
       if (layer.draw) {
@@ -39,7 +39,7 @@
 
     /**
      * Toggles drawing tool based on user selection.
-     * @param {Object}  Layer object (from layerDefinitionsService)
+     * @param {Object}  Layer definition object (from layerDefinitionsService)
      */
     function setVisibleDrawingToolLayer(layer) {
       var drawingLayer = olLayerGroupService.getActiveLayerByKey(layer.key, true);
@@ -51,7 +51,7 @@
 
     /**
      * Activates drawing functions for a given drawing layer.
-     * @param  {Object} Layer object (from layerDefinitionsService)
+     * @param  {Object} Layer definition object (from layerDefinitionsService)
      */
     function activateDrawingTool(layer) {
       var drawingLayer = olLayerGroupService.getActiveLayerByKey(layer.key, true);
@@ -99,7 +99,7 @@
 
     /**
      * Deactivates drawing functions for a given drawing layer.
-     * @param  {Object} Layer object (from layerDefinitionsService)
+     * @param  {Object} Layer definition object (from layerDefinitionsService)
      */
     function deactivateDrawingTool(layer) {
       var drawingLayer = olLayerGroupService.getActiveLayerByKey(layer.key, true);

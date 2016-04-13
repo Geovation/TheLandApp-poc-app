@@ -97,9 +97,9 @@
     }
 
     /**
-     * Fetches parent layer object for a given feature object.
+     * Fetches parent Layer definition object for a given feature object.
      * @param  {ol.Feature} Feature to find
-     * @return {Object} Layer object (from layerDefinitionsService)
+     * @return {Object} Layer definition object (from layerDefinitionsService)
      */
     function getLayerDetailsByFeature(feature) {
       var layerDetails = null;
@@ -323,7 +323,7 @@
 
     /**
      * Creates a new OL vector layer instance based on the passed layer details.
-     * @param  {Object} Layer object (from layerDefinitionsService)
+     * @param  {Object} Layer definition object (from layerDefinitionsService)
      * @return {ol.layer.Vector}
      */
     function newVectorLayer(layerDetails) {
