@@ -43,7 +43,7 @@
           vm.mapOwner = email.val();
         });
 
-        firebaseReferenceService.getUserPresence().on("value", function(presence) {
+        firebaseReferenceService.getUserPresenceRef().on("value", function(presence) {
           $timeout(function() {
             vm.usersAccedingCurrentMap = [];
 

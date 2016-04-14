@@ -13,7 +13,7 @@
         loginService.onceAuthData()
           .then(_getUserData)
           .then(function(info){
-            var presenceRef = firebaseReferenceService.getUserPresence().push(info);
+            var presenceRef = firebaseReferenceService.getUserPresenceRef().push(info);
             presenceRef.onDisconnect().remove();
           });
       }

@@ -1,3 +1,7 @@
+/**
+ * Contains basic layer definitions for use within the map
+ * which are later used to build internal ol layers.
+ */
 (function() {
   'use strict';
 
@@ -16,8 +20,7 @@
       nationalDataLayers: createNationalDataLayers(),
     };
 
-    // for practical reasons, add a key value to each layer and a name if it
-    // is not defined
+    // for practical reasons, add a key value to each layer
     angular.forEach(service, function(layerFamily) {
       angular.forEach(layerFamily, function(layer, layerKey) {
         layer.key = layerKey;
@@ -26,8 +29,12 @@
 
     return service;
 
-    //////////
+    ///////////////// PUBLIC /////////////////
 
+    /**
+     * Generates the National Data layer definitions (LR data).
+     * @return {Object} Layer definitions
+     */
     function createNationalDataLayers() {
       return {
         lrVectors: {
@@ -38,6 +45,10 @@
       };
     }
 
+    /**
+     * Generates the Environmental layer definitions (AONB, SAC, SSSI, Ancient Woodland).
+     * @return {Object} Layer definitions
+     */
     function createEnvironmentalLayers() {
       return {
         aonb: {
@@ -67,7 +78,10 @@
       };
     }
 
-
+    /**
+     * Generates the base map (OSM, OS, Aerial) definitions.
+     * @return {Object} Layer definitions
+     */
     function createBaseMapLayers() {
       return {
         openStreetMap: {
@@ -93,6 +107,10 @@
       };
     }
 
+    /**
+     * Generates the farm layer (RLR, MasterMap, owned LR) definitions.
+     * @return {Object} Layer definitions
+     */
     function createFarmLayers() {
       return {
         rlrParcel: {
@@ -126,6 +144,10 @@
       };
     }
 
+    /**
+     * Generates the drawing layer (water, electricity, hedge etc.) definitions.
+     * @return {Object} Layer definitions
+     */
     function createDrawingLayers() {
       return {
         water: {

@@ -26,7 +26,6 @@
       messageService.loading();
 
       mapService.init();
-      drawingToolsService.init();
       olUserLayerService.init()
         .then(projectService.init)
         .then(messageService.hide);

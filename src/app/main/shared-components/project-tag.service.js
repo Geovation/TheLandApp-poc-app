@@ -1,3 +1,6 @@
+/**
+ *
+ */
 (function() {
   'use strict';
 
@@ -7,25 +10,33 @@
 
   /** @ngInject */
   function projectTagService() {
-    var service = {
+    return {
       findMatchingTags: findMatchingTags
     };
 
-    var defaultTags = createDefaultProjectTags();
+    ///////////////// PUBLIC /////////////////
 
-    return service;
-
-    //////////
-
+    /**
+     * Returns a list of tag definitions which match the search query.
+     *
+     * @param  {String}   searchQuery User's search query
+     * @return {Object[]}             List of tag definition objects
+     */
     function findMatchingTags(searchQuery) {
       var regex = new RegExp(searchQuery, "i");
 
-      return defaultTags.filter(function(tag) {
+      return _generateDefaultProjectTags().filter(function(tag) {
         return regex.test(tag.displayText);
       });
     }
 
-    function createDefaultProjectTags() {
+    ///////////////// PRIVATE /////////////////
+
+    /**
+     * Generates a list of default tag definitions.
+     * @return {Object[]} List of default tag definitions
+     */
+    function _generateDefaultProjectTags() {
       return [{
         name: "digitse-farm",
         displayText: "Digitise farm"

@@ -1,3 +1,7 @@
+/**
+ * Sets up and controls the measurement tooltips that appear
+ * when drawing new features on the map.
+ */
 (function() {
   'use strict';
 
@@ -8,30 +12,31 @@
   /** @ngInject */
   function tooltipMeasurementService(ol, featureMeasureService, mapService) {
     var service = {
-      addTooltip: addTooltip,
-      init: init
+      addTooltip: addTooltip
     };
 
     var measureTooltipNode;
     var measureTooltip;
     var currentFeature;
-    var map;
 
     return service;
 
     //////////////////////////// PUBLIC FUNCTIONS ////////////////////////////
 
-    function init() {
-      map = mapService.getMap();
-    }
-
-    function addTooltip(layer, drawInteraction) {
+    /**
+     * Adds a new tooltip and binds it to the draw interaction's events.
+     * @param {ol.interaction.Draw} drawInteraction Draw interaction instance
+     */
+    function addTooltip(drawInteraction) {
       createMeasureTooltip();
       addDrawListeners(drawInteraction);
     }
 
     //////////////////////////// PRIVATE FUNCTIONS ////////////////////////////
 
+    /**
+     * Creates the tooltip overlay and adds it to the map.
+     */
     function createMeasureTooltip() {
       if (measureTooltipNode) {
         measureTooltipNode.remove();
@@ -45,9 +50,14 @@
         stopEvent: false
       });
 
-      map.addOverlay(measureTooltip);
+      mapService.getMap().addOverlay(measureTooltip);
     }
 
+    /**
+     * Adds a drawstart callback to the draw interaction which
+     * displays the feature's length/area within the tooltip.
+     * @param {ol.interaction.Draw} drawInteraction Draw interaction instance
+     */
     function addDrawListeners(drawInteraction) {
       var listener;
 
@@ -58,7 +68,7 @@
 
         listener = currentFeature.getGeometry().on("change", function(event) {
           var geometry = event.target;
-          var output = featureMeasureService.getPrettyMeasurement(geometry, map.getView().getProjection());
+          var output = featureMeasureService.getPrettyMeasurement(geometry, mapService.getMap().getView().getProjection());
 
           if (geometry instanceof ol.geom.Polygon) {
             tooltipCoord = geometry.getInteriorPoint().getCoordinates();

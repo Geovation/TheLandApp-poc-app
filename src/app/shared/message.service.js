@@ -1,3 +1,6 @@
+/**
+ * Manages the displaying and hiding of message/error dialogs.
+ */
 (function() {
   'use strict';
 
@@ -17,20 +20,32 @@
     };
 
     return service;
-    ////////// public functions //////////////
 
+    ///////////////////// PUBLIC /////////////////////
+
+    /**
+     * Hides the current dialog.
+     */
     function hideFn() {
       $mdDialog.hide();
     }
 
+    /**
+     * Displays the loading dialog.
+     */
     function loadingFn() {
       var modalConfig = {
         templateUrl: "app/shared/loading.html",
-        clickOutsideToClose:false
+        clickOutsideToClose: false
       };
+
       $mdDialog.show(modalConfig);
     }
 
+    /**
+     * Display an error dialog.
+     * @param  {String} error Error text
+     */
     function errorFn(error) {
       $mdDialog.hide(modalConfig);
       modalConfig = $mdDialog
@@ -40,6 +55,10 @@
       $mdDialog.show(modalConfig);
     }
 
+    /**
+     * Displays a standard message dialog.
+     * @param  {String} message Message text
+     */
     function messageFn(message) {
       modalConfig = {
         parent: angular.element($document.body),
@@ -58,10 +77,5 @@
 
       $mdDialog.show(modalConfig);
     }
-
-
-    //////////// privates ////////////////
-
   }
-
 })();

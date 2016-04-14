@@ -1,5 +1,5 @@
 /**
- * Stores information about the currently active layer group.
+ * Stores information about the currently active project/layer group.
  */
 (function() {
   'use strict';

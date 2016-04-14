@@ -1,3 +1,6 @@
+/**
+ * Manages the onboarding process and land registry title ownership.
+ */
 (function() {
   'use strict';
 
@@ -33,7 +36,11 @@
 
     return service;
 
-    // PUBLIC //////////////////////////////////////////////////////////////////
+    //////////////////////////// PUBLIC ////////////////////////////
+
+    /**
+     * Initializes the service.
+     */
     function init() {
       loginService.onceAuthData().then(nextStep);
 
@@ -111,6 +118,10 @@
       }
     }
 
+    /**
+     * Triggers the appropriate actions when the user
+     * progresses to the next step of the onboarding process.
+     */
     function handleStep(stepName) {
       _currentStepName = stepName;
 
@@ -132,7 +143,6 @@
           break;
 
         case _stepNames.end:
-          stepEnd();
           break;
       }
     }
@@ -162,10 +172,9 @@
       });
     }
 
-    function stepEnd() {
-
-    }
-
+    /**
+     * Completes the onboarding process and updates the db with the current timestamp.
+     */
     function stepCompleted() {
       firebaseReferenceService.getUserInfoRef().update({onboardingCompletedAt: Firebase.ServerValue.TIMESTAMP})
       .then(function(){
@@ -175,6 +184,9 @@
       });
     }
 
+    /**
+     * Displays the dialog shown in the first step of the onboarding process.
+     */
     function stepShowOnboardingDialog() {
       $mdDialog.show({
         templateUrl: 'app/main/onboarding/onboarding-dialog.html',
@@ -192,7 +204,9 @@
         vm.querySearch = querySearch;
         vm.selectedItemChange = selectedItemChange;
 
-        /////////////////////////////////////////////////////////////////////////
+        /**
+         * Closes the onboarding modal allowing the user to use the map.
+         */
         function continueMapping() {
           if (selectedAddress) {
             firebaseReferenceService.getUserInfoRef().update({
@@ -209,7 +223,12 @@
           }
         }
 
-        // returns a promise as it is async.
+        /**
+         * Performs a Nominatim search based on the provided query string.
+         *
+         * @param  {String}  query Search string
+         * @return {Promise}       Promise object
+         */
         function querySearch(query) {
           $log.debug("Query search:" + query);
 
@@ -229,13 +248,16 @@
           return defer.promise;
         }
 
+        /**
+         * Updates the internal state of the application with the user's selected address.
+         *
+         * @param  {String} address Address chosen by user
+         */
         function selectedItemChange(address) {
           selectedAddress = address;
           $rootScope.$broadcast('address-selected', selectedAddress);
         }
-      } // DialogController
-
-    } // stepShowOnboardingDialog
-
+      }
+    }
   }
 })();

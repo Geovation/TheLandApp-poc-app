@@ -1,3 +1,6 @@
+/**
+ * Manages the ol.Map instance and the interactions associated with it.
+ */
 (function() {
   'use strict';
 
@@ -26,15 +29,24 @@
     };
 
     return service;
-    // PUBLIC FUNCTIONS ////////////////////////////////////////////////////////
-    /** if extent is empty, calculate the extent based on user's layers.
-    */
+
+    //////////////////////////////// PUBLIC FUNCTIONS ////////////////////////////////
+
+    /**
+     * Fits the view to the provided extent,
+     * which is based on the user's layer data.
+     *
+     * @param  {ol.Extent} extent Extent object
+     */
     function fitExtent(extent) {
       if (!ol.extent.isEmpty(extent)) {
         view.fit(extent, map.getSize());
       }
     }
 
+    /**
+     * Init method
+     */
     function init() {
       view = new ol.View({
         center: ol.proj.fromLonLat(ENV.defaultMapCenter),
@@ -59,14 +71,26 @@
       recenterMapToUserHome();
     }
 
+    /**
+     * Zooms the map to the provided level
+     * @param {number} zoomLevel Zoom level
+     */
     function setZoom(zoomLevel) {
       view.setZoom(zoomLevel);
     }
 
+    /**
+     * Returns the projection of the view
+     * @return {ol.proj.Projection} Projection object
+     */
     function getProjection() {
       return view.getProjection();
     }
 
+    /**
+     * Changes the base layer of the map.
+     * @param {Object} baseMap Layer definition object
+     */
     function setBaseMap(baseMap) {
       if (currentBaseMap.olLayer) {
         removeLayer(currentBaseMap);
@@ -76,6 +100,11 @@
       addLayer(currentBaseMap);
     }
 
+    /**
+     * Toggles the layer on/off based on its layer.checked property.
+     *
+     * @param  {Object} layer Layer definition object
+     */
     function toggleLayerFromCheckProperty(layer) {
       if (layer.checked) {
         addLayer(layer);
@@ -84,7 +113,13 @@
       }
     }
 
-    // PRIVATE FUNCTIONS ///////////////////////////////////////////////////////
+    //////////////////////////////// PRIVATE FUNCTIONS ////////////////////////////////
+    /**
+     * Adds a layer to the map. If the layer has already been added,
+     * it will only display it.
+     *
+     * @param {Object} layer Layer definition object
+     */
     function addLayer(layer) {
       // prevent adding duplicate layers to the map
       if (map.getLayers().getArray().indexOf(layer.olLayer) === -1) {
@@ -98,6 +133,11 @@
       layer.olLayer.setVisible(true);
     }
 
+    /**
+     * Removes a layer from the map.
+     *
+     * @param  {Object} layer Layer definition object
+     */
     function removeLayer(layer) {
       layer.olLayer.setVisible(false);
       map.removeLayer(layer.olLayer);
@@ -107,6 +147,9 @@
       });
     }
 
+    /**
+     * Recenters the map to the user's home bounding box.
+     */
     function recenterMapToUserHome() {
       firebaseReferenceService.getUserInfoRef().once("value").then(function(userInfo) {
         var boundingBox = userInfo.val().homeBoundingBox;
@@ -119,7 +162,5 @@
         }
       });
     }
-
-  } // mapService
-
+  }
 })();
