@@ -1,4 +1,7 @@
 /**
+ * @ngdoc service
+ * @name  LandApp.service:layerDefinitionsService
+ * @description
  * Contains basic layer definitions for use within the map
  * which are later used to build internal ol layers.
  */
@@ -32,6 +35,10 @@
     ///////////////// PUBLIC /////////////////
 
     /**
+     * @ngdoc method
+     * @name  createNationalDataLayers
+     * @methodOf LandApp.service:layerDefinitionsService
+     * @description
      * Generates the National Data layer definitions (LR data).
      * @return {Object} Layer definitions
      */
@@ -46,6 +53,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  createEnvironmentalLayers
+     * @methodOf LandApp.service:layerDefinitionsService
+     * @description
      * Generates the Environmental layer definitions (AONB, SAC, SSSI, Ancient Woodland).
      * @return {Object} Layer definitions
      */
@@ -79,6 +90,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  createBaseMapLayers
+     * @methodOf LandApp.service:layerDefinitionsService
+     * @description
      * Generates the base map (OSM, OS, Aerial) definitions.
      * @return {Object} Layer definitions
      */
@@ -108,6 +123,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  createFarmLayers
+     * @methodOf LandApp.service:layerDefinitionsService
+     * @description
      * Generates the farm layer (RLR, MasterMap, owned LR) definitions.
      * @return {Object} Layer definitions
      */
@@ -145,6 +164,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  createDrawingLayers
+     * @methodOf LandApp.service:layerDefinitionsService
+     * @description
      * Generates the drawing layer (water, electricity, hedge etc.) definitions.
      * @return {Object} Layer definitions
      */

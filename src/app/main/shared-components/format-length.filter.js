@@ -1,6 +1,9 @@
 /**
+ * @ngdoc filter
+ * @name  LandApp.filter:formatLength
+ * @description
  * Formats a length given as a simple number in meters
- * to HTML styled m/km.
+ * to HTML styled m or km.
  */
 (function() {
   'use strict';

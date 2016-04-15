@@ -1,4 +1,7 @@
 /**
+ * @ngdoc service
+ * @name  LandApp.service:olLayerGroupService
+ * @description
  * Manages and allows for interacting with grouped OL layers,
  * where each group is an individual project.
  */
@@ -31,6 +34,10 @@
     ////////////////////////////////// PUBLIC //////////////////////////////////
 
     /**
+     * @ngdoc method
+     * @name  createLayerGroup
+     * @methodOf LandApp.service:olLayerGroupService
+     * @description
      * Creates a new group of layers and appends them to the map.
      * The group is invisible by default.
      *
@@ -53,6 +60,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  removeLayerGroup
+     * @methodOf LandApp.service:olLayerGroupService
+     * @description
      * Removes a group/project and all of its child layers from the map.
      *
      * @param  {String} groupName Name of the project/group
@@ -73,6 +84,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  getActiveLayerGroup
+     * @methodOf LandApp.service:olLayerGroupService
+     * @description
      * Returns a collection of the active group layers.
      * @return {Object} Object of layer definition objects, grouped by type
      */
@@ -81,6 +96,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  getBaseFarmLayerGroup
+     * @methodOf LandApp.service:olLayerGroupService
+     * @description
      * Returns the base farm group object
      * @return {Object} Group definition object
      */
@@ -89,6 +108,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  getActiveLayerByKey
+     * @methodOf LandApp.service:olLayerGroupService
+     * @description
      * Returns a specific named layer from the active group.
      *
      * @param  {String}  layerKey       Layer name/key
@@ -102,14 +125,22 @@
     }
 
     /**
-     * Returns true if the base farm layer group is visible, false otherwise.
-     * @return {Boolean}  Layer visibility
+     * @ngdoc method
+     * @name  isBaseFarmLayerVisible
+     * @methodOf LandApp.service:olLayerGroupService
+     * @description
+     * Checks if the base farm layer group is visible.
+     * @return {Boolean}  True if the base farm layer group is visible, false otherwise
      */
     function isBaseFarmLayerVisible() {
       return _groupCollection.myFarm && _groupCollection.myFarm.getVisible();
     }
 
     /**
+     * @ngdoc method
+     * @name  hideFarmDataLayers
+     * @methodOf LandApp.service:olLayerGroupService
+     * @description
      * Hides all of the farm layers which belong to the myFarm project group.
      */
     function hideFarmDataLayers() {
@@ -120,6 +151,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  setGroupVisibility
+     * @methodOf LandApp.service:olLayerGroupService
+     * @description
      * Toggles the visiblity of a named layer group.
      *
      * @param  {String}  groupName Name/key of the project/group

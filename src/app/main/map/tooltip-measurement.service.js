@@ -1,4 +1,7 @@
 /**
+ * @ngdoc service
+ * @name  LandApp.service:tooltipMeasurementService
+ * @description
  * Sets up and controls the measurement tooltips that appear
  * when drawing new features on the map.
  */
@@ -24,6 +27,10 @@
     //////////////////////////// PUBLIC FUNCTIONS ////////////////////////////
 
     /**
+     * @ngdoc method
+     * @name  addTooltip
+     * @methodOf LandApp.service:tooltipMeasurementService
+     * @description
      * Adds a new tooltip and binds it to the draw interaction's events.
      * @param {ol.interaction.Draw} drawInteraction Draw interaction instance
      */
@@ -35,6 +42,10 @@
     //////////////////////////// PRIVATE FUNCTIONS ////////////////////////////
 
     /**
+     * @ngdoc method
+     * @name  createMeasureTooltip
+     * @methodOf LandApp.service:tooltipMeasurementService
+     * @description
      * Creates the tooltip overlay and adds it to the map.
      */
     function createMeasureTooltip() {
@@ -54,6 +65,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  addDrawListeners
+     * @methodOf LandApp.service:tooltipMeasurementService
+     * @description
      * Adds a drawstart callback to the draw interaction which
      * displays the feature's length/area within the tooltip.
      * @param {ol.interaction.Draw} drawInteraction Draw interaction instance

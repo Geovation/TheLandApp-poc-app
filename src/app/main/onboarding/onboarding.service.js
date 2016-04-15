@@ -1,4 +1,7 @@
 /**
+ * @ngdoc service
+ * @name  LandApp.service:onboardingService
+ * @description
  * Manages the onboarding process and land registry title ownership.
  */
 (function() {
@@ -39,6 +42,10 @@
     //////////////////////////// PUBLIC ////////////////////////////
 
     /**
+     * @ngdoc method
+     * @name  init
+     * @methodOf LandApp.service:onboardingService
+     * @description
      * Initializes the service.
      */
     function init() {
@@ -53,6 +60,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  init
+     * @methodOf LandApp.service:onboardingService
+     * @description
      * Disables the adding of additional LR features
      * and toggles the owned and national LR layer data.
      */
@@ -62,6 +73,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  init
+     * @methodOf LandApp.service:onboardingService
+     * @description
      * Selected LR features setter.
      * @param {Ol.Collection<Ol.Feature>} selectedLrFeatures Collection of selected features
      */
@@ -70,6 +85,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  init
+     * @methodOf LandApp.service:onboardingService
+     * @description
      * Copies the currently selected (highlighted) national LR features
      * into the owned LR farm layer.
      */
@@ -91,9 +110,15 @@
       }
     }
 
-    // PRIVATE /////////////////////////////////////////////////////////////////
-    /* It calculates the step to display based on the data present in the DB.
-     * It assumes that the user could had have been interrupted and the user
+    ///////////////////////// PRIVATE /////////////////////////
+
+    /**
+     * @ngdoc method
+     * @name  nextStep
+     * @methodOf LandApp.service:onboardingService
+     * @description
+     * Calculates the step to display based on the data present in the DB.
+     * Assumes that the user could had have been interrupted and the user
      * needs to continue from there.
      */
     function nextStep() {
@@ -119,6 +144,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  handleStep
+     * @methodOf LandApp.service:onboardingService
+     * @description
      * Triggers the appropriate actions when the user
      * progresses to the next step of the onboarding process.
      */
@@ -148,6 +177,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  toggleLrLayers
+     * @methodOf LandApp.service:onboardingService
+     * @description
      * Toggles the display of the owned and national LR data layers.
      */
     function toggleLrLayers() {
@@ -173,6 +206,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  stepCompleted
+     * @methodOf LandApp.service:onboardingService
+     * @description
      * Completes the onboarding process and updates the db with the current timestamp.
      */
     function stepCompleted() {
@@ -185,6 +222,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  stepShowOnboardingDialog
+     * @methodOf LandApp.service:onboardingService
+     * @description
      * Displays the dialog shown in the first step of the onboarding process.
      */
     function stepShowOnboardingDialog() {

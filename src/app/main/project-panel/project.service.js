@@ -1,4 +1,7 @@
 /**
+ * @ngdoc service
+ * @name  LandApp.service:projectService
+ * @description
  * Handles the creation and management of projects.
  */
 (function() {
@@ -29,6 +32,10 @@
     /////////////////////////// PUBLIC ///////////////////////////
 
     /**
+     * @ngdoc method
+     * @name  init
+     * @methodOf LandApp.service:projectService
+     * @description
      * Initializes the service by loading project details from the db.
      */
     function init() {
@@ -64,14 +71,22 @@
     }
 
     /**
-     * Returns true if there is at least one active project, false otherwise.
-     * @return {Boolean}
+     * @ngdoc method
+     * @name  isThereAnyProjectActive
+     * @methodOf LandApp.service:projectService
+     * @description
+     * Checks if there are any active projects within the current session.
+     * @return {Boolean} True if there is at least one active project, false otherwise.
      */
     function isThereAnyProjectActive() {
       return !!(getActiveProject() || (getMyFarmProject() && getMyFarmProject().isActive));
     }
 
     /**
+     * @ngdoc method
+     * @name  setProjectVisibility
+     * @methodOf LandApp.service:projectService
+     * @description
      * Toggles a project's visiblity.
      *
      * @param {Object} toggledProject Project to toggle
@@ -118,6 +133,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  getActiveProject
+     * @methodOf LandApp.service:projectService
+     * @description
      * Returns the currently active project.
      * @return {Object} Project object
      */
@@ -126,6 +145,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  getMyFarmProject
+     * @methodOf LandApp.service:projectService
+     * @description
      * Returns the base farm project.
      * @return {Object} Project object
      */
@@ -134,6 +157,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  createProject
+     * @methodOf LandApp.service:projectService
+     * @description
      * Creates a new named project.
      *
      * @param  {String}   projectName Name of the new project
@@ -182,6 +209,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  deleteProject
+     * @methodOf LandApp.service:projectService
+     * @description
      * Deletes a given project from the db and removes it from the map.
      *
      * @param  {Object}  project Project object

@@ -1,4 +1,7 @@
 /**
+ * @ngdoc service
+ * @name  LandApp.service:drawingToolsService
+ * @description
  * Manages the activation and deactivation of the drawing tools
  * associated with the map, calls on several other services to
  * trigger certain events (such as tooltip creation or highlight clearing).
@@ -25,9 +28,13 @@
     //////////////////////////// PUBLIC ////////////////////////////
 
     /**
+     * @ngdoc method
+     * @name  editToggleDrawingTool
+     * @methodOf LandApp.service:drawingToolsService
+     * @description
      * Toggles a specific drawing tool (called by the view when
      * a drawing tool is clicked).
-     * @param  {Object} Layer definition object (from layerDefinitionsService)
+     * @param  {Object} layer Layer definition object (from layerDefinitionsService)
      */
     function editToggleDrawingTool(layer) {
       if (layer.draw) {
@@ -38,8 +45,12 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  setVisibleDrawingToolLayer
+     * @methodOf LandApp.service:drawingToolsService
+     * @description
      * Toggles drawing tool based on user selection.
-     * @param {Object}  Layer definition object (from layerDefinitionsService)
+     * @param {Object} layer Layer definition object (from layerDefinitionsService)
      */
     function setVisibleDrawingToolLayer(layer) {
       var drawingLayer = olLayerGroupService.getActiveLayerByKey(layer.key, true);
@@ -50,8 +61,12 @@
     //////////////////////////// PRIVATE ////////////////////////////
 
     /**
+     * @ngdoc method
+     * @name  activateDrawingTool
+     * @methodOf LandApp.service:drawingToolsService
+     * @description
      * Activates drawing functions for a given drawing layer.
-     * @param  {Object} Layer definition object (from layerDefinitionsService)
+     * @param  {Object} layer Layer definition object (from layerDefinitionsService)
      */
     function activateDrawingTool(layer) {
       var drawingLayer = olLayerGroupService.getActiveLayerByKey(layer.key, true);
@@ -98,8 +113,12 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  deactivateDrawingTool
+     * @methodOf LandApp.service:drawingToolsService
+     * @description
      * Deactivates drawing functions for a given drawing layer.
-     * @param  {Object} Layer definition object (from layerDefinitionsService)
+     * @param  {Object} layer Layer definition object (from layerDefinitionsService)
      */
     function deactivateDrawingTool(layer) {
       var drawingLayer = olLayerGroupService.getActiveLayerByKey(layer.key, true);

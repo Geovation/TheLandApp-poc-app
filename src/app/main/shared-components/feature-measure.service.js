@@ -1,4 +1,7 @@
 /**
+ * @ngdoc service
+ * @name  LandApp.service:featureMeasureService
+ * @description
  * Calculates geometry sizes (length or area) depending on their type.
  */
 (function() {
@@ -23,6 +26,10 @@
     ///////////////////// PUBLIC /////////////////////
 
     /**
+     * @ngdoc method
+     * @name  getPrettyMeasurement
+     * @methodOf LandApp.service:featureMeasureService
+     * @description
      * Calculates and formats the area/length of a geometry.
      *
      * @param  {ol.geom.SimpleGeometry} geometry         Geometry to measure
@@ -46,6 +53,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  calculateArea
+     * @methodOf LandApp.service:featureMeasureService
+     * @description
      * Calculates the area of a polygon.
      *
      * @param  {ol.geom.Polygon}        polygon          Geometry to measure
@@ -60,6 +71,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  calculateLength
+     * @methodOf LandApp.service:featureMeasureService
+     * @description
      * Calculates the length of a line using the haversine formula.
      *
      * @param  {ol.geom.LineString}     polygon          Geometry to measure

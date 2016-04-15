@@ -1,4 +1,7 @@
 /**
+ * @ngdoc service
+ * @name  LandApp.service:messageService
+ * @description
  * Manages the displaying and hiding of message/error dialogs.
  */
 (function() {
@@ -24,6 +27,10 @@
     ///////////////////// PUBLIC /////////////////////
 
     /**
+     * @ngdoc method
+     * @name  hideFn
+     * @methodOf LandApp.service:messageService
+     * @description
      * Hides the current dialog.
      */
     function hideFn() {
@@ -31,6 +38,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  loadingFn
+     * @methodOf LandApp.service:messageService
+     * @description
      * Displays the loading dialog.
      */
     function loadingFn() {
@@ -43,6 +54,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  errorFn
+     * @methodOf LandApp.service:messageService
+     * @description
      * Display an error dialog.
      * @param  {String} error Error text
      */
@@ -56,6 +71,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  messageFn
+     * @methodOf LandApp.service:messageService
+     * @description
      * Displays a standard message dialog.
      * @param  {String} message Message text
      */
