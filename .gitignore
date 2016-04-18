@@ -1,5 +1,6 @@
 node_modules/
 bower_components/
+ng-docs/
 .sass-cache/
 .idea/
 .tmp/

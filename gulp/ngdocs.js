@@ -16,5 +16,5 @@ var options = {
 gulp.task('ngdocs', recursiveFolder('src', function(foundFolder) {
   return gulp.src(foundFolder.path + "/*.js")
     .pipe(gulpDocs.process(options))
-    .pipe(gulp.dest('./docs'));
+    .pipe(gulp.dest('./ng-docs'));
 }));
