@@ -1,4 +1,7 @@
 /**
+ * @ngdoc service
+ * @name  LandApp.service:olExternalLayerService
+ * @description
  * Creates "external" layers, such as various base map and
  * Land Registry data sources. These layers cannot be modified
  * by the user, they are read and display only.
@@ -25,6 +28,10 @@
     ///////////////////// PUBLIC /////////////////////
 
     /**
+     * @ngdoc method
+     * @name  addLayerAndInteractions
+     * @methodOf LandApp.service:olExternalLayerService
+     * @description
      * Creates OpenLayers layers and interactions based on the
      * passed layer definition object. The generated layer
      * will be added to the layer definition object under
@@ -44,6 +51,10 @@
     ///////////////////// PRIVATE /////////////////////
 
     /**
+     * @ngdoc method
+     * @name  _buildAddLayerFunctions
+     * @methodOf LandApp.service:olExternalLayerService
+     * @description
      * Returns an object literal containing a set of layer generators.
      */
     function _buildAddLayerFunctions() {
@@ -153,6 +164,10 @@
 
 
     /**
+     * @ngdoc method
+     * @name  _makeAttribution
+     * @methodOf LandApp.service:olExternalLayerService
+     * @description
      * Generates a layer attribution object.
      *
      * @param  {String}           attributionHtml HTML attribution string
@@ -165,6 +180,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  _buildVectorSpaceOlLayer
+     * @methodOf LandApp.service:olExternalLayerService
+     * @description
      * Builds a new Vectorspace layer (sourced from vectorspace.io),
      * used to display LR titles.
      *
@@ -213,6 +232,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  _buildVectorSpaceInteractions
+     * @methodOf LandApp.service:olExternalLayerService
+     * @description
      * Generates the interactions used for Vectorspace LR titles.
      * Allows the user to select/deselect the titles by clicking on them.
      *

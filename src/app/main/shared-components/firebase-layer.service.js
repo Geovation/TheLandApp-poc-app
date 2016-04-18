@@ -1,4 +1,7 @@
 /**
+ * @ngdoc service
+ * @name  LandApp.service:firebaseLayerService
+ * @description
  * Manages the saving of farm and drawing layers to the database.
  */
 (function() {
@@ -22,6 +25,10 @@
     //////////////// PUBLIC ////////////////
 
     /**
+     * @ngdoc method
+     * @name  saveDrawingLayers
+     * @methodOf LandApp.service:firebaseLayerService
+     * @description
      * Saves a set of drawing layers to the database.
      *
      * @param  {Object[]}  layersList      List of drawing layer definition objects
@@ -33,6 +40,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  saveFarmLayers
+     * @methodOf LandApp.service:firebaseLayerService
+     * @description
      * Saves a set of farm layers to the database.
      *
      * @param  {Object[]}  layersList      List of farm layer definition objects
@@ -46,6 +57,10 @@
     //////////////// PRIVATE ////////////////
 
     /**
+     * @ngdoc method
+     * @name  _saveLayer
+     * @methodOf LandApp.service:firebaseLayerService
+     * @description
      * Saves a set of layers to the database.
      *
      * @param  {Object[]} layersList      List of layer definition objects

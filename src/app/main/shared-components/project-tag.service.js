@@ -1,5 +1,8 @@
 /**
- *
+ * @ngdoc service
+ * @name  LandApp.service:projectTagService
+ * @description
+ * Manages the querying of internall stored default project tags.
  */
 (function() {
   'use strict';
@@ -17,6 +20,10 @@
     ///////////////// PUBLIC /////////////////
 
     /**
+     * @ngdoc method
+     * @name  findMatchingTags
+     * @methodOf LandApp.service:projectTagService
+     * @description
      * Returns a list of tag definitions which match the search query.
      *
      * @param  {String}   searchQuery User's search query
@@ -33,6 +40,10 @@
     ///////////////// PRIVATE /////////////////
 
     /**
+     * @ngdoc method
+     * @name  _generateDefaultProjectTags
+     * @methodOf LandApp.service:projectTagService
+     * @description
      * Generates a list of default tag definitions.
      * @return {Object[]} List of default tag definitions
      */

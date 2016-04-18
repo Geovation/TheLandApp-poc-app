@@ -1,4 +1,7 @@
 /**
+ * @ngdoc service
+ * @name  LandApp.service:olUserLayerService
+ * @description
  * Handles the creating and interacting with user defined layers
  * stored in the database (drawing and farm layers).
  */
@@ -38,6 +41,10 @@
     ////////////////////////////// PUBLIC //////////////////////////////
 
     /**
+     * @ngdoc method
+     * @name  init
+     * @methodOf LandApp.service:olUserLayerService
+     * @description
      * Initializes the service.
      */
     function init() {
@@ -45,6 +52,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  clearSelectedFeatures
+     * @methodOf LandApp.service:olUserLayerService
+     * @description
      * Clears all selected (highlighted) features
      */
     function clearSelectedFeatures() {
@@ -54,6 +65,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  disableInteractions
+     * @methodOf LandApp.service:olUserLayerService
+     * @description
      * Disables user interactions (clicks, hovers etc.)
      */
     function disableInteractions() {
@@ -61,6 +76,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  enableInteractions
+     * @methodOf LandApp.service:olUserLayerService
+     * @description
      * Enables user interactions (clicks, hovers etc.)
      */
     function enableInteractions() {
@@ -68,6 +87,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  removeFeature
+     * @methodOf LandApp.service:olUserLayerService
+     * @description
      * Removes a feature from its parent layer.
      * @param  {ol.Feature} Feature to remove
      */
@@ -97,6 +120,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  getLayerDetailsByFeature
+     * @methodOf LandApp.service:olUserLayerService
+     * @description
      * Fetches parent Layer definition object for a given feature object.
      * @param  {ol.Feature} Feature to find
      * @return {Object} Layer definition object (from layerDefinitionsService)
@@ -127,8 +154,12 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  getExtent
+     * @methodOf LandApp.service:olUserLayerService
+     * @description
      * Calculates an extent for all the drawing and farm layers within the map.
-     * @return {ol.Extent}
+     * @return {ol.Extent} Extent object
      */
     function getExtent() {
       var extent = ol.extent.createEmpty();
@@ -149,6 +180,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  focusLayer
+     * @methodOf LandApp.service:olUserLayerService
+     * @description
      * Focuses a given layer by unfocusing all others.
      * @param  {ol.layer.Vector}  Layer to focus
      */
@@ -162,6 +197,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  unfocusLayer
+     * @methodOf LandApp.service:olUserLayerService
+     * @description
      * Unfocuses a given layer by focusing all others.
      * @param  {ol.layer.Vector}  Layer to focus
      */
@@ -177,6 +216,10 @@
     ////////////////////////////// PRIVATE //////////////////////////////
 
     /**
+     * @ngdoc method
+     * @name  loadUserLayersAndEnableEditing
+     * @methodOf LandApp.service:olUserLayerService
+     * @description
      * Callback method used to initialize the database layers.
      * @param  {Object}  Firebase auth data object
      * @return {Promise} Promise object
@@ -210,6 +253,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  createLayers
+     * @methodOf LandApp.service:olUserLayerService
+     * @description
      * Instantiates the OL layers, adds features and adds them to the map.
      * @param  {DataSnapshot}      projectSnapshot  Collection of farm and drawing layers
      * @return {ol.layer.Vector[]}                  List of created layer instances
@@ -257,6 +304,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  readDrawingFeatures
+     * @methodOf LandApp.service:olUserLayerService
+     * @description
      * Reads and caches all of the drawing features that belong to the current map.
      * This is necessary because ol.interaction.Modify does not provide a
      * filter function, it instead takes an ol.Collection object reference.
@@ -289,6 +340,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  addControlInteractions
+     * @methodOf LandApp.service:olUserLayerService
+     * @description
      * Adds the select and modify interactions to the existing vector layers.
      */
     function addControlInteractions() {
@@ -322,9 +377,13 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  newVectorLayer
+     * @methodOf LandApp.service:olUserLayerService
+     * @description
      * Creates a new OL vector layer instance based on the passed layer details.
      * @param  {Object} Layer definition object (from layerDefinitionsService)
-     * @return {ol.layer.Vector}
+     * @return {ol.layer.Vector} Created vector layer
      */
     function newVectorLayer(layerDetails) {
       return new ol.layer.Vector({

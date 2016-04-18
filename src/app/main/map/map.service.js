@@ -1,4 +1,7 @@
 /**
+ * @ngdoc service
+ * @name  LandApp.service:mapService
+ * @description
  * Manages the ol.Map instance and the interactions associated with it.
  */
 (function() {
@@ -33,6 +36,10 @@
     //////////////////////////////// PUBLIC FUNCTIONS ////////////////////////////////
 
     /**
+     * @ngdoc method
+     * @name  fitExtent
+     * @methodOf LandApp.service:mapService
+     * @description
      * Fits the view to the provided extent,
      * which is based on the user's layer data.
      *
@@ -45,6 +52,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  init
+     * @methodOf LandApp.service:mapService
+     * @description
      * Init method
      */
     function init() {
@@ -72,6 +83,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  setZoom
+     * @methodOf LandApp.service:mapService
+     * @description
      * Zooms the map to the provided level
      * @param {number} zoomLevel Zoom level
      */
@@ -80,6 +95,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  getProjection
+     * @methodOf LandApp.service:mapService
+     * @description
      * Returns the projection of the view
      * @return {ol.proj.Projection} Projection object
      */
@@ -88,6 +107,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  setBaseMap
+     * @methodOf LandApp.service:mapService
+     * @description
      * Changes the base layer of the map.
      * @param {Object} baseMap Layer definition object
      */
@@ -101,6 +124,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  toggleLayerFromCheckProperty
+     * @methodOf LandApp.service:mapService
+     * @description
      * Toggles the layer on/off based on its layer.checked property.
      *
      * @param  {Object} layer Layer definition object
@@ -115,10 +142,15 @@
 
     //////////////////////////////// PRIVATE FUNCTIONS ////////////////////////////////
     /**
+     * @ngdoc method
+     * @name  addLayer
+     * @methodOf LandApp.service:mapService
+     * @description
      * Adds a layer to the map. If the layer has already been added,
      * it will only display it.
      *
      * @param {Object} layer Layer definition object
+     * @private
      */
     function addLayer(layer) {
       // prevent adding duplicate layers to the map
@@ -134,6 +166,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  removeLayer
+     * @methodOf LandApp.service:mapService
+     * @description
      * Removes a layer from the map.
      *
      * @param  {Object} layer Layer definition object
@@ -148,6 +184,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  recenterMapToUserHome
+     * @methodOf LandApp.service:mapService
+     * @description
      * Recenters the map to the user's home bounding box.
      */
     function recenterMapToUserHome() {

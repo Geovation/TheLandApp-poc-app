@@ -1,4 +1,7 @@
 /**
+ * @ngdoc service
+ * @name  LandApp.service:activeProjectService
+ * @description
  * Stores information about the currently active project/layer group.
  */
 (function() {
@@ -20,6 +23,10 @@
     return service;
 
     /**
+     * @ngdoc method
+     * @name  setActiveProjectKey
+     * @methodOf LandApp.service:activeProjectService
+     * @description
      * Sets the active project key
      * @param {String} key Project key
      */
@@ -28,6 +35,10 @@
     }
 
     /**
+     * @ngdoc method
+     * @name  getActiveProjectKey
+     * @methodOf LandApp.service:activeProjectService
+     * @description
      * Returns the active project key
      * @return {String} Project key
      */
